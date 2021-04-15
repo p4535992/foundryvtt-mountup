@@ -13,18 +13,18 @@ export let readyHooks = async () => {
 
   // Settings.registerSettings();
 
-//   game.socket['on'](socketName, data => {
-//       if (game.user.isGM) {
-//           switch (data.mode) {
-//               case socketAction.UpdateToken:
-//                   findTokenById(data.riderId).update({
-//                       x: data.x,
-//                       y: data.y,
-//                       rotation: data.rotation
-//                   });
-//           }
-//       }
-//   });
+  game.socket.on(socketName, data => {
+      if (game.user.isGM) {
+          switch (data.mode) {
+              case socketAction.UpdateToken:
+                  findTokenById(data.riderId).update({
+                      x: data.x,
+                      y: data.y,
+                      rotation: data.rotation
+                  });
+          }
+      }
+  });
 
   // window['MountUp'] = {
   window[MODULE_NAME] = {
@@ -72,7 +72,7 @@ export let initHooks = () => {
   });
 
   Hooks.on('updateToken', async (scene, token, updateData) => {
-      if (updateData.hasOwnProperty("x") || updateData.hasOwnProperty("y") || updateData.hasOwnProperty("rotation")) {      
+      if (updateData.hasOwnProperty("x") || updateData.hasOwnProperty("y") || updateData.hasOwnProperty("rotation")) {
         if (MountManager.isaMount(updateData._id)) {
             MountManager.popRider(updateData._id);
         }
