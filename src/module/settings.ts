@@ -7,11 +7,11 @@ export const MODULE_NAME = 'foundryvtt-mountup';
 // const mod = 'foundryvtt-mountup';
 
 /**
- * Because typescript doesn’t know when in the lifecycle of foundry your code runs, we have to assume that the
- * canvas is potentially not yet initialized, so it’s typed as declare let canvas: Canvas | {ready: false}.
- * That’s why you get errors when you try to access properties on canvas other than ready.
+ * Because typescript doesn't know when in the lifecycle of foundry your code runs, we have to assume that the
+ * canvas is potentially not yet initialized, so it's typed as declare let canvas: Canvas | {ready: false}.
+ * That's why you get errors when you try to access properties on canvas other than ready.
  * In order to get around that, you need to type guard canvas.
- * Also be aware that this will become even more important in 0.8.x because a „no canvas“ mode is being introduced there.
+ * Also be aware that this will become even more important in 0.8.x because no canvas mode is being introduced there.
  * So you will need to deal with the fact that there might not be an initialized canvas at any point in time.
  * @returns
  */
@@ -156,21 +156,21 @@ export const iconOptions:Record<string, string> = {
     'Handshake':'Handshake'
 };
 export const hudColumns:Record<string, string> = {
-    'Left':'Left', 
+    'Left':'Left',
     'Right':'Right'
 };
 export const hudTopBottom:Record<string, string> = {
-    'Top':'Top', 
+    'Top':'Top',
     'Bottom':'Bottom'
 };
 export const riderXOptions:Record<string, string> = {
-    'Left':'Left', 
-    'Center':'Center', 
+    'Left':'Left',
+    'Center':'Center',
     'Right':'Right'
 };
 export const riderYOptions:Record<string, string> = {
-    'Top':'Top', 
-    'Center':'Center', 
+    'Top':'Top',
+    'Center':'Center',
     'Bottom':'Bottom'
 };
 export const riderLockOptions:Record<string, string> = {
