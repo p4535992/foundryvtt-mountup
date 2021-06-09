@@ -1,7 +1,5 @@
 import { warn, error, debug, i18n } from "../foundryvtt-mountup";
 import { MODULE_NAME } from "./settings";
-//@ts-ignore
-import {libWrapper} from '../../lib-wrapper/lib-wrapper.js';
 import { dismount, dropRider, mount } from './macros.js';
 import { MountHud } from "./mountHud.js";
 import { MountManager } from "./mountManager.js";
