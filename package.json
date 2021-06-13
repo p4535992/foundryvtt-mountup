@@ -10,7 +10,7 @@
 		"clean": "gulp clean && gulp link --clean",
 		"update": "npm install --save-dev @league-of-foundry-developers/foundry-vtt-types@fvtt-0.7.10"
 	},
-	"author": "Brunhine",
+	"author": "Brunhine and p4535992",
 	"license": "ISC",
 	"devDependencies": {
 		"@league-of-foundry-developers/foundry-vtt-types": "^0.7.10-0",
