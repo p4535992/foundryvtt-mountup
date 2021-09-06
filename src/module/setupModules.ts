@@ -1,5 +1,5 @@
 import { log, debug, error, debugEnabled } from '../foundryvtt-mountup';
-import { MODULE_NAME } from './settings';
+import { MOUNT_UP_MODULE_NAME } from './settings';
 // let modules = {
 //               "lib-wrapper": "0.0.0",
 //             };

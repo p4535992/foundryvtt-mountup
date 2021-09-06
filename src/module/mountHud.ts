@@ -1,7 +1,8 @@
 import { warn } from '../foundryvtt-mountup.js';
 import { MountManager } from './mountManager.js';
-import { getCanvas, MODULE_NAME, Settings } from './settings.js';
-import { findTokenById, Flags, FlagScope } from './utils.js';
+import { SettingsForm } from './MountUpForm.js';
+import { FlagScope, getCanvas, MOUNT_UP_MODULE_NAME } from './settings.js';
+import { findTokenById, Flags } from './utils.js';
 
 /**
  * Functinality class for managing the token HUD
@@ -15,15 +16,15 @@ export class MountHud {
    * @param {Object} hudToken - The HUD Data
    */
   static async renderMountHud(app, html, hudToken) {
-    let mount = getCanvas().tokens.controlled.find((t) => t.id == hudToken._id);
+    const mount = getCanvas().tokens?.controlled.find((t) => t.id == hudToken._id);
 
     // if only one token is selected
-    if (getCanvas().tokens.controlled.length == 1) {
+    if (getCanvas().tokens?.controlled.length == 1) {
       // if the selected token is a mount
-      if (MountManager.isaMount(getCanvas().tokens.controlled[0].id)) {
+      if (MountManager.isaMount(<string>getCanvas().tokens?.controlled[0].id)) {
         this.addRemoveRidersButton(html, hudToken);
       }
-      if (MountManager.isaRider(getCanvas().tokens.controlled[0].id)) {
+      if (MountManager.isaRider(<string>getCanvas().tokens?.controlled[0].id)) {
         this.addDismountButton(html, hudToken);
       }
     } else {
@@ -51,8 +52,8 @@ export class MountHud {
   }
 
   static addMountButton(html, hudToken) {
-    let tokenNames = getCanvas()
-      .tokens.controlled.filter((token) => token.id != hudToken._id)
+    const tokenNames = <string[]>getCanvas()
+      .tokens?.controlled.filter((token) => token.id != hudToken._id)
       .map((token) => {
         return `'${token.name}'`;
       });
@@ -68,11 +69,9 @@ export class MountHud {
   }
 
   static addDismountButton(html, hudToken) {
-    const rider = findTokenById(hudToken._id);
-    let button = this.buildButton(
-      html,
-      `Dismount ${hudToken.name} from ${findTokenById(rider.getFlag(FlagScope, Flags.Mount)).name}`,
-    );
+    const rider: Token = findTokenById(hudToken._id);
+    const mount = findTokenById(<string>rider.document.getFlag(FlagScope, Flags.Mount));
+    let button = this.buildButton(html, `Dismount ${hudToken.name} from ${mount.name}`);
     button = this.addSlash(button);
 
     button.find('i').on('click', async (ev) => {
@@ -90,11 +89,11 @@ export class MountHud {
   }
 
   static buildButton(html, tooltip) {
-    let button = $(
-      `<div class="control-icon mount-up" title="${tooltip}"><i class="fas ${Settings.getIconClass()}"></i></div>`,
+    const button = $(
+      `<div class="control-icon mount-up" title="${tooltip}"><i class="fas ${SettingsForm.getIconClass()}"></i></div>`,
     );
-    let col = html.find(Settings.getHudColumnClass());
-    if (Settings.getHudTopBottomClass() == 'top') {
+    const col = html.find(SettingsForm.getHudColumnClass());
+    if (SettingsForm.getHudTopBottomClass() == 'top') {
       col.prepend(button);
     } else {
       col.append(button);
@@ -109,26 +108,25 @@ export class MountHud {
    * @param {boolean} hasSlash - If true, the slash will be placed over the mount icon
    */
   static async addButton(html, data, hasSlash = false) {
-    let button = $(`<div class="control-icon mount-up"><i class="fas ${Settings.getIconClass()}"></i></div>`);
+    const button = $(`<div class="control-icon mount-up"><i class="fas ${SettingsForm.getIconClass()}"></i></div>`);
 
     if (hasSlash) {
       this.addSlash(button);
     }
 
-    let col = html.find(Settings.getHudColumnClass());
-    if (Settings.getHudTopBottomClass() == 'top') {
+    const col = html.find(SettingsForm.getHudColumnClass());
+    if (SettingsForm.getHudTopBottomClass() == 'top') {
       col.prepend(button);
     } else {
       col.append(button);
     }
 
     button.find('i').on('click', async (ev) => {
-      if (MountManager.mountUpHud(data)) {
-        if (hasSlash) {
-          this.removeSlash(button);
-        } else {
-          this.addSlash(button);
-        }
+      await MountManager.mountUpHud(data);
+      if (hasSlash) {
+        this.removeSlash(button);
+      } else {
+        this.addSlash(button);
       }
     });
   }
@@ -138,7 +136,7 @@ export class MountHud {
    * @param {Object} button - The HUD button to add a slash on top of
    */
   static addSlash(button) {
-    let slash = $(`<i class="fas fa-slash" style="position: absolute; color: tomato"></i>`);
+    const slash = $(`<i class="fas fa-slash" style="position: absolute; color: tomato"></i>`);
     button.addClass('fa-stack');
     button.find('i').addClass('fa-stack-1x');
     slash.addClass('fa-stack-1x');
@@ -151,7 +149,7 @@ export class MountHud {
    * @param {Object} button - The mount up button
    */
   static removeSlash(button) {
-    let slash = button.find('i')[1];
+    const slash = button.find('i')[1];
     slash.remove();
   }
 }

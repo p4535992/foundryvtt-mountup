@@ -2,7 +2,7 @@ import {
   hudColumns,
   hudTopBottom,
   iconOptions,
-  MODULE_NAME,
+  MOUNT_UP_MODULE_NAME,
   riderLockOptions,
   riderXOptions,
   riderYOptions,
@@ -22,7 +22,7 @@ export class SettingsForm extends FormApplication {
     return mergeObject(super.defaultOptions, {
       id: 'mountup-settings-form',
       title: 'Mount Up! - Settings',
-      template: `./modules/${MODULE_NAME}/templates/settings.html`,
+      template: `./modules/${MOUNT_UP_MODULE_NAME}/templates/settings.html`,
       classes: ['sheet'],
       width: 500,
       closeOnSubmit: true,
@@ -88,7 +88,7 @@ export class SettingsForm extends FormApplication {
   }
 
   getSelectList(myselectslist, selected) {
-    let options = [];
+    const options = [];
     Object.keys(myselectslist).forEach((x, i) => {
       options.push({ value: x, selected: i == selected });
     });

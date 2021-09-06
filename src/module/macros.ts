@@ -1,18 +1,19 @@
 import { error } from '../foundryvtt-mountup.js';
 import { MountManager } from './mountManager.js';
-import { findTokenById, findTokenByName, Flags, FlagScope } from './utils.js';
+import { FlagScope } from './settings.js';
+import { findTokenById, findTokenByName, Flags } from './utils.js';
 
 /**
  * Macro function to mount a rider token onto a mount token
  * @param {string} riderNameOrId - The name or the ID of the rider token
  * @param {string} mountNameOrId - The name or the ID of the mount token
  */
-export function mount(riderNameOrId, mountNameOrId) {
-  let rider = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
-  let mount = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
+export function mount(riderNameOrId: string, mountNameOrId: string) {
+  const rider: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
+  const mount: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
 
-  let mountName = mount.name;
-  let riderName = rider.name;
+  const mountName = mount.name;
+  const riderName = rider.name;
 
   if (rider) {
     if (mount) {
@@ -33,13 +34,13 @@ export function mount(riderNameOrId, mountNameOrId) {
  * Macro function to dismount a rider token from its mount
  * @param {string} riderNameOrId - The name or the ID of the rider token
  */
-export function dismount(riderNameOrId) {
-  let rider = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
-  let riderName = rider.name;
+export function dismount(riderNameOrId: string) {
+  const rider: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
+  const riderName: string = rider.name;
 
   if (rider) {
     if (MountManager.isaRider(rider.id)) {
-      let mountToken = findTokenById(rider.getFlag(FlagScope, Flags.Mount));
+      const mountToken = findTokenById(<string>rider.document.getFlag(FlagScope, Flags.Mount));
       MountManager.doRemoveMount(rider, mountToken);
     } else {
       error(`Token '${riderName}' is not a rider`);
@@ -53,14 +54,17 @@ export function dismount(riderNameOrId) {
  * Macro function to have a mount drop its rider
  * @param {string} mountNameOrId - The name or the ID of the mount token
  */
-export function dropRider(mountNameOrId) {
-  let mount = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
-  let mountName = mount.name;
+export function dropRider(mountNameOrId: string) {
+  const mount: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
+  const mountName: string = mount.name;
 
   if (mount) {
     if (MountManager.isaMount(mount.id)) {
-      let riderToken = findTokenById(mount.getFlag(FlagScope, Flags.Riders));
-      MountManager.doRemoveMount(riderToken, mount); // TODO Flag.Rider ???
+      const riders = <string[]>mount.document.getFlag(FlagScope, Flags.Riders);
+      for (const rider in riders) {
+        const riderToken: Token = findTokenById(rider);
+        MountManager.doRemoveMount(riderToken, mount);
+      }
     } else {
       error(`Token '${mountName}' is not a mount`);
     }

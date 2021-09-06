@@ -1,30 +1,16 @@
 import { warn, error, debug, i18n } from '../foundryvtt-mountup';
-import { MODULE_NAME } from './settings';
+import { getGame, MOUNT_UP_MODULE_NAME } from './settings';
 import { dismount, dropRider, mount } from './macros.js';
 import { MountHud } from './mountHud.js';
 import { MountManager } from './mountManager.js';
-import { Settings } from './settings.js';
-import { findTokenById, Flags, FlagScope, socketAction, socketName } from './utils.js';
+import { findTokenById, Flags, socketAction } from './utils.js';
 import { dismountDropAll, dismountDropTarget } from './tokenAttacherHelper';
+import { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs';
 
-export let readyHooks = async () => {
+export const readyHooks = async () => {
   // Settings.registerSettings();
 
-  game.socket.on(socketName, (data) => {
-    if (game.user.isGM) {
-      switch (data.mode) {
-        case socketAction.UpdateToken:
-          findTokenById(data.riderId).update({
-            x: data.x,
-            y: data.y,
-            rotation: data.rotation,
-          });
-      }
-    }
-  });
-
-  // window['MountUp'] = {
-  window[MODULE_NAME] = {
+  window[MOUNT_UP_MODULE_NAME] = {
     mount: mount,
     dismount: dismount,
     dropRider: dropRider,
@@ -39,7 +25,7 @@ export let readyHooks = async () => {
   };
 };
 
-export let initHooks = () => {
+export const initHooks = () => {
   warn('Init Hooks processing');
 
   // setup all the hooks
@@ -48,16 +34,16 @@ export let initHooks = () => {
     MountHud.renderMountHud(app, html, data);
   });
 
-  Hooks.on('preUpdateToken', async (scene, token, updateData) => {
-    if (updateData.hasOwnProperty('x') || updateData.hasOwnProperty('y') || updateData.hasOwnProperty('rotation')) {
+  Hooks.on('preUpdateToken', async (scene: Scene, token: Token, updateData: TokenData) => {
+    if (updateData.x || updateData.y || updateData.rotation) {
       //await findTokenById(token._id).setFlag(FlagScope, Flags.MountMove, true);
 
       // NO NEED ANYMORE TOKEN ATTACHER DO THE WORK
       // await MountManager.doTokenUpdate(token._id, updateData);
 
-      await MountManager.doTokenUpdateOnlyCheckBoundHandler(token._id, updateData);
-      if (MountManager.isaRider(token._id)) {
-        await MountManager.doPostTokenUpdate(token._id, updateData);
+      await MountManager.doTokenUpdateOnlyCheckBoundHandler(token.document.id, updateData);
+      if (MountManager.isaRider(token.document.id)) {
+        await MountManager.doPostTokenUpdate(<string>token.document.id, updateData);
       }
     }
   });
@@ -68,13 +54,13 @@ export let initHooks = () => {
     MountManager.popAllRiders();
   });
 
-  Hooks.on('updateToken', async (scene, token, updateData) => {
-    if (updateData.hasOwnProperty('x') || updateData.hasOwnProperty('y') || updateData.hasOwnProperty('rotation')) {
-      if (MountManager.isaMount(updateData._id)) {
-        MountManager.popRider(updateData._id);
+  Hooks.on('updateToken', async (scene: Scene, token: Token, updateData: TokenData) => {
+    if (updateData.x || updateData.y || updateData.rotation) {
+      if (MountManager.isaMount(<string>updateData._id)) {
+        MountManager.popRider(<string>updateData._id);
       }
       if (MountManager.isaRider(updateData._id)) {
-        await MountManager.doPostTokenUpdate(updateData._id, updateData);
+        await MountManager.doPostTokenUpdate(<string>updateData._id, updateData);
       }
     }
   });
