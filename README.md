@@ -1,17 +1,9 @@
-![logo](/img/ogMountUp.png)
-
-![](https://img.shields.io/badge/Foundry-v0.7.9-informational)
-
+![](https://img.shields.io/badge/Foundry-v0.8.9-informational)
 # Mount Up!
+
 **Mount Up!** is a module for [Foundry VTT](https://foundryvtt.com/  "Foundry VTT") that allows tokens to carry or be carried by other tokens. This is completely system agnostic, and fully customizable to fit right into your game.
 
-[![Twitter Follow](https://img.shields.io/badge/follow-%40Brunhine-blue.svg?style=flat-square&logo=twitter)](https://twitter.com/brunhine)
-[![Become a Patron](https://img.shields.io/badge/support-patreon-orange.svg?style=flat-square&logo=patreon)](https://www.patreon.com/brunhine)
-[![Donate via Ko-Fi](https://img.shields.io/badge/support-ko--fi-ff4646?style=flat-square&logo=ko-fi)](https://ko-fi.com/brunhine)
-
-# NOTE
-
-**This is just a variant code of the wonderful work of brunhine hope to see you back, (try to make it work for 0.7.9), but i failed there is to many issues, i will try to  make some strange patches, but anyone more skilled then me is welcome take charge of this.**
+## NOTE: If you are a javascript developer and not a typescript developer, you can just use the javascript files under the dist folder or rename the file from .ts to .js
 
 ## Known issue
 
@@ -53,7 +45,7 @@ To dismount a token from a token:
 ![dismount example](./img/dismount-example.png)\
 *The rider will now be un-linked from the mount, and is free to move on their own.*
 
-## Macros
+## Hooks
 
 Some functionality is exposed to macros for repeatable usage. All macros will either accept a token ID or name (case insensitive).
 
@@ -81,20 +73,98 @@ You can have a mount drop its rider by passing the mount's name or id:
 
 or you can use the module 'token-attacher'
 
+# Build
+
+## Install all packages
+
+```bash
+npm install
+```
+## npm build scripts
+
+### build
+
+will build the code and copy all necessary assets into the dist folder and make a symlink to install the result into your foundry data; create a
+`foundryconfig.json` file with your Foundry Data path.
+
+```json
+{
+  "dataPath": "~/.local/share/FoundryVTT/"
+}
+```
+
+`build` will build and set up a symlink between `dist` and your `dataPath`.
+
+```bash
+npm run-script build
+```
+
+### NOTE:
+
+You don't need to build the `foundryconfig.json` file you can just copy the content of the `dist` folder on the module folder under `modules` of Foundry
+
+### build:watch
+
+`build:watch` will build and watch for changes, rebuilding automatically.
+
+```bash
+npm run-script build:watch
+```
+
+### clean
+
+`clean` will remove all contents in the dist folder (but keeps the link from build:install).
+
+```bash
+npm run-script clean
+```
+### lint and lintfix
+
+`lint` launch the eslint process based on the configuration [here](./.eslintrc)
+
+```bash
+npm run-script lint
+```
+
+`lintfix` launch the eslint process with the fix argument
+
+```bash
+npm run-script lintfix
+```
+
+### prettier-format
+
+`prettier-format` launch the prettier plugin based on the configuration [here](./.prettierrc)
+
+```bash
+npm run-script prettier-format
+```
+
+### package
+
+`package` generates a zip file containing the contents of the dist folder generated previously with the `build` command. Useful for those who want to manually load the module or want to create their own release
+
+```bash
+npm run-script package
+```
+
 ## [Changelog](./changelog.md)
 
+## Issues
+
+Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/MountUp/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
+
 # Localization
+
 Japanese Language support provided by [BrotherSharper](https://github.com/BrotherSharper) ('Brother Sharp#6921' on discord)
 
 *always welcoming more translations*
 # Feedback
 
 Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/mountup/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
-# Licensing
+# License
 
-**Mount Up!** is a module for [Foundry VTT](https://foundryvtt.com/  "Foundry VTT") by Jeremiah Altepeter and is licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
-
-This work is licensed under Foundry Virtual Tabletop [EULA - Limited License Agreement for module development v 0.1.6](https://foundryvtt.com/article/license/).
+**Mount Up!** is a module licensed under a [Mit License](./LICENSE).
 
 ## Acknowledgements
 
