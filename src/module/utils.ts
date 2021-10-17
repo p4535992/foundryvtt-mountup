@@ -1,4 +1,4 @@
-import { getCanvas, getGame, MOUNT_UP_MODULE_NAME } from './settings.js';
+import { getCanvas, getGame } from './settings';
 
 /**
  * Flag Info

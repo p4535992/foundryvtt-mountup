@@ -1,5 +1,5 @@
-import { SettingsForm } from './MountUpForm.js';
-import { findTokenById } from './utils.js';
+import { SettingsForm } from './MountUpForm';
+import { findTokenById } from './utils';
 
 /**
  * Provides functionality for sending chat messages

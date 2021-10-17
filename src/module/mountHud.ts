@@ -1,8 +1,7 @@
-import { warn } from '../foundryvtt-mountup.js';
-import { MountManager } from './mountManager.js';
-import { SettingsForm } from './MountUpForm.js';
-import { FlagScope, getCanvas, getGame, MOUNT_UP_MODULE_NAME } from './settings.js';
-import { findTokenById, Flags } from './utils.js';
+import { MountManager } from './mountManager';
+import { SettingsForm } from './MountUpForm';
+import { FlagScope, getCanvas, getGame, MOUNT_UP_MODULE_NAME } from './settings';
+import { findTokenById, Flags } from './utils';
 
 /**
  * Functinality class for managing the token HUD

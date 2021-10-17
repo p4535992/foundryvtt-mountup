@@ -1,4 +1,4 @@
-import { debug, log, setDebugLevel, warn, i18n } from '../foundryvtt-mountup';
+import { i18n } from '../foundryvtt-mountup';
 import { MountUpForm } from './MountUpForm';
 
 export const MOUNT_UP_MODULE_NAME = 'foundryvtt-mountup';

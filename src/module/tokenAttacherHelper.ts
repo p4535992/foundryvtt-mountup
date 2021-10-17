@@ -1,9 +1,4 @@
-//@ts-ignore
-// import { tokenAttacher } from '../../token-attacher/scripts/token-attacher.js';
-
-import { warn } from '../foundryvtt-mountup';
 import { getCanvas, getGame } from './settings';
-import { findTokenById, Flags } from './utils';
 
 export const mountUp = async function (riderToken: Token, mountToken: Token) {
   const targets = [mountToken]; // Array.from(getGame().user.targets);

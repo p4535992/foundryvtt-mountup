@@ -1,9 +1,9 @@
-import { error, warn } from '../foundryvtt-mountup.js';
-import { Chatter } from './chatter.js';
-import { SettingsForm } from './MountUpForm.js';
-import { FlagScope, getCanvas, MOUNT_UP_MODULE_NAME } from './settings.js';
-import { detachAllFromToken, dismountDropAll, dismountDropTarget, mountUp, moveToken } from './tokenAttacherHelper.js';
-import { findTokenById, Flags, getTokenShape, riderLock, riderX, riderY, socketAction } from './utils.js';
+import { error, warn } from '../foundryvtt-mountup';
+import { Chatter } from './chatter';
+import { SettingsForm } from './MountUpForm';
+import { FlagScope, getCanvas, MOUNT_UP_MODULE_NAME } from './settings';
+import { detachAllFromToken, dismountDropAll, dismountDropTarget, mountUp, moveToken } from './tokenAttacherHelper';
+import { findTokenById, Flags, getTokenShape, riderLock, riderX, riderY, socketAction } from './utils';
 
 /**
  * Provides all of the functionality for interacting with the game (tokens, canvas, etc.)
