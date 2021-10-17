@@ -36,7 +36,7 @@ export const initHooks = () => {
 
   Hooks.on('preUpdateToken', async (scene: Scene, token: Token, updateData: TokenData) => {
     if (updateData.x || updateData.y || updateData.rotation) {
-      //await findTokenById(token._id).setFlag(FlagScope, Flags.MountMove, true);
+      //await findTokenById(token._id).document.setFlag(FlagScope, Flags.MountMove, true);
 
       // NO NEED ANYMORE TOKEN ATTACHER DO THE WORK
       // await MountManager.doTokenUpdate(token._id, updateData);

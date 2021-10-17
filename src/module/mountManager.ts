@@ -2,7 +2,7 @@ import { error, warn } from '../foundryvtt-mountup.js';
 import { Chatter } from './chatter.js';
 import { SettingsForm } from './MountUpForm.js';
 import { FlagScope, getCanvas, MOUNT_UP_MODULE_NAME } from './settings.js';
-import { detachAllFromToken, dismountDropAll, dismountDropTarget, mountUp } from './tokenAttacherHelper.js';
+import { detachAllFromToken, dismountDropAll, dismountDropTarget, mountUp, moveToken } from './tokenAttacherHelper.js';
 import { findTokenById, Flags, getTokenShape, riderLock, riderX, riderY, socketAction } from './utils.js';
 
 /**
@@ -48,7 +48,7 @@ export class MountManager {
         }
 
         // CALL TOKEN ATTACHER
-        mountUp(riderToken, mountToken);
+        await mountUp(riderToken, mountToken);
 
         Chatter.mountMessage(riderToken.id, mountToken.id);
 
@@ -64,12 +64,12 @@ export class MountManager {
           //riderToken.zIndex = mountToken.zIndex + 10;
         }
 
-        const loc: { x; y } = await this.getRiderInitialLocation(riderToken, mountToken);
+        // const loc: { x; y } = await this.getRiderInitialLocation(riderToken, mountToken);
         await riderToken.document.setFlag(FlagScope, Flags.MountMove, true);
-        await riderToken.document.update({
-          x: loc.x,
-          y: loc.y,
-        });
+        // await riderToken.document.update({
+        //   x: loc.x,
+        //   y: loc.y,
+        // });
         riderToken.zIndex = mountToken.zIndex + 10;
       }
     }
@@ -103,25 +103,25 @@ export class MountManager {
    * @param {object} riderToken - The rider token
    * @param {object} mountToken - The mount token
    */
-  static async doCreateMount(riderToken, mountToken) {
-    let riders = <string[]>mountToken.getFlag(FlagScope, Flags.Riders);
+  static async doCreateMount(riderToken: Token, mountToken: Token) {
+    let riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
     if (riders == undefined) riders = [];
     if (!riders.includes(riderToken.id)) {
       riders.push(riderToken.id);
     }
-    await mountToken.setFlag(FlagScope, Flags.Riders, riders);
+    await mountToken.document.setFlag(FlagScope, Flags.Riders, riders);
     console.log(riders);
-    await mountToken.update({ flags: { mountup: { riders: riders } } });
-    await riderToken.setFlag(FlagScope, Flags.Mount, mountToken.id);
-    if (!riderToken.getFlag(FlagScope, Flags.OrigSize)) {
-      await riderToken.setFlag(FlagScope, Flags.OrigSize, { w: riderToken.w, h: riderToken.h });
+    await mountToken.document.update({ flags: { mountup: { riders: riders } } });
+    await riderToken.document.setFlag(FlagScope, Flags.Mount, mountToken.id);
+    if (!riderToken.document.getFlag(FlagScope, Flags.OrigSize)) {
+      await riderToken.document.setFlag(FlagScope, Flags.OrigSize, { w: riderToken.w, h: riderToken.h });
     }
 
     // NO NEED ANYMORE TOKEN ATTACHER DO THE WORK
     // this.moveRiderToMount(riderToken, { x: mountToken.x, y: mountToken.y }, null, null, null);
 
     // CALL TOKEN ATTACHER MOVED UP
-    mountUp(riderToken, mountToken);
+    await mountUp(riderToken, mountToken);
 
     Chatter.mountMessage(riderToken.id, mountToken.id);
     return true;
@@ -147,8 +147,8 @@ export class MountManager {
     await riderToken.document.unsetFlag(FlagScope, Flags.Mount);
     await riderToken.document.unsetFlag(FlagScope, Flags.OrigSize);
 
-    // MOD 4535992 FROCE SHRINK TO OHETRS RIDERS
-    //let riders = <string[]>mountToken.getFlag(FlagScope, Flags.Riders);
+    // MOD 4535992 FORCE SHRINK TO OTHERS RIDERS
+    //let riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
     for (const riderTmp of riders) {
       const riderTokenTmp: Token = findTokenById(riderTmp);
       if (riders.includes(riderTokenTmp.id)) {
@@ -165,7 +165,7 @@ export class MountManager {
         }
       }
     }
-    // END MOD 4535992 FROCE SHRINK TO OHETRS RIDERS
+    // END MOD 4535992 FORCE SHRINK TO OTHERS RIDERS
 
     return true;
   }
@@ -180,7 +180,7 @@ export class MountManager {
     const riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
     if (riders && riders.includes(riderToken.id)) {
       // let mount = findTokenById(riderToken);
-      // let rider = findTokenById(<string[]>mount.getFlag(FlagScope, Flags.Riders));
+      // let rider = findTokenById(<string[]>mount.document.getFlag(FlagScope, Flags.Riders));
       const origsize = <{ w; h }>riderToken.document.getFlag(FlagScope, Flags.OrigSize);
       // MOD 4535992 REMOVED IF
       //if (riderToken.w < origsize.w || riderToken.h < origsize.h) {
@@ -260,7 +260,7 @@ export class MountManager {
       });
       return true;
     }
-    const mountToken = findTokenById(mountId);
+    const mountToken: Token = findTokenById(mountId);
     const riders: string[] = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
     for (const riderId of riders) {
       const riderToken = findTokenById(riderId);
@@ -294,12 +294,12 @@ export class MountManager {
 
   //     if (callcount > 100) {
   //         error('Pop riders called too many times. Breaking all rides for safety.');
-  //         getCanvas().tokens.placeables.forEach(t => { t.unsetFlag(MODULE_NAME, 'riders'); t.unsetFlag(MODULE_NAME, 'mount'); });
+  //         getCanvas().tokens.placeables.forEach(t => { t.document.unsetFlag(MODULE_NAME, 'riders'); t.unsetFlag(MODULE_NAME, 'mount'); });
   //         return true;
   //     }
   //     let mountToken = findTokenById(mountId);
 
-  //     for (const riderId of <string[]>mountToken.getFlag(FlagScope, Flags.Riders)) {
+  //     for (const riderId of <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders)) {
   //         const riderToken = findTokenById(riderId);
   //         if (riderToken) {
   //             riderToken.zIndex = mountToken.zIndex + 10;
@@ -310,7 +310,7 @@ export class MountManager {
   //         }
 
   //         if (riderToken.owner) {
-  //             await riderToken.unsetFlag(FlagScope, Flags.MountMove);
+  //             await riderToken.document.unsetFlag(FlagScope, Flags.MountMove);
   //         }
   //     }
 
@@ -328,14 +328,14 @@ export class MountManager {
   // static async doTokenUpdate(tokenId, updateData) {
   //     if (this.isaRider(tokenId)) {
   //         const riderToken = findTokenById(tokenId);
-  //         const mountToken = findTokenById(<string>riderToken.getFlag(FlagScope, Flags.Mount));
+  //         const mountToken = findTokenById(<string>riderToken.document.getFlag(FlagScope, Flags.Mount));
   //         const newLocation = {
   //             x: updateData.x !== undefined ? updateData.x : riderToken.x,
   //             y: updateData.y !== undefined ? updateData.y : riderToken.y
   //         };
 
-  //         if (!riderToken.getFlag(FlagScope, Flags.MountMove)) {
-  //             if (!getCanvas().tokens.controlled.map(t => t.id).includes(<string>riderToken.getFlag(FlagScope, Flags.Mount))) {
+  //         if (!riderToken.document.getFlag(FlagScope, Flags.MountMove)) {
+  //             if (!getCanvas().tokens.controlled.map(t => t.id).includes(<string>riderToken.document.getFlag(FlagScope, Flags.Mount))) {
   //                 switch (SettingsForm.getRiderLock()) {
   //                     case riderLock.NoLock:
   //                         break;
@@ -369,7 +369,7 @@ export class MountManager {
 
   //         const mountLocation = { x: mountToken.x, y: mountToken.y };
 
-  //         for (const riderId of <string[]>mountToken.getFlag(FlagScope, Flags.Riders)) {
+  //         for (const riderId of <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders)) {
   //             const riderToken = findTokenById(riderId);
   //             if (riderToken.owner) {
   //                 await this.moveRiderToMount(riderToken, mountLocation, updateData.x, updateData.y, updateData.rotation == undefined ? mountToken.data.rotation : updateData.rotation);
@@ -411,7 +411,7 @@ export class MountManager {
             riderToken.zIndex = mountToken.zIndex + 10;
           }
           // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
-          // let riders = <string[]>mountToken.getFlag(FlagScope, Flags.Riders);
+          // let riders = <string[]>mountToken.document.document.getFlag(FlagScope, Flags.Riders);
           // let index = riders.indexOf(riderToken.id); // 1
           // let offsetM = index;
           // if(!updateData){
@@ -494,7 +494,7 @@ export class MountManager {
             y: updateData.y !== undefined ? updateData.y : riderToken.y,
           };
 
-          if (!riderToken.getFlag(FlagScope, Flags.MountMove)) {
+          if (!riderToken.document.getFlag(FlagScope, Flags.MountMove)) {
             if (
               !getCanvas()
                 .tokens?.controlled.map((t) => t.id)
@@ -537,7 +537,7 @@ export class MountManager {
     //         x: mountToken.x,
     //         y: mountToken.y
     //     };
-    //     for (const riderId of <string[]>mountToken.getFlag(FlagScope, Flags.Riders)) {
+    //     for (const riderId of <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders)) {
     //         const riderToken = findTokenById(riderId);
     //         if (riderToken.owner) {
     //             await this.moveRiderToMount(riderToken, mountLocation, updateData.x, updateData.y, updateData.rotation == undefined ? mountToken.data.rotation : updateData.rotation);
@@ -621,7 +621,7 @@ export class MountManager {
 
   //     riderToken = findTokenById(riderToken.id);
 
-  //     await riderToken.setFlag(FlagScope, Flags.MountMove, true);
+  //     await riderToken.document.setFlag(FlagScope, Flags.MountMove, true);
 
   //     const offset = { x: mountLocation.x - riderToken.x, y: mountLocation.y - riderToken.y };
 
@@ -639,7 +639,7 @@ export class MountManager {
 
   //     // // MOD 4535992 2021-04-30 PACTH FOR BETTER CALCULATION
   //     // // TODO CHECK BETTER SOLUTION
-  //     // const mountToken = findTokenById(<string>riderToken.getFlag(FlagScope, Flags.Mount));
+  //     // const mountToken = findTokenById(<string>riderToken.document.getFlag(FlagScope, Flags.Mount));
   //     // // let mount = mountToken;//targets[0];
   //     // // let newCoords = {
   //     // //     x:riderToken.x,
@@ -670,10 +670,10 @@ export class MountManager {
   //     // // newY = loc.y;
 
   //     // // const riderToken = findTokenById(tokenId);
-  //     // // const mountToken = findTokenById(<string>riderToken.getFlag(FlagScope, Flags.Mount));
+  //     // // const mountToken = findTokenById(<string>riderToken.document.getFlag(FlagScope, Flags.Mount));
   //     // // MOD 4535992 ADD CHECK FOR RIDERS FLAGS
   //     // let newLocation;
-  //     // let riders = <string[]>mountToken.getFlag(FlagScope, Flags.Riders);
+  //     // let riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
 
   //     // newLocation = {
   //     //     // x: updateData.x !== undefined ? updateData.x : riderToken.x,
@@ -682,8 +682,8 @@ export class MountManager {
   //     //     y: newY === undefined ? mountLocation.y - offset.y : newY - offset.y,
   //     // };
 
-  //     // if (!riderToken.getFlag(FlagScope, Flags.MountMove)) {
-  //     //     if (!getCanvas().tokens.controlled.map(t => t.id).includes(<string>riderToken.getFlag(FlagScope, Flags.Mount))) {
+  //     // if (!riderToken.document.getFlag(FlagScope, Flags.MountMove)) {
+  //     //     if (!getCanvas().tokens.controlled.map(t => t.id).includes(<string>riderToken.document.getFlag(FlagScope, Flags.Mount))) {
   //     //         switch (SettingsForm.getRiderLock()) {
   //     //             case riderLock.NoLock:
   //     //                 break;
@@ -759,10 +759,10 @@ export class MountManager {
    * @param {string} childId - The ID of the child
    * @param {string} ancestorId - The ID of the ancestor
    */
-  static isAncestor(childId, ancestorId) {
+  static isAncestor(childId: string, ancestorId: string) {
     if (this.isaRider(childId)) {
-      const child = findTokenById(childId);
-      const parent = findTokenById(<string>child.getFlag(FlagScope, Flags.Mount));
+      const child: Token = findTokenById(childId);
+      const parent: Token = findTokenById(<string>child.document.getFlag(FlagScope, Flags.Mount));
       if (parent.id == ancestorId) {
         return true;
       }

@@ -1,7 +1,7 @@
 import { warn } from '../foundryvtt-mountup.js';
 import { MountManager } from './mountManager.js';
 import { SettingsForm } from './MountUpForm.js';
-import { FlagScope, getCanvas, MOUNT_UP_MODULE_NAME } from './settings.js';
+import { FlagScope, getCanvas, getGame, MOUNT_UP_MODULE_NAME } from './settings.js';
 import { findTokenById, Flags } from './utils.js';
 
 /**
@@ -16,15 +16,15 @@ export class MountHud {
    * @param {Object} hudToken - The HUD Data
    */
   static async renderMountHud(app, html, hudToken) {
-    const mount = getCanvas().tokens?.controlled.find((t) => t.id == hudToken._id);
-
+    const mountOrRider = <Token>getCanvas().tokens?.controlled.find((t) => t.id == hudToken._id);
+    // const t = <UserTargets>getGame().user?.targets[0];
     // if only one token is selected
     if (getCanvas().tokens?.controlled.length == 1) {
       // if the selected token is a mount
-      if (MountManager.isaMount(<string>getCanvas().tokens?.controlled[0].id)) {
+      if (MountManager.isaMount(mountOrRider.id)) {
         this.addRemoveRidersButton(html, hudToken);
       }
-      if (MountManager.isaRider(<string>getCanvas().tokens?.controlled[0].id)) {
+      if (MountManager.isaRider(mountOrRider.id)) {
         this.addDismountButton(html, hudToken);
       }
     } else {

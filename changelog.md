@@ -1,3 +1,9 @@
+# 3.2.0
+
+- Upgrade for 0.8.9 and preparation for 0.9.X
+- Many buug fix
+- Some perormance check
+
 # 3.1.5
 
 - Bug fix about a error while trying to open the module settings (TODO SOME CHECK WITH TYPESCRIPT)

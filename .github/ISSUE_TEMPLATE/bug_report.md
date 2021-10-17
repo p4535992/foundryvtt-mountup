@@ -1,31 +1,36 @@
 ---
 name: Bug report
-about: Create a bug report to help improve the module
+about: Create a report to help us improve
 title: "[BUG]"
 labels: bug
-assignees: Brunhine
+assignees: ''
 
 ---
 
-**Describe the bug**
-_A clear and concise description of what the bug is._
+**Module Version:** v0.0.0
 
-**Environment Details**
-Foundry VTT Version: _(Example 0.5.4)_
-Mount Up! Version: _(Example 2.2.0)_
+**Describe the bug**
+A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-_1. Go to '...'
+1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
-4. See error_
+4. See error
 
 **Expected behavior**
-_A clear and concise description of what you expected to happen._
+A clear and concise description of what you expected to happen.
 
 **Screenshots**
-_If applicable, add screenshots to help explain your problem._
+If applicable, add screenshots to help explain your problem.
+
+**Browser:**
+ - 
+
+**Foundry Version:** 
+
+**Game System:** 
 
 **Additional context**
-_Add any other context about the problem here._
+Add any other context (like other modules installed) about the problem here.
