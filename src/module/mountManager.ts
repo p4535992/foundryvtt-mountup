@@ -1,6 +1,6 @@
 import { error, warn } from '../foundryvtt-mountup';
 import { Chatter } from './chatter';
-import { SettingsForm } from './MountUpForm';
+import { SettingsForm } from './mountupForm';
 import { FlagScope, getCanvas, MOUNT_UP_MODULE_NAME } from './settings';
 import { detachAllFromToken, dismountDropAll, dismountDropTarget, mountUp, moveToken } from './tokenAttacherHelper';
 import { findTokenById, Flags, getTokenShape, riderLock, riderX, riderY, socketAction } from './utils';

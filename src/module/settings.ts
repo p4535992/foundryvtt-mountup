@@ -1,5 +1,5 @@
 import { i18n } from '../foundryvtt-mountup';
-import { MountUpForm } from './MountUpForm';
+import { MountUpForm } from './mountupForm';
 
 export const MOUNT_UP_MODULE_NAME = 'foundryvtt-mountup';
 export const socketName = 'module.' + MOUNT_UP_MODULE_NAME; //'module.mountup';

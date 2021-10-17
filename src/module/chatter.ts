@@ -1,4 +1,4 @@
-import { SettingsForm } from './MountUpForm';
+import { SettingsForm } from './mountupForm';
 import { findTokenById } from './utils';
 
 /**

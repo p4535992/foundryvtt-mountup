@@ -1,5 +1,5 @@
 import { MountManager } from './mountManager';
-import { SettingsForm } from './MountUpForm';
+import { SettingsForm } from './mountupForm';
 import { FlagScope, getCanvas, getGame, MOUNT_UP_MODULE_NAME } from './settings';
 import { findTokenById, Flags } from './utils';
 
