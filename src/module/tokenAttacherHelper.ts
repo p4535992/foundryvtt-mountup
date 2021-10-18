@@ -61,7 +61,7 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     await window['tokenAttacher'].attachElementToToken(riderToken, targets[0], true);
     await window['tokenAttacher'].setElementsLockStatus(riderToken, false, true);
   }
-};
+}
 
 export const dismountDropAll = async function (mountToken: Token) {
   // tokenAttacher.detachAllElementsFromToken(mountToken, true);

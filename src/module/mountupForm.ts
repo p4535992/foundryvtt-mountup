@@ -57,43 +57,8 @@ export class MountUpForm extends FormApplication {
 
   activateListeners(html: JQuery): void {
     super.activateListeners(html);
-
-    // this.toggleBorderShape();
-    // this.toggleUseUserColorAsBorderColor();
-
-    // html.find('select[name="borderShape"]').change(this.toggleBorderShape.bind(this));
-    // html.find('input[name="useUserColorAsBorderColor"]').change(this.toggleUseUserColorAsBorderColor.bind(this));
-    // html
-    //   .find('input[name="useUserColorAsBackgroundColor"]')
-    //   .change(this.toggleUseUserColorAsBackgroundColor.bind(this));
-    // html.find('button[name="reset"]').click(this.onReset.bind(this));
-
     this.reset = false;
   }
-
-  // toggleBorderShape() {
-  //   const noneBorder = $('select[name="borderShape"]').val() === 'none';
-  //   const useUserColor: boolean = ($('input[name="useUserColorAsBorderColor"]')[0] as HTMLInputElement).checked;
-  //   $('input[name="useUserColorAsBorderColor"]').prop('disabled', noneBorder);
-  //   $('input[name="useUserColorAsBackgroundColor"]').prop('disabled', noneBorder);
-  //   $('input[name="borderColor"]').prop('disabled', noneBorder || useUserColor);
-  //   $('input[name="borderColorSelector"]').prop('disabled', noneBorder || useUserColor);
-  //   $('input[name="borderWidth"]').prop('disabled', noneBorder);
-  // }
-
-  // toggleUseUserColorAsBorderColor() {
-  //   const noneBorder = $('select[name="borderShape"]').val() === 'none';
-  //   const useUserColor: boolean = ($('input[name="useUserColorAsBorderColor"]')[0] as HTMLInputElement).checked;
-  //   $('input[name="borderColor"]').prop('disabled', noneBorder || useUserColor);
-  //   $('input[name="borderColorSelector"]').prop('disabled', noneBorder || useUserColor);
-  // }
-
-  // toggleUseUserColorAsBackgroundColor() {
-  //   const noneBorder = $('select[name="borderShape"]').val() === 'none';
-  //   const useUserColor: boolean = ($('input[name="useUserColorAsBackgroundColor"]')[0] as HTMLInputElement).checked;
-  //   $('input[name="borderColor"]').prop('disabled', noneBorder || useUserColor);
-  //   $('input[name="borderColorSelector"]').prop('disabled', noneBorder || useUserColor);
-  // }
 
   onReset() {
     this.reset = true;
@@ -125,16 +90,6 @@ export class MountUpForm extends FormApplication {
     });
     return options;
   }
-
-  // displayUnknownListOptions: Record<string, string> = {
-  //   allCards: i18n(CHAT_PORTRAIT_MODULE_NAME + '.displayUnknown.choice.allCards'), //"Affect every message.",
-  //   selfAndGM: i18n(CHAT_PORTRAIT_MODULE_NAME + '.displayUnknown.choice.selfAndGM'), //"Affect own messages and GM messages.",
-  //   self: i18n(CHAT_PORTRAIT_MODULE_NAME + '.displayUnknown.choice.self'), //"Only affect own messages.",
-  //   gm: i18n(CHAT_PORTRAIT_MODULE_NAME + '.displayUnknown.choice.gm'), //"Only affect GM messages.",
-  //   player: i18n(CHAT_PORTRAIT_MODULE_NAME + '.displayUnknown.choice.player'), //"Only affect player messages.",
-  //   none: i18n(CHAT_PORTRAIT_MODULE_NAME + '.displayUnknown.choice.none'), //"Don't affect any messages.",
-  //   onlyNpc: i18n(CHAT_PORTRAIT_MODULE_NAME + '.displayUnknown.choice.onlyNpc'), //"Affect any messages done from a NPC (need a compatible system with the 'npc' type like D&D5)."
-  // };
 
   iconOptions: Record<string, string> = {
     horse: 'Horse',
