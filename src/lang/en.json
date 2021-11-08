@@ -10,7 +10,8 @@
         "hudSettings": "HUD Settings",
         "riderBehavior": "Rider Behavior",
         "chatSettings": "Chat Settings",
-        "save": "Save Settings"
+        "save": "Save Settings",
+        "reset": "Reset Settings"
       },
       "icon": {
         "name": "Icon",

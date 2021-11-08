@@ -1,12 +1,13 @@
 <div class="tab active" data-tab="general">
-    <form autocomplete="off" class="foundryvtt-mountup" onsubmit="event.preventDefault()">
+    <form autocomplete="off" class="foundryvtt-mountup">
         <h2>{{localize 'foundryvtt-mountup.settings.formHeaders.hudSettings'}}</h2>
         <div class="form-group">
             <label>{{localize 'foundryvtt-mountup.settings.icon.name'}}:</label>
             <select name="icon">
-                {{#select icons}}
-                {{#each icons}}
-                <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
+                {{#select iconsList}}
+                {{#each iconsList}}
+                <!-- <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option> -->
+                <option value="{{this.value}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
                 {{/each}}
                 {{/select}}
             </select>
@@ -15,9 +16,10 @@
         <div class="form-group">
             <label>{{localize 'foundryvtt-mountup.settings.hudColumn.name'}}:</label>
             <select name="hudColumn">
-                {{#select hudColumn}}
-                {{#each hudColumn}}
-                <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
+                {{#select hudColumnList}}
+                {{#each hudColumnList}}
+                <!-- <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option> -->
+                <option value="{{this.value}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
                 {{/each}}
                 {{/select}}
             </select>
@@ -26,9 +28,10 @@
         <div class="form-group">
             <label>{{localize 'foundryvtt-mountup.settings.hudTopBottom.name'}}:</label>
             <select name="hudTopBottom">
-                {{#select hudTopBottom}}
-                {{#each hudTopBottom}}
-                <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
+                {{#select hudTopBottomList}}
+                {{#each hudTopBottomList}}
+                <!-- <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option> -->
+                <option value="{{this.value}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
                 {{/each}}
                 {{/select}}
             </select>
@@ -39,9 +42,10 @@
         <div class="form-group">
             <label>{{localize 'foundryvtt-mountup.settings.riderLock.name'}}</label>
             <select name="riderLock">
-                {{#select riderLock}}
-                {{#each riderLock}}
-                <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{localize this.value}}</option>
+                {{#select riderLockList}}
+                {{#each riderLockList}}
+                <!-- <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option> -->
+                <option value="{{this.value}}" {{#if this.selected}}selected="selected" {{/if}}>{{localize this.value}}</option>
                 {{/each}}
                 {{/select}}
             </select>
@@ -49,15 +53,16 @@
         </div>
         <div class="form-group">
             <label>{{localize 'foundryvtt-mountup.settings.riderRotate.name'}}</label>
-            <input name="riderRotate" type="checkbox" {{#if riderRotate}}checked="checked" {{/if}} />
+            <input name="riderRotate" type="checkbox" data-dtype="Boolean" {{#if riderRotate}}checked="checked" {{/if}} />
             <p class="notes">{{localize 'foundryvtt-mountup.settings.riderRotate.hint'}}</p>
         </div>
         <div class="form-group">
             <label>{{localize 'foundryvtt-mountup.settings.riderX.name'}}</label>
             <select name="riderX">
-                {{#select riderX}}
-                {{#each riderX}}
-                <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
+                {{#select riderXList}}
+                {{#each riderXList}}
+                <!-- <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option> -->
+                <option value="{{this.value}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
                 {{/each}}
                 {{/select}}
             </select>
@@ -66,9 +71,10 @@
         <div class="form-group">
             <label>{{localize 'foundryvtt-mountup.settings.riderY.name'}}</label>
             <select name="riderY">
-                {{#select riderY}}
-                {{#each riderY}}
-                <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
+                {{#select riderYList}}
+                {{#each riderYList}}
+                <!-- <option value="{{@index}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option> -->
+                <option value="{{this.value}}" {{#if this.selected}}selected="selected" {{/if}}>{{this.value}}</option>
                 {{/each}}
                 {{/select}}
             </select>
@@ -78,7 +84,7 @@
         <h2>{{localize 'foundryvtt-mountup.settings.formHeaders.chatSettings'}}</h2>
         <div class="form-group">
             <label>{{localize 'foundryvtt-mountup.settings.shouldChat.name'}}</label>
-            <input name="shouldChat" type="checkbox" {{#if shouldChat}}checked="checked" {{/if}} />
+            <input name="shouldChat" type="checkbox" data-dtype="Boolean" {{#if shouldChat}}checked="checked" {{/if}} />
             <p class="notes">{{localize 'foundryvtt-mountup.settings.shouldChat.hint'}}</p>
         </div>
         <div class="form-group">
@@ -91,9 +97,15 @@
             <input name="dismountMsg" type="text" value="{{dismountMsg}}" />
             <p class="notes">{{localize 'foundryvtt-mountup.settings.dismountMsg.hint'}}</p>
         </div>
+
         <hr />
-        <button type="submit" name="submit">
-            <i class="far fa-save"></i> {{localize 'foundryvtt-mountup.settings.formHeaders.save'}}
-        </button>
+        <div class="form-group" style="margin: 10px;">
+            <button type="submit" name="submit">
+                <i class="far fa-save"></i> {{localize 'foundryvtt-mountup.settings.formHeaders.save'}}
+            </button>
+            <button type="button" name="reset">
+                <i class="fas fa-undo"></i> {{localize 'foundryvtt-mountup.settings.formHeaders.reset'}}
+            </button>
+        </div>
     </form>
 </div>

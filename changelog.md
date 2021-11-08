@@ -1,3 +1,10 @@
+# 3.2.1
+
+- Fix settings are not saved ????
+- Fix [[BUG] Settings aren't saving at all. #1](https://github.com/p4535992/MountUp/issues/1)
+- Fix [[BUG] Most Settings Not Respected](https://github.com/p4535992/MountUp/issues/2)
+- Fix [MountUp! not recognised in game](https://github.com/p4535992/MountUp/issues/3)
+
 # 3.2.0
 
 - Upgrade for 0.8.9 and preparation for 0.9.X

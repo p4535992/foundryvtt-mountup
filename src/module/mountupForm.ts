@@ -15,7 +15,7 @@ export class MountUpForm extends FormApplication {
     return mergeObject(super.defaultOptions, {
       title: i18n(MOUNT_UP_MODULE_NAME + '.form-title'),
       id: 'mountup-settings-form',
-      template: `modules/${MOUNT_UP_MODULE_NAME}/templates/settings.html`,
+      template: `modules/${MOUNT_UP_MODULE_NAME}/templates/mountup-settings-form.html`,
       width: 500,
       closeOnSubmit: true,
       classes: ['sheet'],
@@ -26,26 +26,26 @@ export class MountUpForm extends FormApplication {
     let data;
     if (this.reset) {
       data = {
-        icons: 'Horse',
-        hudColumn: 'Left',
-        hudTopBottom: 'Top',
-        riderLock: i18n(MOUNT_UP_MODULE_NAME + '.settings.riderLock.noLock'),
+        iconsList: this.getSelectList(this.iconOptions,'Horse'),
+        hudColumnList:  this.getSelectList(this.hudColumnsOptions,'Left'),
+        hudTopBottomList:  this.getSelectList(this.hudTopBottomOptions,'Top'),
+        riderLockList:  this.getSelectList(this.riderLockOptions, i18n(MOUNT_UP_MODULE_NAME + '.settings.riderLock.noLock')),
         riderRotate: false,
-        riderX: 'Left',
-        riderY: 'Top',
+        riderXList:  this.getSelectList(this.riderXOptions,'Left'),
+        riderYList:  this.getSelectList(this.riderYOptions,'Top'),
         shouldChat: true,
         mountMsg: '{rider} has mounted {mount}.',
         dismountMsg: '{rider} has dismounted from {mount}.',
       };
     } else {
       data = {
-        icons: this.getSelectList(this.iconOptions, SettingsForm.getIcon()),
-        hudColumn: this.getSelectList(this.hudColumns, SettingsForm.getHudColumn()),
-        hudTopBottom: this.getSelectList(this.hudTopBottom, SettingsForm.getHudTopBottom()),
-        riderLock: this.getSelectList(this.riderLockOptions, SettingsForm.getRiderLock()),
+        iconsList: this.getSelectList(this.iconOptions, SettingsForm.getIcon()),
+        hudColumnList: this.getSelectList(this.hudColumnsOptions, SettingsForm.getHudColumn()),
+        hudTopBottomList: this.getSelectList(this.hudTopBottomOptions, SettingsForm.getHudTopBottom()),
+        riderLockList: this.getSelectList(this.riderLockOptions, SettingsForm.getRiderLock()),
         riderRotate: SettingsForm.getRiderRotate(),
-        riderX: this.getSelectList(this.riderXOptions, SettingsForm.getRiderX()),
-        riderY: this.getSelectList(this.riderYOptions, SettingsForm.getRiderY()),
+        riderXList: this.getSelectList(this.riderXOptions, SettingsForm.getRiderX()),
+        riderYList: this.getSelectList(this.riderYOptions, SettingsForm.getRiderY()),
         shouldChat: SettingsForm.getShouldChat(),
         mountMsg: SettingsForm.getMountMessage(),
         dismountMsg: SettingsForm.getDismountMessage(),
@@ -57,6 +57,7 @@ export class MountUpForm extends FormApplication {
 
   activateListeners(html: JQuery): void {
     super.activateListeners(html);
+    html.find('button[name="reset"]').click(this.onReset.bind(this))
     this.reset = false;
   }
 
@@ -100,12 +101,12 @@ export class MountUpForm extends FormApplication {
     handshake: 'Handshake',
   };
 
-  hudColumns: Record<string, string> = {
+  hudColumnsOptions: Record<string, string> = {
     left: 'Left',
     right: 'Right',
   };
 
-  hudTopBottom: Record<string, string> = {
+  hudTopBottomOptions: Record<string, string> = {
     top: 'Top',
     bottom: 'Bottom',
   };
@@ -187,7 +188,7 @@ export class SettingsForm {
     return getGame().settings.get(MOUNT_UP_MODULE_NAME, 'should-chat');
   }
 
-  static setShouldChat(val) {
+  static setShouldChat(val:boolean) {
     getGame().settings.set(MOUNT_UP_MODULE_NAME, 'should-chat', val);
   }
 
@@ -217,7 +218,7 @@ export class SettingsForm {
     return getGame().settings.get(MOUNT_UP_MODULE_NAME, 'mount-message');
   }
 
-  static setMountMessage(val) {
+  static setMountMessage(val:string) {
     getGame().settings.set(MOUNT_UP_MODULE_NAME, 'mount-message', val);
   }
 
@@ -228,7 +229,7 @@ export class SettingsForm {
     return getGame().settings.get(MOUNT_UP_MODULE_NAME, 'dismount-message');
   }
 
-  static setDismountMessage(val) {
+  static setDismountMessage(val:string) {
     getGame().settings.set(MOUNT_UP_MODULE_NAME, 'dismount-message', val);
   }
   //#endregion
@@ -264,6 +265,19 @@ export class SettingsForm {
       case 4:
         return 'fa-fist-raised';
       case 5:
+        return 'fa-handshake';
+
+      case 'horse':
+        return 'fa-horse';
+      case 'peopleCarrying':
+        return 'fa-people-carry';
+      case 'hands':
+        return 'fa-hands';
+      case 'openHand':
+        return 'fa-hand-holding';
+      case 'fist':
+        return 'fa-fist-raised';
+      case 'handshake':
         return 'fa-handshake';
     }
   }

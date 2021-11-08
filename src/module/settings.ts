@@ -53,54 +53,62 @@ export const registerSettings = function () {
   getGame().settings.register(MOUNT_UP_MODULE_NAME, 'icon', {
     scope: 'world',
     config: false,
-    type: Number,
-    default: 0,
-    choices: {
-      horse: 'Horse',
-      peopleCarrying: 'People Carrying',
-      hands: 'Hands',
-      openHand: 'Open Hand',
-      fist: 'Fist',
-      handshake: 'Handshake',
-    },
+    type: String,
+    default: 'Horse'
+    // type: Number,
+    // default: 0,
+    // choices: {
+    //   horse: 'Horse',
+    //   peopleCarrying: 'People Carrying',
+    //   hands: 'Hands',
+    //   openHand: 'Open Hand',
+    //   fist: 'Fist',
+    //   handshake: 'Handshake',
+    // },
   });
 
   /** Which column should the button be placed on */
   getGame().settings.register(MOUNT_UP_MODULE_NAME, 'column', {
     scope: 'world',
     config: false,
-    type: Number,
-    default: 0,
-    choices: {
-      left: 'Left',
-      right: 'Right',
-    },
+    type: String,
+    default: 'Left'
+    // type: Number,
+    // default: 0,
+    // choices: {
+    //   left: 'Left',
+    //   right: 'Right',
+    // },
   });
 
   /** Whether the button should be placed on the top or bottom of the column */
   getGame().settings.register(MOUNT_UP_MODULE_NAME, 'topbottom', {
     scope: 'world',
     config: false,
-    type: Number,
-    default: 0,
-    choices: {
-      top: 'Top',
-      bottom: 'Bottom',
-    },
+    type: String,
+    default: 'Top'
+    // type: Number,
+    // default: 0,
+    // choices: {
+    //   top: 'Top',
+    //   bottom: 'Bottom',
+    // },
   });
 
   /** Whether or not riders should be locked to mounts */
   getGame().settings.register(MOUNT_UP_MODULE_NAME, 'lock-riders', {
     scope: 'world',
     config: false,
-    type: Number,
-    default: 3,
-    choices: {
-      noLock: MOUNT_UP_MODULE_NAME + '.settings.riderLock.noLock',
-      lockToLocation: 'Lock to location',
-      lockToMountBounds: 'Lock to mount bounds',
-      dismount: 'Dismount when outside mount bounds',
-    },
+    type: String,
+    default: 'Dismount when outside mount bounds'
+    // type: Number,
+    // default: 3,
+    // choices: {
+    //   noLock: MOUNT_UP_MODULE_NAME + '.settings.riderLock.noLock',
+    //   lockToLocation: 'Lock to location',
+    //   lockToMountBounds: 'Lock to mount bounds',
+    //   dismount: 'Dismount when outside mount bounds',
+    // },
   });
 
   getGame().settings.register(MOUNT_UP_MODULE_NAME, 'rider-rotate', {
@@ -114,26 +122,30 @@ export const registerSettings = function () {
   getGame().settings.register(MOUNT_UP_MODULE_NAME, 'rider-x', {
     scope: 'world',
     config: false,
-    type: Number,
-    default: 1,
-    choices: {
-      left: 'Left',
-      center: 'Center',
-      right: 'Right',
-    },
+    type: String,
+    default: 'Center'
+    // type: Number,
+    // default: 1,
+    // choices: {
+    //   left: 'Left',
+    //   center: 'Center',
+    //   right: 'Right',
+    // },
   });
 
   /** Where to place the rider vertically on the mount */
   getGame().settings.register(MOUNT_UP_MODULE_NAME, 'rider-y', {
     scope: 'world',
     config: false,
-    type: Number,
-    default: 0,
-    choices: {
-      top: 'Top',
-      center: 'Center',
-      bottom: 'Bottom',
-    },
+    type: String,
+    default: 'Top'
+    // type: Number,
+    // default: 0,
+    // choices: {
+    //   top: 'Top',
+    //   center: 'Center',
+    //   bottom: 'Bottom',
+    // },
   });
 
   /** Whether or not chat messages should be sent */
