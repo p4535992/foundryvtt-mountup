@@ -43,7 +43,7 @@ export const registerSettings = function () {
     //.registerMenu(CHAT_PORTRAIT_MODULE_NAME, CHAT_PORTRAIT_MODULE_NAME, {
     name: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.name'), // i18n(CHAT_PORTRAIT_MODULE_NAME + '.form'),
     label: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.label'), // i18n(CHAT_PORTRAIT_MODULE_NAME + '.form-title'),
-    hint: '', // i18n(CHAT_PORTRAIT_MODULE_NAME + '.form-hint'),
+    hint: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.hint'), // i18n(CHAT_PORTRAIT_MODULE_NAME + '.form-hint'),
     icon: 'fas fa-horse',
     type: MountUpForm,
     restricted: true,

@@ -3,7 +3,8 @@
     "settings": {
       "button": {
         "name": "Mount Up! Settings",
-        "label": "Mount Up!"
+        "label": "Mount Up!",
+        "hint": "Mount Up!"
       },
       "formHeaders": {
         "hudSettings": "HUD Settings",
@@ -33,10 +34,12 @@
         "hint": "If enabled, rider rotation will be updated to match mount rotation"
       },
       "riderX": {
-        "name": "Rider Horizontal Alignment"
+        "name": "Rider Horizontal Alignment",
+        "hint": " "
       },
       "riderY": {
-        "name": "Rider Vertical Alignment"
+        "name": "Rider Vertical Alignment",
+        "hint": " "
       },
       "shouldChat": {
         "name": "Send messages to chat",

@@ -1,4 +1,4 @@
-import { getCanvas, getGame } from './settings';
+import { getCanvas, getGame, MOUNT_UP_MODULE_NAME } from './settings';
 
 export const mountUp = async function (riderToken: Token, mountToken: Token) {
   const targets = [mountToken]; // Array.from(getGame().user.targets);
@@ -45,14 +45,20 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
       undefined,
     );
 
+    let message = <string>getGame().settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
+      ? <string>getGame().settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
+      : `I mount this ${targets[0].name}`;
+    message = message.replace('{rider}', riderToken.name);
+    message = message.replace('{mount}', targets[0].name);
+
     //@ts-ignore
-    ui.chat.processMessage(`I mount this ${targets[0].name}`);
+    ui.chat.processMessage(message);
     const userGMToWhisper = <User>getGame().users?.find((u) => u.isGM && u.active);
     const chatData = {
       type: 4,
       user: <User>getGame().user,
       speaker: { alias: 'Mount Up' },
-      content: `I mount this ${targets[0].name}`,
+      content: message,
       whisper: [userGMToWhisper.id, getGame().user],
     };
     //@ts-ignore
@@ -61,19 +67,24 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     await window['tokenAttacher'].attachElementToToken(riderToken, targets[0], true);
     await window['tokenAttacher'].setElementsLockStatus(riderToken, false, true);
   }
-}
+};
 
 export const dismountDropAll = async function (mountToken: Token) {
   // tokenAttacher.detachAllElementsFromToken(mountToken, true);
   await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
+
+  let message = `Everyone and everything get off from {mount}!`;
+  // message = message.replace('{rider}',riderToken.name);
+  message = message.replace('{mount}', mountToken.name);
+
   //@ts-ignore
-  ui.chat.processMessage(`Everyone and everything get off!`);
+  ui.chat.processMessage(message);
   const userGMToWhisper = <User>getGame().users?.find((u) => u.isGM && u.active);
   const chatData = {
     type: 4,
     user: <User>getGame().user,
     speaker: { alias: 'Mount Up' },
-    content: `Everyone and everything get off!`,
+    content: message,
     whisper: [userGMToWhisper.id, getGame().user],
   };
   //@ts-ignore
@@ -91,14 +102,21 @@ export const dismountDropTarget = async function (mountToken: Token, target: Tok
     //dismountDropAll(token);
     for (let i = 0; i < targets.length; i++) {
       const targ: Token = targets[i];
+
+      let message = <string>getGame().settings.get(MOUNT_UP_MODULE_NAME, 'dismount-message')
+        ? <string>getGame().settings.get(MOUNT_UP_MODULE_NAME, 'dismount-message')
+        : `Get off ${targ.name}!`;
+      message = message.replace('{rider}', targ.name);
+      message = message.replace('{mount}', mountToken.name);
+
       //@ts-ignore
-      ui.chat.processMessage(`Get off ${targ.name}!`);
+      ui.chat.processMessage(message);
       const userGMToWhisper = <User>getGame().users?.find((u) => u.isGM && u.active);
       const chatData = {
         type: 4,
         user: getGame().user,
         speaker: { alias: 'Mount Up' },
-        content: `Get off ${targ.name}!`,
+        content: message,
         whisper: [userGMToWhisper.id, getGame().user],
       };
       //@ts-ignore
@@ -110,14 +128,19 @@ export const dismountDropTarget = async function (mountToken: Token, target: Tok
 export const detachAllFromToken = async function (mountToken: Token) {
   // tokenAttacher.detachAllElementsFromToken(mountToken, true);
   await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
+
+  let message = `Everyone and everything get off from {mount}!`;
+  // message = message.replace('{rider}',riderToken.name);
+  message = message.replace('{mount}', mountToken.name);
+
   //@ts-ignore
-  ui.chat.processMessage(`Everyone and everything get off!`);
+  ui.chat.processMessage(message);
   const userGMToWhisper = <User>getGame().users?.find((u) => u.isGM && u.active);
   const chatData = {
     type: 4,
     user: getGame().user,
     speaker: { alias: 'Mount Up' },
-    content: `Everyone and everything get off!`,
+    content: message,
     whisper: [userGMToWhisper.id, getGame().user],
   };
   //@ts-ignore
