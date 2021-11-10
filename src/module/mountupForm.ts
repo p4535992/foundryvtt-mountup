@@ -26,13 +26,16 @@ export class MountUpForm extends FormApplication {
     let data;
     if (this.reset) {
       data = {
-        iconsList: this.getSelectList(this.iconOptions,'Horse'),
-        hudColumnList:  this.getSelectList(this.hudColumnsOptions,'Left'),
-        hudTopBottomList:  this.getSelectList(this.hudTopBottomOptions,'Top'),
-        riderLockList:  this.getSelectList(this.riderLockOptions, i18n(MOUNT_UP_MODULE_NAME + '.settings.riderLock.noLock')),
+        iconsList: this.getSelectList(this.iconOptions, 'Horse'),
+        hudColumnList: this.getSelectList(this.hudColumnsOptions, 'Left'),
+        hudTopBottomList: this.getSelectList(this.hudTopBottomOptions, 'Top'),
+        riderLockList: this.getSelectList(
+          this.riderLockOptions,
+          i18n(MOUNT_UP_MODULE_NAME + '.settings.riderLock.noLock'),
+        ),
         riderRotate: false,
-        riderXList:  this.getSelectList(this.riderXOptions,'Left'),
-        riderYList:  this.getSelectList(this.riderYOptions,'Top'),
+        riderXList: this.getSelectList(this.riderXOptions, 'Left'),
+        riderYList: this.getSelectList(this.riderYOptions, 'Top'),
         shouldChat: true,
         mountMsg: '{rider} has mounted {mount}.',
         dismountMsg: '{rider} has dismounted from {mount}.',
@@ -57,7 +60,7 @@ export class MountUpForm extends FormApplication {
 
   activateListeners(html: JQuery): void {
     super.activateListeners(html);
-    html.find('button[name="reset"]').click(this.onReset.bind(this))
+    html.find('button[name="reset"]').click(this.onReset.bind(this));
     this.reset = false;
   }
 
@@ -188,7 +191,7 @@ export class SettingsForm {
     return getGame().settings.get(MOUNT_UP_MODULE_NAME, 'should-chat');
   }
 
-  static setShouldChat(val:boolean) {
+  static setShouldChat(val: boolean) {
     getGame().settings.set(MOUNT_UP_MODULE_NAME, 'should-chat', val);
   }
 
@@ -218,7 +221,7 @@ export class SettingsForm {
     return getGame().settings.get(MOUNT_UP_MODULE_NAME, 'mount-message');
   }
 
-  static setMountMessage(val:string) {
+  static setMountMessage(val: string) {
     getGame().settings.set(MOUNT_UP_MODULE_NAME, 'mount-message', val);
   }
 
@@ -229,7 +232,7 @@ export class SettingsForm {
     return getGame().settings.get(MOUNT_UP_MODULE_NAME, 'dismount-message');
   }
 
-  static setDismountMessage(val:string) {
+  static setDismountMessage(val: string) {
     getGame().settings.set(MOUNT_UP_MODULE_NAME, 'dismount-message', val);
   }
   //#endregion

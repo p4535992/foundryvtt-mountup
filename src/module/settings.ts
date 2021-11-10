@@ -54,7 +54,7 @@ export const registerSettings = function () {
     scope: 'world',
     config: false,
     type: String,
-    default: 'Horse'
+    default: 'Horse',
     // type: Number,
     // default: 0,
     // choices: {
@@ -72,7 +72,7 @@ export const registerSettings = function () {
     scope: 'world',
     config: false,
     type: String,
-    default: 'Left'
+    default: 'Left',
     // type: Number,
     // default: 0,
     // choices: {
@@ -86,7 +86,7 @@ export const registerSettings = function () {
     scope: 'world',
     config: false,
     type: String,
-    default: 'Top'
+    default: 'Top',
     // type: Number,
     // default: 0,
     // choices: {
@@ -100,7 +100,7 @@ export const registerSettings = function () {
     scope: 'world',
     config: false,
     type: String,
-    default: 'Dismount when outside mount bounds'
+    default: 'Dismount when outside mount bounds',
     // type: Number,
     // default: 3,
     // choices: {
@@ -123,7 +123,7 @@ export const registerSettings = function () {
     scope: 'world',
     config: false,
     type: String,
-    default: 'Center'
+    default: 'Center',
     // type: Number,
     // default: 1,
     // choices: {
@@ -138,7 +138,7 @@ export const registerSettings = function () {
     scope: 'world',
     config: false,
     type: String,
-    default: 'Top'
+    default: 'Top',
     // type: Number,
     // default: 0,
     // choices: {

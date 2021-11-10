@@ -1,4 +1,4 @@
-# 3.2.1
+# 3.2.1 [PATCHED VERSION]
 
 - Fix settings are not saved ????
 - Fix [[BUG] Settings aren't saving at all. #1](https://github.com/p4535992/MountUp/issues/1)

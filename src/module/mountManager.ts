@@ -52,17 +52,17 @@ export class MountManager {
 
         Chatter.mountMessage(riderToken.id, mountToken.id);
 
-        // shrink the rider if needed
-        if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
-          const grid = <number>getCanvas().scene?.data.grid;
-          const newWidth = mountToken.w / 2 / grid;
-          const newHeight = mountToken.h / 2 / grid;
-          await riderToken.document.update({
-            width: newWidth,
-            height: newHeight,
-          });
-          //riderToken.zIndex = mountToken.zIndex + 10;
-        }
+        // // shrink the rider if needed
+        // if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
+        //   const grid = <number>getCanvas().scene?.data.grid;
+        //   const newWidth = mountToken.w / 2 / grid;
+        //   const newHeight = mountToken.h / 2 / grid;
+        //   await riderToken.document.update({
+        //     width: newWidth,
+        //     height: newHeight,
+        //   });
+        //   riderToken.zIndex = mountToken.zIndex + 10;
+        // }
 
         // const loc: { x; y } = await this.getRiderInitialLocation(riderToken, mountToken);
         await riderToken.document.setFlag(FlagScope, Flags.MountMove, true);
@@ -70,7 +70,6 @@ export class MountManager {
         //   x: loc.x,
         //   y: loc.y,
         // });
-        riderToken.zIndex = mountToken.zIndex + 10;
       }
     }
 
@@ -149,22 +148,22 @@ export class MountManager {
 
     // MOD 4535992 FORCE SHRINK TO OTHERS RIDERS
     //let riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
-    for (const riderTmp of riders) {
-      const riderTokenTmp: Token = findTokenById(riderTmp);
-      if (riders.includes(riderTokenTmp.id)) {
-        // shrink the rider if needed
-        if (riderTokenTmp.w >= mountToken.w || riderTokenTmp.h >= mountToken.h) {
-          const grid = <number>getCanvas().scene?.data.grid;
-          const newWidth = mountToken.w / 2 / grid;
-          const newHeight = mountToken.h / 2 / grid;
-          await riderTokenTmp.document.update({
-            width: newWidth,
-            height: newHeight,
-          });
-          riderTokenTmp.zIndex = mountToken.zIndex + 10;
-        }
-      }
-    }
+    // for (const riderTmp of riders) {
+    //   const riderTokenTmp: Token = findTokenById(riderTmp);
+    //   if (riders.includes(riderTokenTmp.id)) {
+    //     // shrink the rider if needed
+    //     if (riderTokenTmp.w >= mountToken.w || riderTokenTmp.h >= mountToken.h) {
+    //       const grid = <number>getCanvas().scene?.data.grid;
+    //       const newWidth = mountToken.w / 2 / grid;
+    //       const newHeight = mountToken.h / 2 / grid;
+    //       await riderTokenTmp.document.update({
+    //         width: newWidth,
+    //         height: newHeight,
+    //       });
+    //       riderTokenTmp.zIndex = mountToken.zIndex + 10;
+    //     }
+    //   }
+    // }
     // END MOD 4535992 FORCE SHRINK TO OTHERS RIDERS
 
     return true;
@@ -293,79 +292,79 @@ export class MountManager {
       // MOD 4535992 ADD CHECK FOR RIDERS FLAGS
       if (mountToken) {
         const riders: string[] = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
-        if (riders && riders.includes(riderToken.id)) {
-          // shrink the rider if needed
-          if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
-            const grid = <number>getCanvas().scene?.data.grid;
-            const newWidth = mountToken.w / 2 / grid;
-            const newHeight = mountToken.h / 2 / grid;
-            await riderToken.document.update({
-              width: newWidth,
-              height: newHeight,
-            });
-            riderToken.zIndex = mountToken.zIndex + 10;
-          }
-          // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
-          // let riders = <string[]>mountToken.document.document.getFlag(FlagScope, Flags.Riders);
-          // let index = riders.indexOf(riderToken.id); // 1
-          // let offsetM = index;
-          // if(!updateData){
-          //     updateData = {
-          //         x: riderToken.x,
-          //         y: riderToken.y
-          //     };
-          // }
+        // if (riders && riders.includes(riderToken.id)) {
+        //   // shrink the rider if needed
+        //   if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
+        //     const grid = <number>getCanvas().scene?.data.grid;
+        //     const newWidth = mountToken.w / 2 / grid;
+        //     const newHeight = mountToken.h / 2 / grid;
+        //     await riderToken.document.update({
+        //       width: newWidth,
+        //       height: newHeight,
+        //     });
+        //     riderToken.zIndex = mountToken.zIndex + 10;
+        //   }
+        //   // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
+        //   // let riders = <string[]>mountToken.document.document.getFlag(FlagScope, Flags.Riders);
+        //   // let index = riders.indexOf(riderToken.id); // 1
+        //   // let offsetM = index;
+        //   // if(!updateData){
+        //   //     updateData = {
+        //   //         x: riderToken.x,
+        //   //         y: riderToken.y
+        //   //     };
+        //   // }
 
-          // const mountLocation = { x: mountToken.x, y: mountToken.y };
-          // const offset = { x: mountLocation.x - riderToken.x, y: mountLocation.y - riderToken.y };
-          // const rotation = SettingsForm.getRiderRotate() ? updateData.rotation : riderToken.data.rotation;
+        //   // const mountLocation = { x: mountToken.x, y: mountToken.y };
+        //   // const offset = { x: mountLocation.x - riderToken.x, y: mountLocation.y - riderToken.y };
+        //   // const rotation = SettingsForm.getRiderRotate() ? updateData.rotation : riderToken.data.rotation;
 
-          // let mount = mountToken;//targets[0];
-          // let newCoords = {
-          //     x:riderToken.x,
-          //     y:riderToken.y
-          // };
-          // if(mount.x+mount.w-riderToken.w < riderToken.x){
-          //     newCoords.x = mount.x+mount.w-riderToken.w;
-          // }
-          // else if(mount.x > riderToken.x){
-          //     newCoords.x = mount.x;
-          // }
-          // if(mount.y+mount.h-riderToken.h < riderToken.y){
-          //     newCoords.y = mount.y+mount.h-riderToken.h;
-          // }
-          // else if(mount.y > riderToken.y){
-          //     newCoords.y = mount.y;
-          // }
-          // let newX = newCoords.x;
-          // let newY = newCoords.y;
+        //   // let mount = mountToken;//targets[0];
+        //   // let newCoords = {
+        //   //     x:riderToken.x,
+        //   //     y:riderToken.y
+        //   // };
+        //   // if(mount.x+mount.w-riderToken.w < riderToken.x){
+        //   //     newCoords.x = mount.x+mount.w-riderToken.w;
+        //   // }
+        //   // else if(mount.x > riderToken.x){
+        //   //     newCoords.x = mount.x;
+        //   // }
+        //   // if(mount.y+mount.h-riderToken.h < riderToken.y){
+        //   //     newCoords.y = mount.y+mount.h-riderToken.h;
+        //   // }
+        //   // else if(mount.y > riderToken.y){
+        //   //     newCoords.y = mount.y;
+        //   // }
+        //   // let newX = newCoords.x;
+        //   // let newY = newCoords.y;
 
-          // await riderToken.update({
-          //     x: newX === undefined ? mountLocation.x - offset.x : newX - offset.x,
-          //     y: newY === undefined ? mountLocation.y - offset.y : newY - offset.y,
-          //     rotation: rotation
-          // });
-          // riderToken.zIndex = mountToken.zIndex + 10;
-          // END MOD 4535992 SET UP OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
+        //   // await riderToken.update({
+        //   //     x: newX === undefined ? mountLocation.x - offset.x : newX - offset.x,
+        //   //     y: newY === undefined ? mountLocation.y - offset.y : newY - offset.y,
+        //   //     rotation: rotation
+        //   // });
+        //   // riderToken.zIndex = mountToken.zIndex + 10;
+        //   // END MOD 4535992 SET UP OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
 
-          // MOD 4535992 REMOVED
+        //   // MOD 4535992 REMOVED
 
-          // updateData.x = (updateData.x !== undefined ? updateData.x : mountToken.x);
-          // updateData.y = (updateData.y !== undefined ? updateData.y : mountToken.y);
-          // updateData.rotation = updateData.rotation !== undefined ? updateData.rotation : mountToken.data.rotation;
+        //   // updateData.x = (updateData.x !== undefined ? updateData.x : mountToken.x);
+        //   // updateData.y = (updateData.y !== undefined ? updateData.y : mountToken.y);
+        //   // updateData.rotation = updateData.rotation !== undefined ? updateData.rotation : mountToken.data.rotation;
 
-          // game.socket['emit'](socketName, {
-          //     mode: socketAction.UpdateToken,
-          //     riderId: riderToken.id,
-          //     // updateData: updateData
-          //     // mountId: mountToken.id,
-          //     // x: updateData.x - offset.x,
-          //     // y: updateData.y - offset.y,
-          //     x: newX - offset.x,
-          //     y: newY - offset.y,
-          //     rotation: rotation
-          // });
-        }
+        //   // game.socket['emit'](socketName, {
+        //   //     mode: socketAction.UpdateToken,
+        //   //     riderId: riderToken.id,
+        //   //     // updateData: updateData
+        //   //     // mountId: mountToken.id,
+        //   //     // x: updateData.x - offset.x,
+        //   //     // y: updateData.y - offset.y,
+        //   //     x: newX - offset.x,
+        //   //     y: newY - offset.y,
+        //   //     rotation: rotation
+        //   // });
+        // }
       }
     }
   }

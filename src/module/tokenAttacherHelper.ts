@@ -32,18 +32,38 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
       newRiderCoords.y = newMountCoords.y;
     }
 
+    // shrink the rider if needed
+    const grid = <number>getCanvas().scene?.data.grid;
+    let newWidthRider = riderToken.w;
+    let newHeightRider = riderToken.h;
+    let newWidthRiderSize = riderToken.document.data.width;
+    let newHeightRiderSize = riderToken.document.data.height;
+    if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
+      newWidthRider = mountToken.w / grid / 2;
+      newHeightRider = mountToken.h / grid / 2;
+      newWidthRiderSize = mountToken.document.data.width / 2;
+      newHeightRiderSize = mountToken.document.data.height / 2;
+    }
+
     await riderToken.document.update({
       x: newRiderCoords.x,
       y: newRiderCoords.y,
+      width: newWidthRiderSize,
+      height: newHeightRiderSize,
     });
 
     await riderToken.update(
       {
         x: newRiderCoords.x,
         y: newRiderCoords.y,
+        w: newWidthRider,
+        h: newHeightRider,
+        // zIndex: mountToken.zIndex + 10
       },
       undefined,
     );
+
+    riderToken.zIndex = mountToken.zIndex + 10;
 
     let message = <string>getGame().settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
       ? <string>getGame().settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
@@ -52,7 +72,7 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     message = message.replace('{mount}', targets[0].name);
 
     //@ts-ignore
-    ui.chat.processMessage(message);
+    //ui.chat.processMessage(message);
     const userGMToWhisper = <User>getGame().users?.find((u) => u.isGM && u.active);
     const chatData = {
       type: 4,
@@ -78,7 +98,7 @@ export const dismountDropAll = async function (mountToken: Token) {
   message = message.replace('{mount}', mountToken.name);
 
   //@ts-ignore
-  ui.chat.processMessage(message);
+  //ui.chat.processMessage(message);
   const userGMToWhisper = <User>getGame().users?.find((u) => u.isGM && u.active);
   const chatData = {
     type: 4,
@@ -110,7 +130,7 @@ export const dismountDropTarget = async function (mountToken: Token, target: Tok
       message = message.replace('{mount}', mountToken.name);
 
       //@ts-ignore
-      ui.chat.processMessage(message);
+      //ui.chat.processMessage(message);
       const userGMToWhisper = <User>getGame().users?.find((u) => u.isGM && u.active);
       const chatData = {
         type: 4,
@@ -134,7 +154,7 @@ export const detachAllFromToken = async function (mountToken: Token) {
   message = message.replace('{mount}', mountToken.name);
 
   //@ts-ignore
-  ui.chat.processMessage(message);
+  //ui.chat.processMessage(message);
   const userGMToWhisper = <User>getGame().users?.find((u) => u.isGM && u.active);
   const chatData = {
     type: 4,
