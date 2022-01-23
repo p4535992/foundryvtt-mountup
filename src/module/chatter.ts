@@ -1,19 +1,33 @@
-import { SettingsForm } from './mountupForm';
+// import { SettingsForm } from './mountupForm.ts';
 import { findTokenById } from './utils';
+import { game, MOUNT_UP_MODULE_NAME } from './settings';
 
 /**
  * Provides functionality for sending chat messages
  */
 export class Chatter {
+
+  _shouldChat:boolean;
+  _iconClass:string;
+  _mountMessage:string;
+  _dismountMessage:string;
+
+  constructor(){
+    this._shouldChat = <boolean>game.settings.get(MOUNT_UP_MODULE_NAME,'should-chat');
+    this._iconClass = <string>game.settings.get(MOUNT_UP_MODULE_NAME,'icon');
+    this._mountMessage = <string>game.settings.get(MOUNT_UP_MODULE_NAME,'mount-message');
+    this._dismountMessage = <string>game.settings.get(MOUNT_UP_MODULE_NAME,'dismount-message');
+  }
+
   /**
    * Attempts to display a chat message notifying about a mount action
    * @param {String} riderId - The ID of the rider
    * @param {String} mountId - The ID of the mount
    */
-  static mountMessage(riderId, mountId) {
-    if (SettingsForm.getShouldChat()) {
-      const icon = `<span class="fa-stack"><i class="fas ${SettingsForm.getIconClass()} fa-stack-1x"></i></span>&nbsp;`;
-      this.sendChatMessage(icon + SettingsForm.getMountMessage(), riderId, mountId);
+  mountMessage(riderId, mountId) {
+    if (this._shouldChat) {
+      const icon = `<span class="fa-stack"><i class="fas ${this._iconClass} fa-stack-1x"></i></span>&nbsp;`;
+      this.sendChatMessage(icon + this._mountMessage, riderId, mountId);
     }
   }
 
@@ -22,13 +36,13 @@ export class Chatter {
    * @param {String} riderId - The ID of the rider
    * @param {String} mountId - The ID of the mount
    */
-  static dismountMessage(riderId, mountId) {
-    if (SettingsForm.getShouldChat()) {
+  dismountMessage(riderId, mountId) {
+    if (this._shouldChat) {
       const icon = `<span class="fa-stack" >
-                            <i class="fas ${SettingsForm.getIconClass()} fa-stack-1x"></i>
+                            <i class="fas ${this._iconClass} fa-stack-1x"></i>
                             <i class="fas fa-slash fa-stack-1x" style="color: tomato"></i>
                         </span>&nbsp;`;
-      this.sendChatMessage(icon + SettingsForm.getDismountMessage(), riderId, mountId);
+      this.sendChatMessage(icon + this._dismountMessage, riderId, mountId);
     }
   }
 
@@ -38,7 +52,7 @@ export class Chatter {
    * @param {string} riderId - The ID of the rider token
    * @param {string} mountId - The ID of the mount token
    */
-  static sendChatMessage(message, riderId, mountId) {
+  sendChatMessage(message, riderId, mountId) {
     const rider = findTokenById(riderId);
     const mount = findTokenById(mountId);
 

@@ -1,22 +1,35 @@
 import { error, warn } from '../foundryvtt-mountup';
 import { Chatter } from './chatter';
-import { SettingsForm } from './mountupForm';
-import { FlagScope, getCanvas, MOUNT_UP_MODULE_NAME } from './settings';
+import { FlagScope, MOUNT_UP_MODULE_NAME } from './settings';
 import { detachAllFromToken, dismountDropAll, dismountDropTarget, mountUp, moveToken } from './tokenAttacherHelper';
 import { findTokenById, Flags, getTokenShape, riderLock, riderX, riderY, socketAction } from './utils';
+import { canvas, game } from './settings';
 
 /**
  * Provides all of the functionality for interacting with the game (tokens, canvas, etc.)
  */
 export class MountManager {
+
+  _chatter:Chatter;
+  _riderLock:number;
+  _riderX:number;
+  _riderY:number;
+
+  constructor(){
+    this._chatter = new Chatter();
+    this._riderLock = <number>game.settings.get(MOUNT_UP_MODULE_NAME,'lock-riders');
+    this._riderY = <number>game.settings.get(MOUNT_UP_MODULE_NAME,'rider-y');
+    this._riderX = <number>game.settings.get(MOUNT_UP_MODULE_NAME,'rider-x');
+  }
+
   /**
    * Called when the mount up button was clicked on a token's HUD
    * Determines if conditions are appropriate for mounting, and executes the mount if so
    * @param {Object} hudToken - The token from which the button was clicked on the hud
    */
-  static async mountUpHud(hudToken) {
-    const mountToken = <Token>getCanvas().tokens?.controlled.find((t) => t.id == hudToken._id);
-    const tokensToCheck = getCanvas().tokens?.controlled || [];
+  async mountUpHud(hudToken) {
+    const mountToken = <Token>canvas.tokens?.controlled.find((t) => t.id == hudToken._id);
+    const tokensToCheck = canvas.tokens?.controlled || [];
     for (const riderToken of tokensToCheck) {
       if (riderToken.id != mountToken.id) {
         const mountTokenTmp = <Token>findTokenById(<string>riderToken.document.getFlag(FlagScope, Flags.Mount));
@@ -50,11 +63,11 @@ export class MountManager {
         // CALL TOKEN ATTACHER
         await mountUp(riderToken, mountToken);
 
-        Chatter.mountMessage(riderToken.id, mountToken.id);
+        this._chatter.mountMessage(riderToken.id, mountToken.id);
 
         // // shrink the rider if needed
         // if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
-        //   const grid = <number>getCanvas().scene?.data.grid;
+        //   const grid = <number>canvas.scene?.data.grid;
         //   const newWidth = mountToken.w / 2 / grid;
         //   const newHeight = mountToken.h / 2 / grid;
         //   await riderToken.document.update({
@@ -76,7 +89,7 @@ export class MountManager {
     mountToken.parent.sortChildren();
   }
 
-  static async dismount(hudToken) {
+  async dismount(hudToken) {
     const riderToken: Token = findTokenById(hudToken._id);
     const mountToken: Token = findTokenById(<string>riderToken.document.getFlag(FlagScope, Flags.Mount));
     // MOD 4535992
@@ -85,7 +98,7 @@ export class MountManager {
     this.doRemoveMount(riderToken, mountToken);
   }
 
-  static async removeAllRiders(hudToken) {
+  async removeAllRiders(hudToken) {
     const mountToken: Token = findTokenById(hudToken._id);
     // CALL TOKEN ATTACHER
     dismountDropAll(mountToken);
@@ -102,7 +115,7 @@ export class MountManager {
    * @param {object} riderToken - The rider token
    * @param {object} mountToken - The mount token
    */
-  static async doCreateMount(riderToken: Token, mountToken: Token) {
+  async doCreateMount(riderToken: Token, mountToken: Token) {
     let riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
     if (riders == undefined) riders = [];
     if (!riders.includes(riderToken.id)) {
@@ -122,7 +135,7 @@ export class MountManager {
     // CALL TOKEN ATTACHER MOVED UP
     await mountUp(riderToken, mountToken);
 
-    Chatter.mountMessage(riderToken.id, mountToken.id);
+    this._chatter.mountMessage(riderToken.id, mountToken.id);
     return true;
   }
 
@@ -131,14 +144,14 @@ export class MountManager {
    * @param {object} riderToken - The rider token
    * @param {object} mountToken - The mount token
    */
-  static async doRemoveMount(riderToken: Token, mountToken: Token) {
+  async doRemoveMount(riderToken: Token, mountToken: Token) {
     await riderToken.document.setFlag(FlagScope, Flags.MountMove, true);
     this.restoreRiderSize(riderToken);
 
     // CALL TOKEN ATTACHER MOVED UP
     dismountDropTarget(mountToken, riderToken);
 
-    Chatter.dismountMessage(riderToken.id, mountToken.id);
+    this._chatter.dismountMessage(riderToken.id, mountToken.id);
     const riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
     await mountToken.document.unsetFlag(FlagScope, Flags.Riders);
     riders.splice(riders.indexOf(riderToken.id));
@@ -153,7 +166,7 @@ export class MountManager {
     //   if (riders.includes(riderTokenTmp.id)) {
     //     // shrink the rider if needed
     //     if (riderTokenTmp.w >= mountToken.w || riderTokenTmp.h >= mountToken.h) {
-    //       const grid = <number>getCanvas().scene?.data.grid;
+    //       const grid = <number>canvas.scene?.data.grid;
     //       const newWidth = mountToken.w / 2 / grid;
     //       const newHeight = mountToken.h / 2 / grid;
     //       await riderTokenTmp.document.update({
@@ -173,7 +186,7 @@ export class MountManager {
    * Restores the size of a mount's rider token to original size
    * @param {Token} riderToken - The rider token who's size needs to be restored
    */
-  static async restoreRiderSize(riderToken: Token) {
+  async restoreRiderSize(riderToken: Token) {
     // MOD 4535992 ADD CHECK FOR RIDERS FLAGS
     const mountToken = findTokenById(<string>riderToken.document.getFlag(FlagScope, Flags.Mount));
     const riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
@@ -183,7 +196,7 @@ export class MountManager {
       const origsize = <{ w; h }>riderToken.document.getFlag(FlagScope, Flags.OrigSize);
       // MOD 4535992 REMOVED IF
       //if (riderToken.w < origsize.w || riderToken.h < origsize.h) {
-      const grid = <number>getCanvas().scene?.data.grid;
+      const grid = <number>canvas.scene?.data.grid;
       const newWidth = riderToken.w < origsize.w ? origsize.w : riderToken.w;
       const newHeight = riderToken.h < origsize.h ? origsize.h : riderToken.h;
 
@@ -201,7 +214,7 @@ export class MountManager {
    * Called when a token is deleted, checks if the token is part of any ride link, and breaks said link
    * @param {Object} token - The token being deleted
    */
-  static async handleTokenDelete(tokenId: string) {
+  async handleTokenDelete(tokenId: string) {
     if (tokenId) {
       const token = findTokenById(tokenId);
 
@@ -238,8 +251,8 @@ export class MountManager {
   /**
    * Pops all rider tokens on top of their mount tokens (canvas wide)
    */
-  static async popAllRiders() {
-    await getCanvas().tokens?.placeables.forEach((token) => {
+  async popAllRiders() {
+    await canvas.tokens?.placeables.forEach((token) => {
       if (this.isaMount(token.id) && !this.isaRider(token.id)) {
         this.popRider(token.id);
       }
@@ -250,10 +263,10 @@ export class MountManager {
    * Recursively pops a mount's riders on the z-index
    * @param {string} mountId - The ID of the mount token
    */
-  static async popRider(mountId: string, callcount = 0) {
+  async popRider(mountId: string, callcount = 0) {
     if (callcount > 100) {
       error('Pop riders called too many times. Breaking all rides for safety.');
-      getCanvas().tokens?.placeables.forEach((t: Token) => {
+      canvas.tokens?.placeables.forEach((t: Token) => {
         t.document.unsetFlag(MOUNT_UP_MODULE_NAME, Flags.Riders);
         t.document.unsetFlag(MOUNT_UP_MODULE_NAME, Flags.Mount);
       });
@@ -285,7 +298,7 @@ export class MountManager {
     return true;
   }
 
-  static async doPostTokenUpdate(tokenId: string, updateData) {
+  async doPostTokenUpdate(tokenId: string, updateData) {
     if (this.isaRider(tokenId)) {
       const riderToken = findTokenById(tokenId);
       const mountToken = findTokenById(<string>riderToken.document.getFlag(FlagScope, Flags.Mount));
@@ -295,7 +308,7 @@ export class MountManager {
         // if (riders && riders.includes(riderToken.id)) {
         //   // shrink the rider if needed
         //   if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
-        //     const grid = <number>getCanvas().scene?.data.grid;
+        //     const grid = <number>canvas.scene?.data.grid;
         //     const newWidth = mountToken.w / 2 / grid;
         //     const newHeight = mountToken.h / 2 / grid;
         //     await riderToken.document.update({
@@ -375,7 +388,7 @@ export class MountManager {
    * @param {String} tokenId - The ID of the token being moved
    * @param {Object} updateData - Update data being sent by the game
    */
-  static async doTokenUpdateOnlyCheckBoundHandler(tokenId, updateData) {
+  async doTokenUpdateOnlyCheckBoundHandler(tokenId, updateData) {
     if (this.isaRider(tokenId)) {
       const riderToken = findTokenById(tokenId);
       const mountToken = findTokenById(<string>riderToken.document.getFlag(FlagScope, Flags.Mount));
@@ -390,11 +403,10 @@ export class MountManager {
 
           if (!riderToken.document.getFlag(FlagScope, Flags.MountMove)) {
             if (
-              !getCanvas()
-                .tokens?.controlled.map((t) => t.id)
+              !canvas.tokens?.controlled.map((t) => t.id)
                 .includes(<string>riderToken.document.getFlag(FlagScope, Flags.Mount))
             ) {
-              switch (SettingsForm.getRiderLock()) {
+              switch (this._riderLock) {
                 case riderLock.NoLock:
                   break;
                 case riderLock.LockLocation:
@@ -421,7 +433,7 @@ export class MountManager {
     }
   }
 
-  static isInsideTokenBounds(location: { x; y }, token: Token) {
+  isInsideTokenBounds(location: { x; y }, token: Token) {
     const x = token.x + token.w;
     const y = token.y + token.h;
 
@@ -434,7 +446,7 @@ export class MountManager {
    * Returns true if the token is currently serving as a mount in any existing ride link
    * @param {String} tokenId - The ID of the token to evaluate
    */
-  static isaMount(tokenId: string) {
+  isaMount(tokenId: string) {
     const token = findTokenById(tokenId);
     if (token) {
       const riders: string[] = <string[]>token.document.getFlag(FlagScope, Flags.Riders);
@@ -448,7 +460,7 @@ export class MountManager {
    * Returns true if the token is currenty serving as a rider in any existing ride link
    * @param {String} tokenId - The ID of the token to evaluate
    */
-  static isaRider(tokenId) {
+  isaRider(tokenId) {
     const token = findTokenById(tokenId);
     if (token) {
       return token.document.getFlag(MOUNT_UP_MODULE_NAME, Flags.Mount) != undefined;
@@ -462,7 +474,7 @@ export class MountManager {
    * @param {string} riderId - The rider token's ID
    * @param {string} mountId - The mount token's ID
    */
-  static isRidersMount(riderId, mountId) {
+  isRidersMount(riderId, mountId) {
     const rider = findTokenById(riderId);
     const mount = findTokenById(mountId);
     return <string>rider.document.getFlag(FlagScope, Flags.Mount) == mount.id;
@@ -473,7 +485,7 @@ export class MountManager {
    * @param {token} riderToken - The rider token
    * @param {token} mountToken - The mount token
    */
-  static async getRiderInitialLocation(riderToken: Token, mountToken: Token): Promise<{ x; y }> {
+  async getRiderInitialLocation(riderToken: Token, mountToken: Token): Promise<{ x; y }> {
     const loc = { x: mountToken.x, y: mountToken.y };
 
     // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
@@ -482,7 +494,7 @@ export class MountManager {
     const offset: number = index;
     // END MOD 4535992 SET UP OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
 
-    switch (SettingsForm.getRiderX()) {
+    switch (this._riderX) {
       case riderX.Center:
         // eslint-disable-next-line no-case-declarations
         const mountCenter = getTokenShape(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);
@@ -493,7 +505,7 @@ export class MountManager {
         break;
     }
 
-    switch (SettingsForm.getRiderY()) {
+    switch (this._riderY) {
       case riderY.Center:
         // eslint-disable-next-line no-case-declarations
         const mountCenter = getTokenShape(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);
@@ -511,7 +523,7 @@ export class MountManager {
    * @param {string} childId - The ID of the child
    * @param {string} ancestorId - The ID of the ancestor
    */
-  static isAncestor(childId: string, ancestorId: string) {
+  isAncestor(childId: string, ancestorId: string) {
     if (this.isaRider(childId)) {
       const child: Token = findTokenById(childId);
       const parent: Token = findTokenById(<string>child.document.getFlag(FlagScope, Flags.Mount));

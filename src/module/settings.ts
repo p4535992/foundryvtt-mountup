@@ -1,5 +1,5 @@
-import { i18n } from '../foundryvtt-mountup';
-import { MountUpForm } from './mountupForm';
+export const game = getGame();
+export const canvas = getCanvas();
 
 export const MOUNT_UP_MODULE_NAME = 'foundryvtt-mountup';
 export const socketName = 'module.' + MOUNT_UP_MODULE_NAME; //'module.mountup';
@@ -16,7 +16,7 @@ export const FlagScope = MOUNT_UP_MODULE_NAME; //'mountup';
  * So you will need to deal with the fact that there might not be an initialized canvas at any point in time.
  * @returns
  */
-export function getCanvas(): Canvas {
+function getCanvas(): Canvas {
   if (!(canvas instanceof Canvas) || !canvas.ready) {
     throw new Error('Canvas Is Not Initialized');
   }
@@ -31,7 +31,7 @@ export function getCanvas(): Canvas {
  * So you will need to deal with the fact that there might not be an initialized canvas at any point in time.
  * @returns
  */
-export function getGame(): Game {
+function getGame(): Game {
   if (!(game instanceof Game)) {
     throw new Error('Game Is Not Initialized');
   }
@@ -39,79 +39,78 @@ export function getGame(): Game {
 }
 
 export const registerSettings = function () {
-  getGame().settings.registerMenu(MOUNT_UP_MODULE_NAME, 'settingsMenu', {
-    //.registerMenu(CHAT_PORTRAIT_MODULE_NAME, CHAT_PORTRAIT_MODULE_NAME, {
-    name: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.name'), // i18n(CHAT_PORTRAIT_MODULE_NAME + '.form'),
-    label: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.label'), // i18n(CHAT_PORTRAIT_MODULE_NAME + '.form-title'),
-    hint: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.hint'), // i18n(CHAT_PORTRAIT_MODULE_NAME + '.form-hint'),
-    icon: 'fas fa-horse',
-    type: MountUpForm,
-    restricted: true,
-  });
+  // game.settings.registerMenu(MOUNT_UP_MODULE_NAME, 'settingsMenu', {
+  //   name: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.name'),
+  //   label: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.label'),
+  //   hint: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.hint'),
+  //   icon: 'fas fa-horse',
+  //   type: MountUpForm,
+  //   restricted: true,
+  // });
 
   /** Which Icon should be used */
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'icon', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'icon', {
     scope: 'world',
     config: false,
     type: String,
     default: 'Horse',
     // type: Number,
     // default: 0,
-    // choices: {
-    //   horse: 'Horse',
-    //   peopleCarrying: 'People Carrying',
-    //   hands: 'Hands',
-    //   openHand: 'Open Hand',
-    //   fist: 'Fist',
-    //   handshake: 'Handshake',
-    // },
+    choices: {
+      horse: 'Horse',
+      peopleCarrying: 'People Carrying',
+      hands: 'Hands',
+      openHand: 'Open Hand',
+      fist: 'Fist',
+      handshake: 'Handshake',
+    },
   });
 
   /** Which column should the button be placed on */
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'column', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'column', {
     scope: 'world',
     config: false,
     type: String,
     default: 'Left',
     // type: Number,
     // default: 0,
-    // choices: {
-    //   left: 'Left',
-    //   right: 'Right',
-    // },
+    choices: {
+      left: 'Left',
+      right: 'Right',
+    },
   });
 
   /** Whether the button should be placed on the top or bottom of the column */
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'topbottom', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'topbottom', {
     scope: 'world',
     config: false,
     type: String,
     default: 'Top',
     // type: Number,
     // default: 0,
-    // choices: {
-    //   top: 'Top',
-    //   bottom: 'Bottom',
-    // },
+    choices: {
+      top: 'Top',
+      bottom: 'Bottom',
+    },
   });
 
   /** Whether or not riders should be locked to mounts */
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'lock-riders', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'lock-riders', {
     scope: 'world',
     config: false,
-    type: String,
-    default: 'Dismount when outside mount bounds',
-    // type: Number,
-    // default: 3,
-    // choices: {
-    //   noLock: MOUNT_UP_MODULE_NAME + '.settings.riderLock.noLock',
-    //   lockToLocation: 'Lock to location',
-    //   lockToMountBounds: 'Lock to mount bounds',
-    //   dismount: 'Dismount when outside mount bounds',
-    // },
+    // type: String,
+    // default: 'Dismount when outside mount bounds',
+    type: Number,
+    default: 3,
+    choices: {
+      0: MOUNT_UP_MODULE_NAME + '.settings.riderLock.noLock',
+      1: 'Lock to location',
+      2: 'Lock to mount bounds',
+      3: 'Dismount when outside mount bounds',
+    },
   });
 
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'rider-rotate', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-rotate', {
     scope: 'world',
     config: false,
     type: Boolean,
@@ -119,37 +118,37 @@ export const registerSettings = function () {
   });
 
   /** Where to place the rider horizontally on the mount */
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'rider-x', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-x', {
     scope: 'world',
     config: false,
-    type: String,
-    default: 'Center',
-    // type: Number,
-    // default: 1,
-    // choices: {
-    //   left: 'Left',
-    //   center: 'Center',
-    //   right: 'Right',
-    // },
+    // type: String,
+    // default: 'Center',
+    type: Number,
+    default: 1,
+    choices: {
+      0: 'Left',
+      1: 'Center',
+      2: 'Right',
+    },
   });
 
   /** Where to place the rider vertically on the mount */
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'rider-y', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-y', {
     scope: 'world',
     config: false,
-    type: String,
-    default: 'Top',
-    // type: Number,
-    // default: 0,
-    // choices: {
-    //   top: 'Top',
-    //   center: 'Center',
-    //   bottom: 'Bottom',
-    // },
+    // type: String,
+    // default: 'Top',
+    type: Number,
+    default: 0,
+    choices: {
+      0: 'Top',
+      1: 'Center',
+      2: 'Bottom',
+    },
   });
 
   /** Whether or not chat messages should be sent */
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'should-chat', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'should-chat', {
     scope: 'world',
     config: false,
     type: Boolean,
@@ -157,7 +156,7 @@ export const registerSettings = function () {
   });
 
   /** The mounting message */
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'mount-message', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'mount-message', {
     scope: 'world',
     config: false,
     type: String,
@@ -165,7 +164,7 @@ export const registerSettings = function () {
   });
 
   /** The dismounting message */
-  getGame().settings.register(MOUNT_UP_MODULE_NAME, 'dismount-message', {
+  game.settings.register(MOUNT_UP_MODULE_NAME, 'dismount-message', {
     scope: 'world',
     config: false,
     type: String,
