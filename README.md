@@ -3,11 +3,7 @@
 
 **Mount Up!** is a module for [Foundry VTT](https://foundryvtt.com/  "Foundry VTT") that allows tokens to carry or be carried by other tokens. This is completely system agnostic, and fully customizable to fit right into your game.
 
-## NOTE: If you are a javascript developer and not a typescript developer, you can just use the javascript files under the dist folder or rename the file from .ts to .js
-
-## Known issue
-
-- There is a incompatibility with the [Token Factions](https://github.com/p4535992/token-factions ) when i "Mount Up" a faction token the PIXI Graphic go in conlict and launch a exception is not a grave exception but is annoying
+## NOTE: If you are a javascript developer and not a typescript developer, you can just use the javascript files under the dist folder
 
 # Installation
 It's always better and easier to install modules through in in app browser. Just search for "Mount Up!"

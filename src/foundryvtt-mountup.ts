@@ -95,3 +95,12 @@ Hooks.once('ready', () => {
 });
 
 // Add any additional hooks if necessary
+
+Hooks.once('libChangelogsReady', function () {
+  //@ts-ignore
+  libChangelogs.register(
+    MOUNT_UP_MODULE_NAME,
+    'Added [token-z](https://github.com/theripper93/token-z) as dependency',
+    'minor',
+  );
+});
