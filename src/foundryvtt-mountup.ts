@@ -100,7 +100,7 @@ Hooks.once('libChangelogsReady', function () {
   //@ts-ignore
   libChangelogs.register(
     MOUNT_UP_MODULE_NAME,
-    'Added [token-z](https://github.com/theripper93/token-z) as dependency',
+    'Add toggleMount function to the macros',
     'minor',
   );
 });

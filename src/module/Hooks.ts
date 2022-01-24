@@ -1,5 +1,5 @@
 import { MOUNT_UP_MODULE_NAME } from './settings';
-import { dismount, dropRider, mount } from './macros';
+import { dismount, dropRider, mount, toggleMount } from './macros';
 import { MountHud } from './mountHud';
 import { MountManager } from './mountManager';
 import { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs';
@@ -13,6 +13,7 @@ export const readyHooks = async () => {
     mount: mount,
     dismount: dismount,
     dropRider: dropRider,
+    toggleMount: toggleMount
   };
 
   // FOR RETROCOMPATIBILITY
@@ -21,6 +22,7 @@ export const readyHooks = async () => {
     mount: mount,
     dismount: dismount,
     dropRider: dropRider,
+    toggleMount: toggleMount
   };
 };
 

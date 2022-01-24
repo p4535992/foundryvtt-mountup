@@ -2,7 +2,7 @@ import { MOUNT_UP_MODULE_NAME } from './settings';
 import { canvas, game } from './settings';
 
 export const mountUp = async function (riderToken: Token, mountToken: Token) {
-  if(!riderToken || !mountToken){
+  if (!riderToken || !mountToken) {
     return;
   }
   const targets = [mountToken]; // Array.from(game.user.targets);
@@ -83,7 +83,7 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
 };
 
 export const dismountDropAll = async function (mountToken: Token) {
-  if(!mountToken){
+  if (!mountToken) {
     return;
   }
   // tokenAttacher.detachAllElementsFromToken(mountToken, true);
@@ -108,7 +108,7 @@ export const dismountDropAll = async function (mountToken: Token) {
 };
 
 export const dismountDropTarget = async function (mountToken: Token, target: Token) {
-  if(!mountToken || !target){
+  if (!mountToken || !target) {
     return;
   }
   const targets = [target]; // Array.from(game.user.targets);
@@ -145,7 +145,7 @@ export const dismountDropTarget = async function (mountToken: Token, target: Tok
 };
 
 export const detachAllFromToken = async function (mountToken: Token) {
-  if(!mountToken){
+  if (!mountToken) {
     return;
   }
   // tokenAttacher.detachAllElementsFromToken(mountToken, true);
@@ -170,7 +170,7 @@ export const detachAllFromToken = async function (mountToken: Token) {
 };
 
 export const moveToken = async function (riderToken: Token, mountToken: Token) {
-  if(!riderToken || !mountToken){
+  if (!riderToken || !mountToken) {
     return;
   }
   const riderTokens = [riderToken];
@@ -178,7 +178,7 @@ export const moveToken = async function (riderToken: Token, mountToken: Token) {
 };
 
 export const moveTokens = async function (riderTokens: Token[], mountToken: Token) {
-  if(!riderTokens || !mountToken){
+  if (!riderTokens || !mountToken) {
     return;
   }
   // if (game.user?.isGM && <number>canvas.tokens?.controlled.length > 0) {

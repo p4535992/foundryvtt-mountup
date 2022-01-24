@@ -134,7 +134,7 @@ export class MountManager {
    * @param {object} mountToken - The mount token
    */
   static async doRemoveMount(riderToken: Token, mountToken: Token) {
-    if(!riderToken || !mountToken){
+    if (!riderToken || !mountToken) {
       return;
     }
     await riderToken.document.setFlag(FlagScope, Flags.MountMove, true);
