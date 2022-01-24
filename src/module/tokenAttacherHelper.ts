@@ -2,6 +2,9 @@ import { MOUNT_UP_MODULE_NAME } from './settings';
 import { canvas, game } from './settings';
 
 export const mountUp = async function (riderToken: Token, mountToken: Token) {
+  if(!riderToken || !mountToken){
+    return;
+  }
   const targets = [mountToken]; // Array.from(game.user.targets);
   if (targets.length > 0) {
     if (targets.length > 1) {
@@ -80,6 +83,9 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
 };
 
 export const dismountDropAll = async function (mountToken: Token) {
+  if(!mountToken){
+    return;
+  }
   // tokenAttacher.detachAllElementsFromToken(mountToken, true);
   await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
 
@@ -102,6 +108,9 @@ export const dismountDropAll = async function (mountToken: Token) {
 };
 
 export const dismountDropTarget = async function (mountToken: Token, target: Token) {
+  if(!mountToken || !target){
+    return;
+  }
   const targets = [target]; // Array.from(game.user.targets);
   if (targets.length > 0) {
     if (targets.length > 1) {
@@ -136,6 +145,9 @@ export const dismountDropTarget = async function (mountToken: Token, target: Tok
 };
 
 export const detachAllFromToken = async function (mountToken: Token) {
+  if(!mountToken){
+    return;
+  }
   // tokenAttacher.detachAllElementsFromToken(mountToken, true);
   await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
 
@@ -158,11 +170,17 @@ export const detachAllFromToken = async function (mountToken: Token) {
 };
 
 export const moveToken = async function (riderToken: Token, mountToken: Token) {
+  if(!riderToken || !mountToken){
+    return;
+  }
   const riderTokens = [riderToken];
   moveTokens(riderTokens, mountToken);
 };
 
 export const moveTokens = async function (riderTokens: Token[], mountToken: Token) {
+  if(!riderTokens || !mountToken){
+    return;
+  }
   // if (game.user?.isGM && <number>canvas.tokens?.controlled.length > 0) {
   if (game.user?.isGM && riderTokens.length > 0) {
     const pos = { x: mountToken.data.x, y: mountToken.data.y }; //riderToken.document.data.getLocalPosition(canvas.app?.stage);

@@ -102,6 +102,24 @@ export const registerSettings = function () {
     },
   });
 
+  // game.settings.register(MOUNT_UP_MODULE_NAME, 'pipPosition', {
+  //   name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.name`),
+  //   hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.hint`),
+  //   scope: 'world',
+  //   config: true,
+  //   default: 'topleft',
+  //   type: String,
+  //   choices: {
+  //     topleft: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.topleft`),
+  //     topright: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.topright`),
+  //     bottomleft: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.bottomleft`),
+  //     bottomright: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.bottomright`),
+  //     centertop: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.centertop`),
+  //     centerbottom: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.centerbottom`),
+  //     random: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.random`),
+  //   },
+  // });
+
   /** Whether or not riders should be locked to mounts */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'lock-riders', {
     name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderLock.name`),
@@ -113,7 +131,7 @@ export const registerSettings = function () {
     type: Number,
     default: 3,
     choices: {
-      0: MOUNT_UP_MODULE_NAME + '.settings.riderLock.noLock',
+      0: `${MOUNT_UP_MODULE_NAME}.settings.riderLock.noLock`,
       1: 'Lock to location',
       2: 'Lock to mount bounds',
       3: 'Dismount when outside mount bounds',
@@ -129,39 +147,39 @@ export const registerSettings = function () {
     default: false,
   });
 
-  /** Where to place the rider horizontally on the mount */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-x', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderX.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderX.hint`),
-    scope: 'world',
-    config: true,
-    // type: String,
-    // default: 'Center',
-    type: Number,
-    default: 1,
-    choices: {
-      0: 'Left',
-      1: 'Center',
-      2: 'Right',
-    },
-  });
+  // /** Where to place the rider horizontally on the mount */
+  // game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-x', {
+  //   name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderX.name`),
+  //   hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderX.hint`),
+  //   scope: 'world',
+  //   config: true,
+  //   // type: String,
+  //   // default: 'Center',
+  //   type: Number,
+  //   default: 1,
+  //   choices: {
+  //     0: 'Left',
+  //     1: 'Center',
+  //     2: 'Right',
+  //   },
+  // });
 
-  /** Where to place the rider vertically on the mount */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-y', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderY.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderY.hint`),
-    scope: 'world',
-    config: true,
-    // type: String,
-    // default: 'Top',
-    type: Number,
-    default: 0,
-    choices: {
-      0: 'Top',
-      1: 'Center',
-      2: 'Bottom',
-    },
-  });
+  // /** Where to place the rider vertically on the mount */
+  // game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-y', {
+  //   name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderY.name`),
+  //   hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderY.hint`),
+  //   scope: 'world',
+  //   config: true,
+  //   // type: String,
+  //   // default: 'Top',
+  //   type: Number,
+  //   default: 0,
+  //   choices: {
+  //     0: 'Top',
+  //     1: 'Center',
+  //     2: 'Bottom',
+  //   },
+  // });
 
   /** Whether or not chat messages should be sent */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'should-chat', {

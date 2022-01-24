@@ -134,6 +134,9 @@ export class MountManager {
    * @param {object} mountToken - The mount token
    */
   static async doRemoveMount(riderToken: Token, mountToken: Token) {
+    if(!riderToken || !mountToken){
+      return;
+    }
     await riderToken.document.setFlag(FlagScope, Flags.MountMove, true);
     this.restoreRiderSize(riderToken);
 
@@ -392,8 +395,8 @@ export class MountManager {
 
           if (!riderToken.document.getFlag(FlagScope, Flags.MountMove)) {
             if (
-              !canvas
-                .tokens?.controlled.map((t) => t.id)
+              !canvas.tokens?.controlled
+                .map((t) => t.id)
                 .includes(<string>riderToken.document.getFlag(FlagScope, Flags.Mount))
             ) {
               switch (SettingsForm.getRiderLock()) {
@@ -470,43 +473,43 @@ export class MountManager {
     return <string>rider.document.getFlag(FlagScope, Flags.Mount) == mount.id;
   }
 
-  /**
-   * Gets the correct rider placement coordinates based on the mount's position and movement
-   * @param {token} riderToken - The rider token
-   * @param {token} mountToken - The mount token
-   */
-  static async getRiderInitialLocation(riderToken: Token, mountToken: Token): Promise<{ x; y }> {
-    const loc = { x: mountToken.x, y: mountToken.y };
+  // /**
+  //  * Gets the correct rider placement coordinates based on the mount's position and movement
+  //  * @param {token} riderToken - The rider token
+  //  * @param {token} mountToken - The mount token
+  //  */
+  // static async getRiderInitialLocation(riderToken: Token, mountToken: Token): Promise<{ x; y }> {
+  //   const loc = { x: mountToken.x, y: mountToken.y };
 
-    // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
-    const riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
-    const index = riders.indexOf(riderToken.id); // 1
-    const offset: number = index;
-    // END MOD 4535992 SET UP OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
+  //   // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
+  //   const riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
+  //   const index = riders.indexOf(riderToken.id); // 1
+  //   const offset: number = index;
+  //   // END MOD 4535992 SET UP OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
 
-    switch (SettingsForm.getRiderX()) {
-      case riderX.Center:
-        // eslint-disable-next-line no-case-declarations
-        const mountCenter = getTokenShape(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);
-        loc.x = mountCenter.x - riderToken.w / 2 + offset;
-        break;
-      case riderX.Right:
-        loc.x = mountToken.x + mountToken.w - riderToken.w + offset;
-        break;
-    }
+  //   switch (SettingsForm.getRiderX()) {
+  //     case riderX.Center:
+  //       // eslint-disable-next-line no-case-declarations
+  //       const mountCenter = getTokenShape(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);
+  //       loc.x = mountCenter.x - riderToken.w / 2 + offset;
+  //       break;
+  //     case riderX.Right:
+  //       loc.x = mountToken.x + mountToken.w - riderToken.w + offset;
+  //       break;
+  //   }
 
-    switch (SettingsForm.getRiderY()) {
-      case riderY.Center:
-        // eslint-disable-next-line no-case-declarations
-        const mountCenter = getTokenShape(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);
-        loc.y = mountCenter.y - riderToken.h / 2 + offset;
-        break;
-      case riderY.Bottom:
-        loc.y = mountToken.y + mountToken.h - riderToken.h + offset;
-        break;
-    }
-    return loc;
-  }
+  //   switch (SettingsForm.getRiderY()) {
+  //     case riderY.Center:
+  //       // eslint-disable-next-line no-case-declarations
+  //       const mountCenter = getTokenShape(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);
+  //       loc.y = mountCenter.y - riderToken.h / 2 + offset;
+  //       break;
+  //     case riderY.Bottom:
+  //       loc.y = mountToken.y + mountToken.h - riderToken.h + offset;
+  //       break;
+  //   }
+  //   return loc;
+  // }
 
   /**
    * Returns true if the tokens are related via a long mount chain

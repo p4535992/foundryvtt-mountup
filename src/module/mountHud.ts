@@ -52,8 +52,8 @@ export class MountHud {
   }
 
   static addMountButton(html, hudToken) {
-    const tokenNames = <string[]>canvas
-      .tokens?.controlled.filter((token) => token.id != hudToken._id)
+    const tokenNames = <string[]>canvas.tokens?.controlled
+      .filter((token) => token.id != hudToken._id)
       .map((token) => {
         return `'${token.name}'`;
       });

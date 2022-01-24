@@ -1,4 +1,3 @@
-
 import { SettingsForm } from './SettingsForm';
 import { findTokenById } from './utils';
 

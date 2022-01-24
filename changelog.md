@@ -1,3 +1,8 @@
+# 3.2.2
+
+- Rewrite and clean up the code
+- Added [token-z](https://github.com/theripper93/token-z) as dependency
+
 # 3.2.1 [PATCHED VERSION]
 
 - Fix settings are not saved ????
