@@ -53,18 +53,7 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
       height: newHeightRiderSize,
     });
 
-    await riderToken.update(
-      {
-        x: newRiderCoords.x,
-        y: newRiderCoords.y,
-        w: newWidthRider,
-        h: newHeightRider,
-        // zIndex: mountToken.zIndex + 10
-      },
-      undefined,
-    );
-
-    riderToken.zIndex = mountToken.zIndex + 10;
+    // riderToken.zIndex = mountToken.zIndex + 10;
 
     let message = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
       ? <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
@@ -206,8 +195,7 @@ export const moveTokens = async function (riderTokens: Token[], mountToken: Toke
     }
     if (updates.length) {
       //@ts-ignore
-      canvas.scene?.updateEmbeddedEntity('Token', updates, { animate: false });
-      //canvas.scene?.updateEmbeddedDocuments('TokenDocument', updates, { animate: false })
+      canvas.scene?.updateEmbeddedDocuments('TokenDocument', updates, { animate: false });
     }
   }
 };

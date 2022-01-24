@@ -1,22 +1,22 @@
 // import { SettingsForm } from './mountupForm.ts';
 import { findTokenById } from './utils';
-import { game, MOUNT_UP_MODULE_NAME } from './settings';
+import { MOUNT_UP_MODULE_NAME } from './settings';
+import { game } from './settings';
 
 /**
  * Provides functionality for sending chat messages
  */
 export class Chatter {
+  _shouldChat: boolean;
+  _iconClass: string;
+  _mountMessage: string;
+  _dismountMessage: string;
 
-  _shouldChat:boolean;
-  _iconClass:string;
-  _mountMessage:string;
-  _dismountMessage:string;
-
-  constructor(){
-    this._shouldChat = <boolean>game.settings.get(MOUNT_UP_MODULE_NAME,'should-chat');
-    this._iconClass = <string>game.settings.get(MOUNT_UP_MODULE_NAME,'icon');
-    this._mountMessage = <string>game.settings.get(MOUNT_UP_MODULE_NAME,'mount-message');
-    this._dismountMessage = <string>game.settings.get(MOUNT_UP_MODULE_NAME,'dismount-message');
+  constructor() {
+    this._shouldChat = <boolean>game.settings.get(MOUNT_UP_MODULE_NAME, 'should-chat');
+    this._iconClass = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'icon');
+    this._mountMessage = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'mount-message');
+    this._dismountMessage = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'dismount-message');
   }
 
   /**

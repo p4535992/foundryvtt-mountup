@@ -12,10 +12,10 @@
 // Import JavaScript modules
 
 // Import TypeScript modules
-import { getGame, registerSettings } from './module/settings';
 import { preloadTemplates } from './module/preloadTemplates';
-import { MOUNT_UP_MODULE_NAME } from './module/settings';
+import { registerSettings, MOUNT_UP_MODULE_NAME } from './module/settings';
 import { initHooks, readyHooks } from './module/Hooks';
+import { game } from './module/settings';
 
 export let debugEnabled = 0;
 // 0 = none, warnings = 1, debug = 2, all = 3
@@ -30,10 +30,10 @@ export const error = (...args) => console.error(`${MOUNT_UP_MODULE_NAME} | `, ..
 export const timelog = (...args) => warn(`${MOUNT_UP_MODULE_NAME} | `, Date.now(), ...args);
 
 export const i18n = (key) => {
-  return getGame().i18n.localize(key);
+  return game.i18n.localize(key);
 };
 export const i18nFormat = (key, data = {}) => {
-  return getGame().i18n.format(key, data);
+  return game.i18n.format(key, data);
 };
 
 export const setDebugLevel = (debugText: string) => {
@@ -47,17 +47,17 @@ export const setDebugLevel = (debugText: string) => {
 /* ------------------------------------ */
 Hooks.once('init', async () => {
   console.log(`${MOUNT_UP_MODULE_NAME} | Initializing ${MOUNT_UP_MODULE_NAME}`);
-
-  initHooks();
   // Assign custom classes and constants here
 
   // Register custom module settings
   registerSettings();
-  //fetchParams();
 
   // Preload Handlebars templates
   await preloadTemplates();
+  
   // Register custom sheets (if any)
+  initHooks();
+
 });
 
 /* ------------------------------------ */
@@ -75,20 +75,20 @@ Hooks.once('setup', function () {
 /* ------------------------------------ */
 Hooks.once('ready', () => {
   // Do anything once the module is ready
-  if (!getGame().modules.get('lib-wrapper')?.active && getGame().user?.isGM) {
+  if (!game.modules.get('lib-wrapper')?.active && game.user?.isGM) {
     ui.notifications?.error(
       `The '${MOUNT_UP_MODULE_NAME}' module requires to install and activate the 'libWrapper' module.`,
     );
     return;
   }
-  if (!getGame().modules.get('token-attacher')?.active && getGame().user?.isGM) {
+  if (!game.modules.get('token-attacher')?.active && game.user?.isGM) {
     ui.notifications?.error(
       `The '${MOUNT_UP_MODULE_NAME}' module requires to install and activate the 'token-attacher' module.`,
     );
     return;
   }
 
-  // if (getGame().modules.get('mountup')?.active && getGame().user?.isGM) {
+  // if (game.modules.get('mountup')?.active && game.user?.isGM) {
   //   ui.notifications?.warn(`The 'mountup', is not needed anymore just use '${MOUNT_UP_MODULE_NAME}'`);
   // }
 

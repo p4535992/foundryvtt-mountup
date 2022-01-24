@@ -8,16 +8,15 @@ import { canvas, game } from './settings';
  * Functinality class for managing the token HUD
  */
 export class MountHud {
+  _hudColumnClass: string;
+  _hudTopBottomClass: string;
+  _iconClass: string;
+  _mountManager: MountManager;
 
-  _hudColumnClass:string;
-  _hudTopBottomClass:string;
-  _iconClass:string;
-  _mountManager:MountManager;
-
-  constructor(mountManager:MountManager){
-    this._hudColumnClass = <string>game.settings.get(MOUNT_UP_MODULE_NAME,'column');
-    this._hudTopBottomClass = <string>game.settings.get(MOUNT_UP_MODULE_NAME,'topbottom');
-    this._iconClass = <string>game.settings.get(MOUNT_UP_MODULE_NAME,'icon');
+  constructor(mountManager: MountManager) {
+    this._hudColumnClass = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'column');
+    this._hudTopBottomClass = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'topbottom');
+    this._iconClass = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'icon');
     this._mountManager = mountManager;
   }
 
@@ -65,8 +64,8 @@ export class MountHud {
   }
 
   addMountButton(html, hudToken) {
-    const tokenNames = <string[]>canvas
-      .tokens?.controlled.filter((token) => token.id != hudToken._id)
+    const tokenNames = <string[]>canvas.tokens?.controlled
+      .filter((token) => token.id != hudToken._id)
       .map((token) => {
         return `'${token.name}'`;
       });

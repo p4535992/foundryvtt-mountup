@@ -46,8 +46,8 @@
   "system": [],
   "esmodules": ["foundryvtt-mountup.js"],
   "styles": [],
-  "minimumCoreVersion": "0.7.10",
-  "compatibleCoreVersion": "0.8.9",
+  "minimumCoreVersion": "0.8.9",
+  "compatibleCoreVersion": "9",
   "url": "https://github.com/p4535992/MountUp",
   "manifest": "https://github.com/p4535992/MountUp/releases/latest/download/module.json",
   "download": "https://github.com/p4535992/MountUp/releases/download/v3.2.1/module.zip",
@@ -62,6 +62,9 @@
     },
     {
       "name": "token-attacher"
+    },
+    {
+      "name": "token-z"
     }
   ]
 }

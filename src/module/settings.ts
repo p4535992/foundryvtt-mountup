@@ -1,3 +1,5 @@
+import { i18n } from "../foundryvtt-mountup";
+
 export const game = getGame();
 export const canvas = getCanvas();
 
@@ -50,54 +52,62 @@ export const registerSettings = function () {
 
   /** Which Icon should be used */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'icon', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.icon.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.icon.hint`),
     scope: 'world',
-    config: false,
-    type: String,
-    default: 'Horse',
-    // type: Number,
-    // default: 0,
+    config: true,
+    // type: String,
+    // default: 'Horse',
+    type: Number,
+    default: 0,
     choices: {
-      horse: 'Horse',
-      peopleCarrying: 'People Carrying',
-      hands: 'Hands',
-      openHand: 'Open Hand',
-      fist: 'Fist',
-      handshake: 'Handshake',
+      0: 'Horse',
+      1: 'People Carrying',
+      2: 'Hands',
+      3: 'Open Hand',
+      4: 'Fist',
+      5: 'Handshake',
     },
   });
 
   /** Which column should the button be placed on */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'column', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.hudColumn.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.hudColumn.hint`),
     scope: 'world',
-    config: false,
-    type: String,
-    default: 'Left',
-    // type: Number,
-    // default: 0,
+    config: true,
+    // type: String,
+    // default: 'Left',
+    type: Number,
+    default: 0,
     choices: {
-      left: 'Left',
-      right: 'Right',
+      0: 'Left',
+      1: 'Right',
     },
   });
 
   /** Whether the button should be placed on the top or bottom of the column */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'topbottom', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.hudTopBottom.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.hudTopBottom.hint`),
     scope: 'world',
-    config: false,
-    type: String,
-    default: 'Top',
-    // type: Number,
-    // default: 0,
+    config: true,
+    // type: String,
+    // default: 'Top',
+    type: Number,
+    default: 0,
     choices: {
-      top: 'Top',
-      bottom: 'Bottom',
+      0: 'Top',
+      1: 'Bottom',
     },
   });
 
   /** Whether or not riders should be locked to mounts */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'lock-riders', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderLock.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderLock.hint`),
     scope: 'world',
-    config: false,
+    config: true,
     // type: String,
     // default: 'Dismount when outside mount bounds',
     type: Number,
@@ -111,16 +121,20 @@ export const registerSettings = function () {
   });
 
   game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-rotate', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderRotate.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderRotate.hint`),
     scope: 'world',
-    config: false,
+    config: true,
     type: Boolean,
     default: false,
   });
 
   /** Where to place the rider horizontally on the mount */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-x', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderX.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderX.hint`),
     scope: 'world',
-    config: false,
+    config: true,
     // type: String,
     // default: 'Center',
     type: Number,
@@ -134,8 +148,10 @@ export const registerSettings = function () {
 
   /** Where to place the rider vertically on the mount */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-y', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderY.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderY.hint`),
     scope: 'world',
-    config: false,
+    config: true,
     // type: String,
     // default: 'Top',
     type: Number,
@@ -149,24 +165,30 @@ export const registerSettings = function () {
 
   /** Whether or not chat messages should be sent */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'should-chat', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.shouldChat.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.shouldChat.hint`),
     scope: 'world',
-    config: false,
+    config: true,
     type: Boolean,
     default: true,
   });
 
   /** The mounting message */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'mount-message', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.mountMsg.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.mountMsg.hint`),
     scope: 'world',
-    config: false,
+    config: true,
     type: String,
     default: '{rider} has mounted {mount}.',
   });
 
   /** The dismounting message */
   game.settings.register(MOUNT_UP_MODULE_NAME, 'dismount-message', {
+    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.dismountMsg.name`),
+    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.dismountMsg.hint`),
     scope: 'world',
-    config: false,
+    config: true,
     type: String,
     default: '{rider} has dismounted from {mount}.',
   });

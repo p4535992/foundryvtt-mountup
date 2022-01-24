@@ -1,36 +1,36 @@
 import { MOUNT_UP_MODULE_NAME } from './settings';
-import { dismount, dropRider, mount } from './macros';
 import { MountHud } from './mountHud';
 import { MountManager } from './mountManager';
 import { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs';
 import { warn } from '../foundryvtt-mountup';
 import { game } from './settings';
 
-let mountManager;
+let mountManager:MountManager;
+let mountHud:MountHud;
 
 export const readyHooks = async () => {
   // Settings.registerSettings();
 
   window[MOUNT_UP_MODULE_NAME] = {
-    mount: mount,
-    dismount: dismount,
-    dropRider: dropRider,
+    mount: mountManager.mountMacro,
+    dismount: mountManager.dismountMacro,
+    dropRider: mountManager.dropRiderMacro,
   };
 
   // FOR RETROCOMPATIBILITY
 
   window['MountUp'] = {
-    mount: mount,
-    dismount: dismount,
-    dropRider: dropRider,
+    mount: mountManager.mountMacro,
+    dismount: mountManager.dismountMacro,
+    dropRider: mountManager.dropRiderMacro,
   };
 };
 
 export const initHooks = () => {
   warn('Init Hooks processing');
-  
+
   mountManager = new MountManager();
-  const mountHud = new MountHud(mountManager);
+  mountHud = new MountHud(mountManager);
 
   // setup all the hooks
   Hooks.on('renderTokenHUD', (app, html, data) => {

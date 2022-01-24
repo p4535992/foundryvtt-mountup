@@ -2,24 +2,23 @@ import { error, warn } from '../foundryvtt-mountup';
 import { Chatter } from './chatter';
 import { FlagScope, MOUNT_UP_MODULE_NAME } from './settings';
 import { detachAllFromToken, dismountDropAll, dismountDropTarget, mountUp, moveToken } from './tokenAttacherHelper';
-import { findTokenById, Flags, getTokenShape, riderLock, riderX, riderY, socketAction } from './utils';
+import { findTokenById, Flags, getTokenShape, riderLock, riderX, riderY, socketAction, findTokenByName } from './utils';
 import { canvas, game } from './settings';
 
 /**
  * Provides all of the functionality for interacting with the game (tokens, canvas, etc.)
  */
 export class MountManager {
+  _chatter: Chatter;
+  _riderLock: number;
+  _riderX: number;
+  _riderY: number;
 
-  _chatter:Chatter;
-  _riderLock:number;
-  _riderX:number;
-  _riderY:number;
-
-  constructor(){
+  constructor() {
     this._chatter = new Chatter();
-    this._riderLock = <number>game.settings.get(MOUNT_UP_MODULE_NAME,'lock-riders');
-    this._riderY = <number>game.settings.get(MOUNT_UP_MODULE_NAME,'rider-y');
-    this._riderX = <number>game.settings.get(MOUNT_UP_MODULE_NAME,'rider-x');
+    this._riderLock = <number>game.settings.get(MOUNT_UP_MODULE_NAME, 'lock-riders');
+    this._riderY = <number>game.settings.get(MOUNT_UP_MODULE_NAME, 'rider-y');
+    this._riderX = <number>game.settings.get(MOUNT_UP_MODULE_NAME, 'rider-x');
   }
 
   /**
@@ -403,7 +402,8 @@ export class MountManager {
 
           if (!riderToken.document.getFlag(FlagScope, Flags.MountMove)) {
             if (
-              !canvas.tokens?.controlled.map((t) => t.id)
+              !canvas.tokens?.controlled
+                .map((t) => t.id)
                 .includes(<string>riderToken.document.getFlag(FlagScope, Flags.Mount))
             ) {
               switch (this._riderLock) {
@@ -533,5 +533,79 @@ export class MountManager {
       return this.isAncestor(parent.id, ancestorId);
     }
     return false;
+  }
+
+  // =====================================
+  // MACROS
+  // ======================================
+
+  /**
+   * Macro function to mount a rider token onto a mount token
+   * @param {string} riderNameOrId - The name or the ID of the rider token
+   * @param {string} mountNameOrId - The name or the ID of the mount token
+   */
+  mountMacro(riderNameOrId: string, mountNameOrId: string) {
+    const rider: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
+    const mount: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
+
+    const mountName = mount.name;
+    const riderName = rider.name;
+
+    if (rider) {
+      if (mount) {
+        if (rider.id != mount.id) {
+          this.doCreateMount(rider, mount);
+        } else {
+          error('You cannot mount a token to itself');
+        }
+      } else {
+        error(`A token could not be found with the name or id : ${mountName}`);
+      }
+    } else {
+      error(`A token could not be found with the name or id : ${riderName}`);
+    }
+  }
+
+  /**
+   * Macro function to dismount a rider token from its mount
+   * @param {string} riderNameOrId - The name or the ID of the rider token
+   */
+  dismountMacro(riderNameOrId: string) {
+    const rider: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
+    const riderName: string = rider.name;
+
+    if (rider) {
+      if (this.isaRider(rider.id)) {
+        const mountToken = findTokenById(<string>rider.document.getFlag(FlagScope, Flags.Mount));
+        this.doRemoveMount(rider, mountToken);
+      } else {
+        error(`Token '${riderName}' is not a rider`);
+      }
+    } else {
+      error(`A token could not be found with the name or id : ${riderName}`);
+    }
+  }
+
+  /**
+   * Macro function to have a mount drop its rider
+   * @param {string} mountNameOrId - The name or the ID of the mount token
+   */
+  dropRiderMacro(mountNameOrId: string) {
+    const mount: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
+    const mountName: string = mount.name;
+
+    if (mount) {
+      if (this.isaMount(mount.id)) {
+        const riders = <string[]>mount.document.getFlag(FlagScope, Flags.Riders);
+        for (const rider in riders) {
+          const riderToken: Token = findTokenById(rider);
+          this.doRemoveMount(riderToken, mount);
+        }
+      } else {
+        error(`Token '${mountName}' is not a mount`);
+      }
+    } else {
+      error(`A token could not be found with the name or id : ${mountName}`);
+    }
   }
 }
