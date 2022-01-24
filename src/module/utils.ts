@@ -1,4 +1,4 @@
-import { canvas, game } from './settings';
+import { getCanvas, getGame } from './settings';
 
 /**
  * Flag Info
@@ -48,7 +48,7 @@ export const riderLock = {
  * Returns the ID of the first GM logged in
  */
 export function firstGM() {
-  const users = <User[]>game.users?.contents;
+  const users = <User[]>getGame().users?.contents;
   for (const user of users) {
     if (user.data['role'] >= 4 && user.active) {
       return user.data._id;
@@ -62,7 +62,7 @@ export function firstGM() {
  * @param {String} tokenId - The ID of the token to look for
  */
 export function findTokenById(tokenId: string): Token {
-  return <Token>canvas.tokens?.placeables.find((t) => t.id == tokenId);
+  return <Token>getCanvas().tokens?.placeables.find((t) => t.id == tokenId);
 }
 
 /**
@@ -70,7 +70,7 @@ export function findTokenById(tokenId: string): Token {
  * @param {String} tokenName - The name of the token to look for
  */
 export function findTokenByName(tokenName: string): Token {
-  return <Token>canvas.tokens?.placeables.find((t) => t.name.toLowerCase() == tokenName.toLowerCase());
+  return <Token>getCanvas().tokens?.placeables.find((t) => t.name.toLowerCase() == tokenName.toLowerCase());
 }
 
 export function getTokenShape(token): { x: number; y: number } {
@@ -90,7 +90,7 @@ export function getTokenShape(token): { x: number; y: number } {
   } else {
     // Hex grids
     //@ts-ignore
-    if (game.modules.get('hex-size-support')?.active && CONFIG.hexSizeSupport.getAltSnappingFlag(token)) {
+    if (getGame().modules.get('hex-size-support')?.active && CONFIG.hexSizeSupport.getAltSnappingFlag(token)) {
       const borderSize = token.data.flags['hex-size-support'].borderSize;
       let shape = [{ x: 0, y: 0 }];
       if (borderSize >= 2)
@@ -114,9 +114,9 @@ export function getTokenShape(token): { x: number; y: number } {
           { x: 1, y: -2 },
         ]);
       //@ts-ignore
-      if (Boolean(CONFIG.hexSizeSupport.getAltOrientationFlag(token)) !== canvas.grid?.grid?.options.columns)
+      if (Boolean(CONFIG.hexSizeSupport.getAltOrientationFlag(token)) !== getCanvas().grid?.grid?.options.columns)
         shape.forEach((space) => (space.y *= -1));
-      if (canvas.grid?.grid?.options.columns)
+      if (getCanvas().grid?.grid?.options.columns)
         shape = shape.map((space) => {
           return { x: space.y, y: space.x };
         });

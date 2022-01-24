@@ -54,10 +54,9 @@ Hooks.once('init', async () => {
 
   // Preload Handlebars templates
   await preloadTemplates();
-  
+
   // Register custom sheets (if any)
   initHooks();
-
 });
 
 /* ------------------------------------ */

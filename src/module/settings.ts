@@ -1,4 +1,4 @@
-import { i18n } from "../foundryvtt-mountup";
+import { i18n } from '../foundryvtt-mountup';
 
 export const game = getGame();
 export const canvas = getCanvas();
@@ -18,7 +18,7 @@ export const FlagScope = MOUNT_UP_MODULE_NAME; //'mountup';
  * So you will need to deal with the fact that there might not be an initialized canvas at any point in time.
  * @returns
  */
-function getCanvas(): Canvas {
+export function getCanvas(): Canvas {
   if (!(canvas instanceof Canvas) || !canvas.ready) {
     throw new Error('Canvas Is Not Initialized');
   }
@@ -33,7 +33,7 @@ function getCanvas(): Canvas {
  * So you will need to deal with the fact that there might not be an initialized canvas at any point in time.
  * @returns
  */
-function getGame(): Game {
+export function getGame(): Game {
   if (!(game instanceof Game)) {
     throw new Error('Game Is Not Initialized');
   }

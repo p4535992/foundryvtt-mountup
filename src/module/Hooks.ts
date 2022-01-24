@@ -1,40 +1,35 @@
-import { MOUNT_UP_MODULE_NAME } from './settings';
+import { getGame, MOUNT_UP_MODULE_NAME } from './settings';
+import { dismount, dropRider, mount } from './macros';
 import { MountHud } from './mountHud';
 import { MountManager } from './mountManager';
 import { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs';
 import { warn } from '../foundryvtt-mountup';
-import { game } from './settings';
-
-let mountManager:MountManager;
-let mountHud:MountHud;
 
 export const readyHooks = async () => {
   // Settings.registerSettings();
 
   window[MOUNT_UP_MODULE_NAME] = {
-    mount: mountManager.mountMacro,
-    dismount: mountManager.dismountMacro,
-    dropRider: mountManager.dropRiderMacro,
+    mount: mount,
+    dismount: dismount,
+    dropRider: dropRider,
   };
 
   // FOR RETROCOMPATIBILITY
 
   window['MountUp'] = {
-    mount: mountManager.mountMacro,
-    dismount: mountManager.dismountMacro,
-    dropRider: mountManager.dropRiderMacro,
+    mount: mount,
+    dismount: dismount,
+    dropRider: dropRider,
   };
 };
 
 export const initHooks = () => {
   warn('Init Hooks processing');
 
-  mountManager = new MountManager();
-  mountHud = new MountHud(mountManager);
-
   // setup all the hooks
+
   Hooks.on('renderTokenHUD', (app, html, data) => {
-    mountHud.renderMountHud(app, html, data);
+    MountHud.renderMountHud(app, html, data);
   });
 
   Hooks.on('preUpdateToken', async (scene: Scene, token: Token, updateData: TokenData) => {
@@ -44,9 +39,9 @@ export const initHooks = () => {
       // NO NEED ANYMORE TOKEN ATTACHER DO THE WORK
       // await MountManager.doTokenUpdate(token._id, updateData);
 
-      await mountManager.doTokenUpdateOnlyCheckBoundHandler(token.document.id, updateData);
-      if (mountManager.isaRider(token.document.id)) {
-        await mountManager.doPostTokenUpdate(<string>token.document.id, updateData);
+      await MountManager.doTokenUpdateOnlyCheckBoundHandler(token.document.id, updateData);
+      if (MountManager.isaRider(token.document.id)) {
+        await MountManager.doPostTokenUpdate(<string>token.document.id, updateData);
       }
     }
   });
@@ -54,28 +49,28 @@ export const initHooks = () => {
   // REMOVED ?????
 
   Hooks.on('canvasReady', async () => {
-    mountManager.popAllRiders();
+    MountManager.popAllRiders();
   });
 
   Hooks.on('updateToken', async (scene: Scene, token: Token, updateData: TokenData) => {
     if (updateData.x || updateData.y || updateData.rotation) {
-      if (mountManager.isaMount(<string>updateData._id)) {
-        mountManager.popRider(<string>updateData._id);
+      if (MountManager.isaMount(<string>updateData._id)) {
+        MountManager.popRider(<string>updateData._id);
       }
-      if (mountManager.isaRider(updateData._id)) {
-        await mountManager.doPostTokenUpdate(<string>updateData._id, updateData);
+      if (MountManager.isaRider(updateData._id)) {
+        await MountManager.doPostTokenUpdate(<string>updateData._id, updateData);
       }
     }
   });
 
   Hooks.on('controlToken', async (token) => {
-    if (mountManager.isaMount(token.id)) {
-      await mountManager.popRider(token.id);
+    if (MountManager.isaMount(token.id)) {
+      await MountManager.popRider(token.id);
     }
   });
 
   Hooks.on('preDeleteToken', async (scene, token) => {
-    await mountManager.handleTokenDelete(token._id);
+    await MountManager.handleTokenDelete(token._id);
     //return true;
   });
 };
