@@ -1,7 +1,8 @@
 import { MountManager } from './mountManager';
-import { FlagScope, getCanvas, getGame, MOUNT_UP_MODULE_NAME } from './settings';
+import { FlagScope, MOUNT_UP_MODULE_NAME } from './settings';
 import { SettingsForm } from './SettingsForm';
 import { findTokenById, Flags } from './utils';
+import { canvas, game } from './settings';
 
 /**
  * Functinality class for managing the token HUD
@@ -15,10 +16,10 @@ export class MountHud {
    * @param {Object} hudToken - The HUD Data
    */
   static async renderMountHud(app, html, hudToken) {
-    const mountOrRider = <Token>getCanvas().tokens?.controlled.find((t) => t.id == hudToken._id);
+    const mountOrRider = <Token>canvas.tokens?.controlled.find((t) => t.id == hudToken._id);
     // const t = <UserTargets>getGame().user?.targets[0];
     // if only one token is selected
-    if (getCanvas().tokens?.controlled.length == 1) {
+    if (canvas.tokens?.controlled.length == 1) {
       // if the selected token is a mount
       if (MountManager.isaMount(mountOrRider.id)) {
         this.addRemoveRidersButton(html, hudToken);
@@ -31,11 +32,11 @@ export class MountHud {
       this.addMountButton(html, hudToken);
     }
 
-    // if (getCanvas().tokens.controlled.length == 1 && MountManager.isaMount(mount.id)) {
+    // if (canvas.tokens.controlled.length == 1 && MountManager.isaMount(mount.id)) {
     //     this.addButton(html, hudToken, true);
-    // } else if (getCanvas().tokens.controlled.length >= 2) {
+    // } else if (canvas.tokens.controlled.length >= 2) {
     //     this.addMountButton(html, hudToken);
-    //     // let rider = getCanvas().tokens.controlled.find(t => t.id != mount.id);
+    //     // let rider = canvas.tokens.controlled.find(t => t.id != mount.id);
 
     //     // if (MountManager.isRidersMount(rider.id, mount.id)) {
     //     //     this.addButton(html, data, true);
@@ -51,7 +52,7 @@ export class MountHud {
   }
 
   static addMountButton(html, hudToken) {
-    const tokenNames = <string[]>getCanvas()
+    const tokenNames = <string[]>canvas
       .tokens?.controlled.filter((token) => token.id != hudToken._id)
       .map((token) => {
         return `'${token.name}'`;

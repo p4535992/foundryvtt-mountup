@@ -1,10 +1,11 @@
 import { error, warn } from '../foundryvtt-mountup';
 import { Chatter } from './chatter';
 // import { SettingsForm } from './mountupForm';
-import { FlagScope, getCanvas, MOUNT_UP_MODULE_NAME } from './settings';
+import { FlagScope, MOUNT_UP_MODULE_NAME } from './settings';
 import { SettingsForm } from './SettingsForm';
 import { detachAllFromToken, dismountDropAll, dismountDropTarget, mountUp, moveToken } from './tokenAttacherHelper';
 import { findTokenById, Flags, getTokenShape, riderLock, riderX, riderY, socketAction } from './utils';
+import { canvas, game } from './settings';
 
 /**
  * Provides all of the functionality for interacting with the game (tokens, canvas, etc.)
@@ -16,8 +17,8 @@ export class MountManager {
    * @param {Object} hudToken - The token from which the button was clicked on the hud
    */
   static async mountUpHud(hudToken) {
-    const mountToken = <Token>getCanvas().tokens?.controlled.find((t) => t.id == hudToken._id);
-    const tokensToCheck = getCanvas().tokens?.controlled || [];
+    const mountToken = <Token>canvas.tokens?.controlled.find((t) => t.id == hudToken._id);
+    const tokensToCheck = canvas.tokens?.controlled || [];
     for (const riderToken of tokensToCheck) {
       if (riderToken.id != mountToken.id) {
         const mountTokenTmp = <Token>findTokenById(<string>riderToken.document.getFlag(FlagScope, Flags.Mount));
@@ -55,7 +56,7 @@ export class MountManager {
 
         // // shrink the rider if needed
         // if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
-        //   const grid = <number>getCanvas().scene?.data.grid;
+        //   const grid = <number>canvas.scene?.data.grid;
         //   const newWidth = mountToken.w / 2 / grid;
         //   const newHeight = mountToken.h / 2 / grid;
         //   await riderToken.document.update({
@@ -154,7 +155,7 @@ export class MountManager {
     //   if (riders.includes(riderTokenTmp.id)) {
     //     // shrink the rider if needed
     //     if (riderTokenTmp.w >= mountToken.w || riderTokenTmp.h >= mountToken.h) {
-    //       const grid = <number>getCanvas().scene?.data.grid;
+    //       const grid = <number>canvas.scene?.data.grid;
     //       const newWidth = mountToken.w / 2 / grid;
     //       const newHeight = mountToken.h / 2 / grid;
     //       await riderTokenTmp.document.update({
@@ -184,7 +185,7 @@ export class MountManager {
       const origsize = <{ w; h }>riderToken.document.getFlag(FlagScope, Flags.OrigSize);
       // MOD 4535992 REMOVED IF
       //if (riderToken.w < origsize.w || riderToken.h < origsize.h) {
-      const grid = <number>getCanvas().scene?.data.grid;
+      const grid = <number>canvas.scene?.data.grid;
       const newWidth = riderToken.w < origsize.w ? origsize.w : riderToken.w;
       const newHeight = riderToken.h < origsize.h ? origsize.h : riderToken.h;
 
@@ -240,7 +241,7 @@ export class MountManager {
    * Pops all rider tokens on top of their mount tokens (canvas wide)
    */
   static async popAllRiders() {
-    await getCanvas().tokens?.placeables.forEach((token) => {
+    await canvas.tokens?.placeables.forEach((token) => {
       if (this.isaMount(token.id) && !this.isaRider(token.id)) {
         this.popRider(token.id);
       }
@@ -254,7 +255,7 @@ export class MountManager {
   static async popRider(mountId: string, callcount = 0) {
     if (callcount > 100) {
       error('Pop riders called too many times. Breaking all rides for safety.');
-      getCanvas().tokens?.placeables.forEach((t: Token) => {
+      canvas.tokens?.placeables.forEach((t: Token) => {
         t.document.unsetFlag(MOUNT_UP_MODULE_NAME, Flags.Riders);
         t.document.unsetFlag(MOUNT_UP_MODULE_NAME, Flags.Mount);
       });
@@ -296,7 +297,7 @@ export class MountManager {
         // if (riders && riders.includes(riderToken.id)) {
         //   // shrink the rider if needed
         //   if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
-        //     const grid = <number>getCanvas().scene?.data.grid;
+        //     const grid = <number>canvas.scene?.data.grid;
         //     const newWidth = mountToken.w / 2 / grid;
         //     const newHeight = mountToken.h / 2 / grid;
         //     await riderToken.document.update({
@@ -391,7 +392,7 @@ export class MountManager {
 
           if (!riderToken.document.getFlag(FlagScope, Flags.MountMove)) {
             if (
-              !getCanvas()
+              !canvas
                 .tokens?.controlled.map((t) => t.id)
                 .includes(<string>riderToken.document.getFlag(FlagScope, Flags.Mount))
             ) {
