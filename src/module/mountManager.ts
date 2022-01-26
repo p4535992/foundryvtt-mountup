@@ -112,7 +112,7 @@ export class MountManager {
     }
     await mountToken.document.setFlag(FlagScope, Flags.Riders, riders);
     console.log(riders);
-    await mountToken.document.update({ flags: { mountup: { riders: riders } } });
+    // await mountToken.document.update({ flags: { mountup: { riders: riders } } });
     await riderToken.document.setFlag(FlagScope, Flags.Mount, mountToken.id);
     if (!riderToken.document.getFlag(FlagScope, Flags.OrigSize)) {
       await riderToken.document.setFlag(FlagScope, Flags.OrigSize, { w: riderToken.w, h: riderToken.h });
