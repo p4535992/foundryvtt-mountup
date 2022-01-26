@@ -98,9 +98,5 @@ Hooks.once('ready', () => {
 
 Hooks.once('libChangelogsReady', function () {
   //@ts-ignore
-  libChangelogs.register(
-    MOUNT_UP_MODULE_NAME,
-    'Add toggleMount function to the macros',
-    'minor',
-  );
+  libChangelogs.register(MOUNT_UP_MODULE_NAME, 'Add toggleMount function to the macros', 'minor');
 });

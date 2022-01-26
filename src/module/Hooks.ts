@@ -13,7 +13,7 @@ export const readyHooks = async () => {
     mount: mount,
     dismount: dismount,
     dropRider: dropRider,
-    toggleMount: toggleMount
+    toggleMount: toggleMount,
   };
 
   // FOR RETROCOMPATIBILITY
@@ -22,7 +22,7 @@ export const readyHooks = async () => {
     mount: mount,
     dismount: dismount,
     dropRider: dropRider,
-    toggleMount: toggleMount
+    toggleMount: toggleMount,
   };
 };
 

@@ -478,8 +478,10 @@ export class MountManager {
    * @param {token} riderToken - The rider token
    * @param {token} mountToken - The mount token
    */
-  static getRiderInitialLocation(riderToken: Token, mountToken: Token): { x:number; y:number } {
-    const loc = { x: mountToken.x, y: mountToken.y };
+  static getRiderInitialLocation(riderToken: Token, mountToken: Token): { x: number; y: number } {
+    const loc = { x: riderToken.x, y: riderToken.y };
+    const width = riderToken.w;
+    const height = riderToken.h;
 
     // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
     const riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
@@ -487,27 +489,63 @@ export class MountManager {
     const offset: number = index;
     // END MOD 4535992 SET UP OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
 
+    const mountCenter = getTokenCenter(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);
+
     switch (SettingsForm.getRiderX()) {
-      case riderX.Center:
-        // eslint-disable-next-line no-case-declarations
-        const mountCenter = getTokenCenter(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);
+      case riderX.Center: {
         loc.x = mountCenter.x - riderToken.w / 2 + offset;
         break;
-      case riderX.Right:
+      }
+      case riderX.Right: {
         loc.x = mountToken.x + mountToken.w - riderToken.w + offset;
         break;
+      }
+      case riderX.Left: {
+        loc.x = mountToken.x + mountToken.w + riderToken.w + offset;
+        break;
+      }
     }
 
     switch (SettingsForm.getRiderY()) {
-      case riderY.Center:
-        // eslint-disable-next-line no-case-declarations
-        const mountCenter = getTokenCenter(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);
+      case riderY.Center: {
         loc.y = mountCenter.y - riderToken.h / 2 + offset;
         break;
-      case riderY.Bottom:
+      }
+      case riderY.Bottom: {
+        // loc.y = mountToken.y + mountToken.h - riderToken.h + offset;
         loc.y = mountToken.y + mountToken.h - riderToken.h + offset;
         break;
+      }
+      case riderY.Top: {
+        loc.y = mountToken.y - mountToken.h / 2 + riderToken.h + offset;
+        break;
+      }
     }
+    // switch (SettingsForm.getRiderPipPosition()) {
+    //   case "topleft":
+    //     break;
+    //   case "topright":
+    //     loc.x = mountCenter.x + width - totalWidth;
+    //     break;
+    //   case "bottomleft":
+    //     loc.y = height - totalHeight;
+    //     break;
+    //   case "bottomright":
+    //     loc.x = width - totalWidth;
+    //     loc.y = height - totalHeight;
+    //     break;
+    //   case "centertop":
+    //     loc.x = (width - totalWidth) / 2;
+    //     break;
+    //   case "centerbottom":
+    //     loc.x = (width - totalWidth) / 2;
+    //     loc.y = height - totalHeight;
+    //     break;
+    //   case "random":
+    //     loc.x = Math.floor(Math.random() * (width - totalWidth));
+    //     loc.y = Math.floor(Math.random() * (height - totalHeight));
+    //     break;
+    // }
     return loc;
   }
 

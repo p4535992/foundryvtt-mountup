@@ -53,6 +53,17 @@
       "dismountMsg": {
         "name": "Dismount Message Format",
         "hint": "How dismounting chat messages should be formatted if enabled. (use {rider} and {mount} for name substitution)"
+      },
+      "pipPosition":{
+        "name": "Rider Position",
+        "hint": "Set the position for the rider",
+        "topleft": "Top Left",
+        "topright": "Top Right",
+        "bottomleft": "Bottom Left",
+        "bottomright": "Bottom Right",
+        "centertop": "Center Top",
+        "centerbottom": "Center Bottom",
+        "random": "Random"
       }
     }
   }

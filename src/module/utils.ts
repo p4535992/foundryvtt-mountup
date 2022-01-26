@@ -76,17 +76,17 @@ export function findTokenByName(tokenName: string): Token {
 /**
  * Get token center
  */
- export const getTokenCenter = function (token) {
+export const getTokenCenter = function (token: Token): { x: number; y: number } {
   /*
     let tokenCenter = {x: token.x , y: token.y };
     tokenCenter.x += -20 + ( token.w * 0.50 );
     tokenCenter.y += -20 + ( token.h * 0.50 );
     */
-  const shapes = getTokenShape(token);
-  if (shapes && shapes.length > 0) {
-    const shape0 = shapes[0];
-    return { x: shape0.x, y: shape0.y };
-  }
+  // const shapes = getTokenShape(token);
+  // if (shapes && shapes.length > 0) {
+  //   const shape0 = shapes[0];
+  //   return { x: shape0.x, y: shape0.y };
+  // }
   const tokenCenter = { x: token.x + token.w / 2, y: token.y + token.h / 2 };
   return tokenCenter;
 };
@@ -94,7 +94,7 @@ export function findTokenByName(tokenName: string): Token {
 /**
  * Get token shape center
  */
-function getTokenShape(token): any[] {
+function getTokenShape(token): { x: number; y: number }[] {
   if (token.scene.data.gridType === CONST.GRID_TYPES.GRIDLESS) {
     return [{ x: 0, y: 0 }];
   } else if (token.scene.data.gridType === CONST.GRID_TYPES.SQUARE) {

@@ -59,10 +59,22 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
 
     // riderToken.zIndex = mountToken.zIndex + 10;
 
+    // const loc: { x; y } = {
+    //   x: newRiderCoords.x,
+    //   y: newRiderCoords.y,
+    // }
+
+    // riderToken.document.data.x = newRiderCoords.x;
+    // riderToken.document.data.y = newRiderCoords.y;
+    // riderToken.document.data.height = newHeightRiderSize;
+    // riderToken.document.data.width = newWidthRiderSize;
+
     const loc: { x; y } = MountManager.getRiderInitialLocation(riderToken, mountToken);
     await riderToken.document.update({
       x: loc.x,
       y: loc.y,
+      // width: newWidthRiderSize,
+      // height: newHeightRiderSize,
     });
 
     let message = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
