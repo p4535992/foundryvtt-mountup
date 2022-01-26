@@ -1,6 +1,7 @@
 import { MountManager } from './mountManager';
 import { MOUNT_UP_MODULE_NAME } from './settings';
 import { canvas, game } from './settings';
+import { SettingsForm } from './SettingsForm';
 
 export const mountUp = async function (riderToken: Token, mountToken: Token) {
   if (!riderToken || !mountToken) {
@@ -83,6 +84,11 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     message = message.replace('{rider}', riderToken.name);
     message = message.replace('{mount}', targets[0].name);
 
+    const icon = `<span class="fa-stack">
+        <i class="fas ${SettingsForm.getIconClass()} fa-stack-1x"></i>
+      </span>&nbsp;`;
+    message = icon + message;
+
     //@ts-ignore
     //ui.chat.processMessage(message);
     const userGMToWhisper = <User>game.users?.find((u) => u.isGM && u.active);
@@ -94,7 +100,7 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
       whisper: [userGMToWhisper.id, game.user],
     };
     //@ts-ignore
-    ChatMessage.create({}, chatData);
+    ChatMessage.create(chatData);
 
     await window['tokenAttacher'].attachElementToToken(riderToken, targets[0], true);
     await window['tokenAttacher'].setElementsLockStatus(riderToken, false, true);
@@ -123,7 +129,7 @@ export const dismountDropAll = async function (mountToken: Token) {
     whisper: [userGMToWhisper.id, game.user],
   };
   //@ts-ignore
-  ChatMessage.create({}, chatData);
+  ChatMessage.create(chatData);
 };
 
 export const dismountDropTarget = async function (mountToken: Token, target: Token) {
@@ -147,6 +153,12 @@ export const dismountDropTarget = async function (mountToken: Token, target: Tok
       message = message.replace('{rider}', targ.name);
       message = message.replace('{mount}', mountToken.name);
 
+      const icon = `<span class="fa-stack" >
+          <i class="fas ${SettingsForm.getIconClass()} fa-stack-1x"></i>
+          <i class="fas fa-slash fa-stack-1x" style="color: tomato"></i>
+        </span>&nbsp;`;
+      message = icon + message;
+
       //@ts-ignore
       //ui.chat.processMessage(message);
       const userGMToWhisper = <User>game.users?.find((u) => u.isGM && u.active);
@@ -158,7 +170,7 @@ export const dismountDropTarget = async function (mountToken: Token, target: Tok
         whisper: [userGMToWhisper.id, game.user],
       };
       //@ts-ignore
-      ChatMessage.create({}, chatData);
+      ChatMessage.create(chatData);
     }
   }
 };
@@ -170,22 +182,18 @@ export const detachAllFromToken = async function (mountToken: Token) {
   // tokenAttacher.detachAllElementsFromToken(mountToken, true);
   await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
 
-  let message = `Everyone and everything get off from {mount}!`;
+  // let message = `Everyone and everything get off from {mount}!`;
   // message = message.replace('{rider}',riderToken.name);
-  message = message.replace('{mount}', mountToken.name);
-
-  //@ts-ignore
-  //ui.chat.processMessage(message);
-  const userGMToWhisper = <User>game.users?.find((u) => u.isGM && u.active);
-  const chatData = {
-    type: 4,
-    user: game.user,
-    speaker: { alias: 'Mount Up' },
-    content: message,
-    whisper: [userGMToWhisper.id, game.user],
-  };
-  //@ts-ignore
-  ChatMessage.create({}, chatData);
+  // message = message.replace('{mount}', mountToken.name);
+  // const userGMToWhisper = <User>game.users?.find((u) => u.isGM && u.active);
+  // const chatData = {
+  //   type: 4,
+  //   user: game.user,
+  //   speaker: { alias: 'Mount Up' },
+  //   content: message,
+  //   whisper: [userGMToWhisper.id, game.user],
+  // };
+  // ChatMessage.create(chatData);
 };
 
 export const moveToken = async function (riderToken: Token, mountToken: Token) {

@@ -1,5 +1,5 @@
 import { error, warn } from '../foundryvtt-mountup';
-import { Chatter } from './chatter';
+// import { Chatter } from './chatter';
 // import { SettingsForm } from './mountupForm';
 import { FlagScope, MOUNT_UP_MODULE_NAME } from './settings';
 import { SettingsForm } from './SettingsForm';
@@ -52,7 +52,7 @@ export class MountManager {
         // CALL TOKEN ATTACHER
         await mountUp(riderToken, mountToken);
 
-        Chatter.mountMessage(riderToken.id, mountToken.id);
+        // Chatter.mountMessage(riderToken.id, mountToken.id);
 
         // // shrink the rider if needed
         // if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
@@ -124,7 +124,7 @@ export class MountManager {
     // CALL TOKEN ATTACHER MOVED UP
     await mountUp(riderToken, mountToken);
 
-    Chatter.mountMessage(riderToken.id, mountToken.id);
+    // Chatter.mountMessage(riderToken.id, mountToken.id);
     return true;
   }
 
@@ -143,7 +143,7 @@ export class MountManager {
     // CALL TOKEN ATTACHER MOVED UP
     dismountDropTarget(mountToken, riderToken);
 
-    Chatter.dismountMessage(riderToken.id, mountToken.id);
+    // Chatter.dismountMessage(riderToken.id, mountToken.id);
     const riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
     await mountToken.document.unsetFlag(FlagScope, Flags.Riders);
     riders.splice(riders.indexOf(riderToken.id));
@@ -501,7 +501,7 @@ export class MountManager {
         break;
       }
       case riderX.Left: {
-        loc.x = mountToken.x + mountToken.w + riderToken.w + offset;
+        loc.x = mountToken.x - mountToken.w / 2 + riderToken.w + offset;
         break;
       }
     }
