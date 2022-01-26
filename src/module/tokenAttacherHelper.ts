@@ -74,8 +74,6 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     await riderToken.document.update({
       x: loc.x,
       y: loc.y,
-      // width: newWidthRiderSize,
-      // height: newHeightRiderSize,
     });
 
     let message = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')

@@ -486,7 +486,7 @@ export class MountManager {
     // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
     const riders = <string[]>mountToken.document.getFlag(FlagScope, Flags.Riders);
     const index = riders.indexOf(riderToken.id); // 1
-    const offset: number = index;
+    const offset: number = riderToken.w / 4 * index;
     // END MOD 4535992 SET UP OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
 
     const mountCenter = getTokenCenter(mountToken); //mountToken.getCenter(mountToken.x, mountToken.y);

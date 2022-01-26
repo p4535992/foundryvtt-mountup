@@ -39,6 +39,11 @@ This module uses the [token-attacher](https://github.com/KayelGee/token-attacher
 
 This module uses the [token-z](https://github.com/theripper93/token-z) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
+## Known issue
+
+- if you scale the token mount the rider position can be a little out of coordinates
+- the multi rider functionality on the same mount work partially, but it should be enough for most use cases
+
 ## Mounting
 
 To mount a token:
@@ -56,11 +61,15 @@ To dismount a token from a token:
 ![dismount example](./img/dismount-example.png)\
 *The rider will now be un-linked from the mount, and is free to move on their own.*
 
-## Hooks
+## Partial multi mounting is supported
+
+![img](./img/multimount_partial.png)
+
+## Hooks and API
 
 Some functionality is exposed to macros for repeatable usage. All macros will either accept a token ID or name (case insensitive).
 
-#### Mounting
+#### Macro to Mounting
 
 You can mount a rider to a mount using the following syntax:
 
@@ -68,7 +77,7 @@ You can mount a rider to a mount using the following syntax:
 
 or you can use the module 'token-attacher'
 
-### Dismounting
+### Macro to Dismounting
 
 You can have a rider dismount by passing it's token name or id:
 
@@ -76,13 +85,17 @@ You can have a rider dismount by passing it's token name or id:
 
 or you can use the module 'token-attacher'
 
-### Drop a rider from a mount
+### Macro to Drop a rider from a mount
 
 You can have a mount drop its rider by passing the mount's name or id:
 
 `MountUp.dropRider('MountNameOrId')`
 
-or you can use the module 'token-attacher'
+### Macro function to toggle a rider mount pair
+
+You can have a mount drop its rider by passing the mount's name or id:
+
+`MountUp.toggleMount('RiderNameOrId', 'MountNameOrId')`
 
 # Build
 

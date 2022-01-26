@@ -98,5 +98,13 @@ Hooks.once('ready', () => {
 
 Hooks.once('libChangelogsReady', function () {
   //@ts-ignore
-  libChangelogs.register(MOUNT_UP_MODULE_NAME, 'Add toggleMount function to the macros', 'minor');
+  libChangelogs.register(
+    MOUNT_UP_MODULE_NAME,
+    `
+  - Fix [Question/Feedback Request: How does one center the rider on the mount?](https://github.com/p4535992/MountUp/issues/6)
+  - Fix [[BUG] Blank messages are sent on mount/dismount](https://github.com/p4535992/MountUp/issues/5)
+  - Fix [[BUG] MountUp's action button nonfunctional & doesn't render](https://github.com/p4535992/MountUp/issues/4)
+  `,
+    'minor',
+  );
 });

@@ -173,7 +173,7 @@ export const registerSettings = function () {
     // type: String,
     // default: 'Top',
     type: Number,
-    default: 0,
+    default: 1,
     choices: {
       0: 'Top',
       1: 'Center',
