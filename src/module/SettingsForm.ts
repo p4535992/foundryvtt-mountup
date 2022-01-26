@@ -29,27 +29,27 @@ export class SettingsForm {
     game.settings.set(MOUNT_UP_MODULE_NAME, 'topbottom', val);
   }
 
-  //   /**
-  //    * Returns the user specified rider horizontal location
-  //    */
-  //   static getRiderX() {
-  //     return game.settings.get(MOUNT_UP_MODULE_NAME, 'rider-x');
-  //   }
+    /**
+     * Returns the user specified rider horizontal location
+     */
+    static getRiderX() {
+      return game.settings.get(MOUNT_UP_MODULE_NAME, 'rider-x');
+    }
 
-  //   static setRiderX(val) {
-  //     game.settings.set(MOUNT_UP_MODULE_NAME, 'rider-x', val);
-  //   }
+    static setRiderX(val) {
+      game.settings.set(MOUNT_UP_MODULE_NAME, 'rider-x', val);
+    }
 
-  //   /**
-  //    * Returns the user specified rider vertical location
-  //    */
-  //   static getRiderY() {
-  //     return game.settings.get(MOUNT_UP_MODULE_NAME, 'rider-y');
-  //   }
+    /**
+     * Returns the user specified rider vertical location
+     */
+    static getRiderY() {
+      return game.settings.get(MOUNT_UP_MODULE_NAME, 'rider-y');
+    }
 
-  //   static setRiderY(val) {
-  //     game.settings.set(MOUNT_UP_MODULE_NAME, 'rider-y', val);
-  //   }
+    static setRiderY(val) {
+      game.settings.set(MOUNT_UP_MODULE_NAME, 'rider-y', val);
+    }
 
   /**
    * Returns true if chat messages should be sent

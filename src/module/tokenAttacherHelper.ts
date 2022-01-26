@@ -1,3 +1,4 @@
+import { MountManager } from './mountManager';
 import { MOUNT_UP_MODULE_NAME } from './settings';
 import { canvas, game } from './settings';
 
@@ -57,6 +58,12 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     });
 
     // riderToken.zIndex = mountToken.zIndex + 10;
+
+    const loc: { x; y } = MountManager.getRiderInitialLocation(riderToken, mountToken);
+    await riderToken.document.update({
+      x: loc.x,
+      y: loc.y,
+    });
 
     let message = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
       ? <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')

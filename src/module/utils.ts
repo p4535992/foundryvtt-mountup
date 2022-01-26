@@ -73,20 +73,40 @@ export function findTokenByName(tokenName: string): Token {
   return <Token>canvas.tokens?.placeables.find((t) => t.name.toLowerCase() == tokenName.toLowerCase());
 }
 
-export function getTokenShape(token): { x: number; y: number } {
+/**
+ * Get token center
+ */
+ export const getTokenCenter = function (token) {
+  /*
+    let tokenCenter = {x: token.x , y: token.y };
+    tokenCenter.x += -20 + ( token.w * 0.50 );
+    tokenCenter.y += -20 + ( token.h * 0.50 );
+    */
+  const shapes = getTokenShape(token);
+  if (shapes && shapes.length > 0) {
+    const shape0 = shapes[0];
+    return { x: shape0.x, y: shape0.y };
+  }
+  const tokenCenter = { x: token.x + token.w / 2, y: token.y + token.h / 2 };
+  return tokenCenter;
+};
+
+/**
+ * Get token shape center
+ */
+function getTokenShape(token): any[] {
   if (token.scene.data.gridType === CONST.GRID_TYPES.GRIDLESS) {
-    return { x: 0, y: 0 };
+    return [{ x: 0, y: 0 }];
   } else if (token.scene.data.gridType === CONST.GRID_TYPES.SQUARE) {
     const topOffset = -Math.floor(token.data.height / 2);
     const leftOffset = -Math.floor(token.data.width / 2);
-    const shape = [];
+    const shape: any[] = [];
     for (let y = 0; y < token.data.height; y++) {
       for (let x = 0; x < token.data.width; x++) {
-        //@ts-ignore
         shape.push({ x: x + leftOffset, y: y + topOffset });
       }
     }
-    return shape[0];
+    return shape;
   } else {
     // Hex grids
     //@ts-ignore
@@ -120,9 +140,9 @@ export function getTokenShape(token): { x: number; y: number } {
         shape = shape.map((space) => {
           return { x: space.y, y: space.x };
         });
-      return shape[0];
+      return shape;
     } else {
-      return { x: 0, y: 0 };
+      return [{ x: 0, y: 0 }];
     }
   }
 }
