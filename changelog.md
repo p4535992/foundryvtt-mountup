@@ -1,3 +1,8 @@
+## 3.2.5 
+
+- Removed old flag set
+- Better center calculation coordinates
+
 ## 3.2.4
 
 - Fix [Question/Feedback Request: How does one center the rider on the mount?](https://github.com/p4535992/MountUp/issues/6)
