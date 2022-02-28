@@ -1,7 +1,9 @@
 import CONSTANTS from './constants';
+import { manageAEOnDismountUp, manageAEOnMountUp } from './lib/lib';
 import { MountManager } from './mountManager';
 import { canvas, game } from './settings';
 import { SettingsForm } from './settings-form';
+import { Flags } from './utils';
 
 export const mountUp = async function (riderToken: Token, mountToken: Token) {
   if (!riderToken || !mountToken) {
@@ -102,6 +104,11 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
 
     await window['tokenAttacher'].attachElementToToken(riderToken, targets[0], true);
     await window['tokenAttacher'].setElementsLockStatus(riderToken, false, true);
+
+    // Manage active effect
+    if(game.settings.get(CONSTANTS.MODULE_NAME,'enableActiveEffect')){
+      await manageAEOnMountUp(riderToken,mountToken);
+    }
   }
 };
 
@@ -128,13 +135,21 @@ export const dismountDropAll = async function (mountToken: Token) {
   };
   //@ts-ignore
   ChatMessage.create(chatData);
+
+  // Manage active effect
+  if(game.settings.get(CONSTANTS.MODULE_NAME,'enableActiveEffect')){
+    const riderTokens:Token[] = <Token[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME,Flags.Riders);
+    for(const riderToken of riderTokens){
+      await manageAEOnDismountUp(riderToken,mountToken);
+    }
+  }
 };
 
-export const dismountDropTarget = async function (mountToken: Token, target: Token) {
-  if (!mountToken || !target) {
+export const dismountDropTarget = async function (mountToken: Token, riderToken: Token) {
+  if (!mountToken || !riderToken) {
     return;
   }
-  const targets = [target]; // Array.from(game.user.targets);
+  const targets = [riderToken]; // Array.from(game.user.targets);
   if (targets.length > 0) {
     if (targets.length > 1) {
       return ui.notifications?.error("Can't follow more then one token!");
@@ -169,6 +184,11 @@ export const dismountDropTarget = async function (mountToken: Token, target: Tok
       };
       //@ts-ignore
       ChatMessage.create(chatData);
+    }
+
+    // Manage active effect
+    if(game.settings.get(CONSTANTS.MODULE_NAME,'enableActiveEffect')){
+      await manageAEOnDismountUp(riderToken,mountToken);
     }
   }
 };

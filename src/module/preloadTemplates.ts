@@ -1,5 +1,3 @@
-
-
 export const preloadTemplates = async function () {
   const templatePaths = [
     // Add paths to "module/XXX/templates"

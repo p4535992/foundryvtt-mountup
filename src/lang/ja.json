@@ -1,6 +1,6 @@
 {
   "foundryvtt-mountup": {
-    "settings": {
+    "setting": {
       "button": {
         "name": "乗りなよ！(Mount Up!)設定",
         "label": "乗りなよ！"

@@ -60,22 +60,14 @@ export function registerSocket() {
 
   mountUpSocket.register('addEffectOnActor', (...args) => API.addEffectOnActorArr(...args));
   mountUpSocket.register('removeEffectOnActor', (...args) => API.removeEffectOnActorArr(...args));
-  mountUpSocket.register('removeEffectFromIdOnActor', (...args) =>
-    API.removeEffectFromIdOnActorArr(...args),
-  );
-  mountUpSocket.register('toggleEffectFromIdOnActor', (...args) =>
-    API.toggleEffectFromIdOnActorArr(...args),
-  );
+  mountUpSocket.register('removeEffectFromIdOnActor', (...args) => API.removeEffectFromIdOnActorArr(...args));
+  mountUpSocket.register('toggleEffectFromIdOnActor', (...args) => API.toggleEffectFromIdOnActorArr(...args));
   mountUpSocket.register('findEffectByNameOnActor', (...args) => API.findEffectByNameOnActorArr(...args));
 
   mountUpSocket.register('addEffectOnToken', (...args) => API.addEffectOnTokenArr(...args));
   mountUpSocket.register('removeEffectOnToken', (...args) => API.removeEffectOnTokenArr(...args));
-  mountUpSocket.register('removeEffectFromIdOnToken', (...args) =>
-    API.removeEffectFromIdOnTokenArr(...args),
-  );
-  mountUpSocket.register('toggleEffectFromIdOnToken', (...args) =>
-    API.toggleEffectFromIdOnTokenArr(...args),
-  );
+  mountUpSocket.register('removeEffectFromIdOnToken', (...args) => API.removeEffectFromIdOnTokenArr(...args));
+  mountUpSocket.register('toggleEffectFromIdOnToken', (...args) => API.toggleEffectFromIdOnTokenArr(...args));
   mountUpSocket.register('findEffectByNameOnToken', (...args) => API.findEffectByNameOnTokenArr(...args));
   return mountUpSocket;
 }

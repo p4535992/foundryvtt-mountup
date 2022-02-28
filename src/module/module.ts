@@ -8,7 +8,6 @@ import { debug, warn } from './lib/lib';
 import HOOKS from './hooks';
 
 export const initHooks = () => {
-
   warn('Init Hooks processing');
 
   if (game.settings.get(CONSTANTS.MODULE_NAME, 'debugHooks')) {
@@ -64,7 +63,6 @@ export const setupHooks = async (): Promise<void> => {
 };
 
 export const readyHooks = async () => {
-
   Hooks.on('renderTokenHUD', (app, html, data) => {
     MountHud.renderMountHud(app, html, data);
   });
@@ -110,5 +108,4 @@ export const readyHooks = async () => {
     await MountManager.handleTokenDelete(token._id);
     //return true;
   });
-
 };

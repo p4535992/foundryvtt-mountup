@@ -248,8 +248,14 @@ export class Constants {
 }
 
 export class EffectSupport {
-  static buildDefault(effectData: any, isPassive: boolean,
-      changes:any[] = [], atlChanges:any[] = [], tokenMagicChanges:any[] = [], atcvChanges:any[] = []): Effect {
+  static buildDefault(
+    effectData: any,
+    isPassive: boolean,
+    changes: any[] = [],
+    atlChanges: any[] = [],
+    tokenMagicChanges: any[] = [],
+    atcvChanges: any[] = [],
+  ): Effect {
     return new Effect({
       customId: effectData.id,
       name: i18n(effectData.name),

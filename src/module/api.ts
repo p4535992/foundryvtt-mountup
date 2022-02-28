@@ -1,13 +1,14 @@
+import EmbeddedCollection from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs';
+import { EffectChangeData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
+import { ActorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
 import CONSTANTS from './constants';
-import Effect from './effects/effect';
+import Effect, { EffectSupport } from './effects/effect';
 import EffectInterface from './effects/effect-interface';
 import { error } from './lib/lib';
 import { MountManager } from './mountManager';
 import { findTokenById, findTokenByName, Flags } from './utils';
 
-
 const API = {
-
   effectInterface: EffectInterface,
 
   /**
@@ -375,7 +376,6 @@ const API = {
   },
 
   // =======================================================================================
-
 };
 
 export default API;

@@ -1,6 +1,6 @@
 {
   "foundryvtt-mountup": {
-    "settings": {
+    "setting": {
       "button": {
         "name": "Mount Up! Settings",
         "label": "Mount Up!",
@@ -64,6 +64,10 @@
         "centertop": "Center Top",
         "centerbottom": "Center Bottom",
         "random": "Random"
+      },
+      "enableActiveEffect": {
+        "name": "Enable active token mount up management",
+        "hint": "Every time you mount up or dismount a token active effect can be added or removed base on the active effect changes configuration"
       }
     }
   }
