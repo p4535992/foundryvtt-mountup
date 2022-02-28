@@ -2,7 +2,7 @@ import { error, warn } from '../foundryvtt-mountup';
 // import { Chatter } from './chatter';
 // import { SettingsForm } from './mountupForm';
 import { FlagScope, MOUNT_UP_MODULE_NAME } from './settings';
-import { SettingsForm } from './SettingsForm';
+import { SettingsForm } from './settings-form';
 import { detachAllFromToken, dismountDropAll, dismountDropTarget, mountUp, moveToken } from './tokenAttacherHelper';
 import { findTokenById, Flags, getTokenCenter, riderLock, riderX, riderY, socketAction } from './utils';
 import { canvas, game } from './settings';

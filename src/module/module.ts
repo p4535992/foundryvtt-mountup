@@ -1,35 +1,69 @@
 import { MOUNT_UP_MODULE_NAME } from './settings';
-import { dismount, dropRider, mount, toggleMount } from './macros';
+import API, { dismount, dropRider, mount, toggleMount } from './api';
 import { MountHud } from './mountHud';
 import { MountManager } from './mountManager';
 import { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs';
 import { warn } from '../foundryvtt-mountup';
 import { game } from './settings';
+import CONSTANTS from './constants';
 
-export const readyHooks = async () => {
-  // Settings.registerSettings();
+export const initHooks = () => {
 
-  window[MOUNT_UP_MODULE_NAME] = {
-    mount: mount,
-    dismount: dismount,
-    dropRider: dropRider,
-    toggleMount: toggleMount,
+  warn('Init Hooks processing');
+
+  if (game.settings.get(CONSTANTS.MODULE_NAME, 'debugHooks')) {
+    for (const hook of Object.values(HOOKS)) {
+      if (typeof hook === 'string') {
+        Hooks.on(hook, (...args) => debug(`Hook called: ${hook}`, ...args));
+        debug(`Registered hook: ${hook}`);
+      } else {
+        for (const innerHook of Object.values(hook)) {
+          Hooks.on(<string>innerHook, (...args) => debug(`Hook called: ${innerHook}`, ...args));
+          debug(`Registered hook: ${innerHook}`);
+        }
+      }
+    }
+  }
+
+  //@ts-ignore
+  window[CONSTANTS.MODULE_NAME] = {
+    API,
+    mount: API.mount,
+    dismount: API.dismount,
+    dropRider: API.dropRider,
+    toggleMount: API.toggleMount,
   };
 
   // FOR RETROCOMPATIBILITY
-
-  window['MountUp'] = {
-    mount: mount,
-    dismount: dismount,
-    dropRider: dropRider,
-    toggleMount: toggleMount,
+  //@ts-ignore
+  window.MountUp = {
+    API,
+    mount: API.mount,
+    dismount: API.dismount,
+    dropRider: API.dropRider,
+    toggleMount: API.toggleMount,
   };
 };
 
-export const initHooks = () => {
-  warn('Init Hooks processing');
-
+export const setupHooks = async (): Promise<void> => {
   // setup all the hooks
+
+  //@ts-ignore
+  window.MountUp.API.effectInterface = new EffectInterface(CONSTANTS.MODULE_NAME);
+  //@ts-ignore
+  window.MountUp.API.effectInterface.initialize();
+
+  if (game[CONSTANTS.MODULE_NAME]) {
+    game[CONSTANTS.MODULE_NAME] = {};
+  }
+  if (game[CONSTANTS.MODULE_NAME].API) {
+    game[CONSTANTS.MODULE_NAME].API = {};
+  }
+  //@ts-ignore
+  game[CONSTANTS.MODULE_NAME].API = window.MountUp.API;
+};
+
+export const readyHooks = async () => {
 
   Hooks.on('renderTokenHUD', (app, html, data) => {
     MountHud.renderMountHud(app, html, data);
@@ -76,4 +110,5 @@ export const initHooks = () => {
     await MountManager.handleTokenDelete(token._id);
     //return true;
   });
+
 };

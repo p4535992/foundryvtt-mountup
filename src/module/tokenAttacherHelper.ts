@@ -1,7 +1,7 @@
 import { MountManager } from './mountManager';
 import { MOUNT_UP_MODULE_NAME } from './settings';
 import { canvas, game } from './settings';
-import { SettingsForm } from './SettingsForm';
+import { SettingsForm } from './settings-form';
 
 export const mountUp = async function (riderToken: Token, mountToken: Token) {
   if (!riderToken || !mountToken) {

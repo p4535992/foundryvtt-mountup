@@ -44,6 +44,8 @@ This module uses the [token-z](https://github.com/theripper93/token-z) library l
 - if you scale the token mount the rider position can be a little out of coordinates
 - the multi rider functionality on the same mount work partially, but it should be enough for most use cases
 
+# Usage
+
 ## Mounting
 
 To mount a token:

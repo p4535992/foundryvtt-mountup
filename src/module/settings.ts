@@ -3,9 +3,9 @@ import { i18n } from '../foundryvtt-mountup';
 export const game = getGame();
 export const canvas = getCanvas();
 
-export const MOUNT_UP_MODULE_NAME = 'foundryvtt-mountup';
-export const socketName = 'module.' + MOUNT_UP_MODULE_NAME; //'module.mountup';
-export const FlagScope = MOUNT_UP_MODULE_NAME; //'mountup';
+// export const MOUNT_UP_MODULE_NAME = 'foundryvtt-mountup';
+// export const socketName = 'module.' + MOUNT_UP_MODULE_NAME; //'module.mountup';
+// export const FlagScope = MOUNT_UP_MODULE_NAME; //'mountup';
 //export const modName = 'Mount Up';
 // const mod = 'foundryvtt-mountup';
 
