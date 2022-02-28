@@ -39,14 +39,15 @@ This module uses the [token-attacher](https://github.com/KayelGee/token-attacher
 
 This module uses the [token-z](https://github.com/theripper93/token-z) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
-## Known issue
+## Known Issue\Limitation
 
-- if you scale the token mount the rider position can be a little out of coordinates
-- the multi rider functionality on the same mount work partially, but it should be enough for most use cases
+- This module can be a lot better with this feature asked to the [token-attacher](https://github.com/KayelGee/token-attacher) developer i invite you to support the request of this feature [[Feature Request] Allow the rider token to be moved as long as it does not leave the area of mount token](https://github.com/KayelGee/token-attacher/issues/67), sorry not smart enough for understand how can i do that by myself...
+- If you scale the token mount the rider position can be a little out of coordinates... i can ignore this if a solve the first point
+- The multi rider functionality on the same mount work partially, but it should be enough for most use cases... i can ignore this if a solve the first point
 
-# Usage
+## Usage
 
-## Mounting
+### Mounting
 
 To mount a token:
 1. Select the "rider" and the "mount" tokens.
@@ -55,7 +56,7 @@ To mount a token:
 ![mount example](./img/mount-example.png)\
 *The rider will now be linked to the mount. Anywhere the mount moves, the rider follows.*
 
-## Dismounting
+### Dismounting
 
 To dismount a token from a token:
 1. Right click on the "mount" to bring up the token HUD.
@@ -63,11 +64,49 @@ To dismount a token from a token:
 ![dismount example](./img/dismount-example.png)\
 *The rider will now be un-linked from the mount, and is free to move on their own.*
 
-## Partial multi mounting is supported
+### Partial multi mounting is supported
 
 ![img](./img/multimount_partial.png)
 
-## Hooks and API
+## Active Effect of Mount Up
+
+### How the active effect name is checked on the module ?
+
+You can use any active effect where the name is founded from the following code of the module:
+
+```
+const effectNameToCheck = <EFFECT NAME>;
+// For each active effects on the token/actor
+let result = false;
+for(const effect of effects){
+    // regex expression to match all non-alphanumeric characters in string
+    const regex = /[^A-Za-z0-9]/g;
+    // use replace() method to match and remove all the non-alphanumeric characters
+    result  = effectNameToCheck.replace(regex, "").toLowerCase().startsWith(effectIdOfTheModule.replace(regex, "").toLowerCase());
+    if(result)break;
+}
+return result;
+```
+
+## What active effect data changes are used from this module ?
+
+Every active effect data of this is module use any changes with the prefix `ATMU` acronim for _Active Token Mount Up_ .
+
+There three type of these AE used and supported from this module:
+
+| Key Syntax                      | Type    | Description                         | Examples Active Effect Data [Key = value] |
+| :------------------------------:|:-------:|:-----------------------------------:|:--------:|
+| `ATMU.toMountOnMount`   | boolean  | Transfer this active effect from the rider to the mount when "Mount Up"   | `ATMU.toMountOnMount = true`, `ATMU.toMountOnMount = false` |
+| `ATMU.toMountOnDismount`| boolean  | Transfer this active effect from the rider to the mount when "Dismount Up" | `ATMU.toMountOnDismount = true`, `ATMU.toMountOnDismount = false` |
+| `ATMU.toRiderOnMount`   | boolean  | Transfer this active effect from the mount to the rider when "Mount Up"   | `ATMU.toRiderOnMount = true`, `ATMU.toRiderOnMount = false` |
+| `ATMU.toRiderOnDismount`| boolean  | Transfer this active effect from the mount to the rider when "Dismount Up" | `ATMU.toRiderOnDismount = true`, `ATMU.toRiderOnDismount = false` |
+
+For now no automatic UI is prepared (and don't think we need one) just created  a active effect and add this changes on it.
+
+**NOTE:** by default all _effect_ from this module are _temporary_
+
+
+## API
 
 Some functionality is exposed to macros for repeatable usage. All macros will either accept a token ID or name (case insensitive).
 
@@ -79,7 +118,7 @@ You can mount a rider to a mount using the following syntax:
 
 or you can use the module 'token-attacher'
 
-### Macro to Dismounting
+#### Macro to Dismounting
 
 You can have a rider dismount by passing it's token name or id:
 
@@ -87,13 +126,13 @@ You can have a rider dismount by passing it's token name or id:
 
 or you can use the module 'token-attacher'
 
-### Macro to Drop a rider from a mount
+#### Macro to Drop a rider from a mount
 
 You can have a mount drop its rider by passing the mount's name or id:
 
 `MountUp.dropRider('MountNameOrId')`
 
-### Macro function to toggle a rider mount pair
+#### Macro function to toggle a rider mount pair
 
 You can have a mount drop its rider by passing the mount's name or id:
 

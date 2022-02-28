@@ -1,13 +1,8 @@
-import { i18n } from '../foundryvtt-mountup';
+import CONSTANTS from "./constants";
+import { i18n } from "./lib/lib";
 
 export const game = getGame();
 export const canvas = getCanvas();
-
-// export const MOUNT_UP_MODULE_NAME = 'foundryvtt-mountup';
-// export const socketName = 'module.' + MOUNT_UP_MODULE_NAME; //'module.mountup';
-// export const FlagScope = MOUNT_UP_MODULE_NAME; //'mountup';
-//export const modName = 'Mount Up';
-// const mod = 'foundryvtt-mountup';
 
 /**
  * Because typescript doesn't know when in the lifecycle of foundry your code runs, we have to assume that the
@@ -41,19 +36,19 @@ function getGame(): Game {
 }
 
 export const registerSettings = function () {
-  // game.settings.registerMenu(MOUNT_UP_MODULE_NAME, 'settingsMenu', {
-  //   name: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.name'),
-  //   label: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.label'),
-  //   hint: i18n(MOUNT_UP_MODULE_NAME + '.settings.button.hint'),
+  // game.settings.registerMenu(CONSTANTS.MODULE_NAME, 'settingsMenu', {
+  //   name: i18n(CONSTANTS.MODULE_NAME + '.settings.button.name'),
+  //   label: i18n(CONSTANTS.MODULE_NAME + '.settings.button.label'),
+  //   hint: i18n(CONSTANTS.MODULE_NAME + '.settings.button.hint'),
   //   icon: 'fas fa-horse',
   //   type: MountUpForm,
   //   restricted: true,
   // });
 
   /** Which Icon should be used */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'icon', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.icon.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.icon.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'icon', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.icon.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.icon.hint`),
     scope: 'world',
     config: true,
     // type: String,
@@ -71,9 +66,9 @@ export const registerSettings = function () {
   });
 
   /** Which column should the button be placed on */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'column', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.hudColumn.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.hudColumn.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'column', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.hudColumn.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.hudColumn.hint`),
     scope: 'world',
     config: true,
     // type: String,
@@ -87,9 +82,9 @@ export const registerSettings = function () {
   });
 
   /** Whether the button should be placed on the top or bottom of the column */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'topbottom', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.hudTopBottom.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.hudTopBottom.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'topbottom', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.hudTopBottom.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.hudTopBottom.hint`),
     scope: 'world',
     config: true,
     // type: String,
@@ -102,28 +97,28 @@ export const registerSettings = function () {
     },
   });
 
-  // game.settings.register(MOUNT_UP_MODULE_NAME, 'pipPosition', {
-  //   name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.name`),
-  //   hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.hint`),
+  // game.settings.register(CONSTANTS.MODULE_NAME, 'pipPosition', {
+  //   name: i18n(`${CONSTANTS.MODULE_NAME}.settings.pipPosition.name`),
+  //   hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.pipPosition.hint`),
   //   scope: 'world',
   //   config: true,
   //   default: 'topleft',
   //   type: String,
   //   choices: {
-  //     topleft: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.topleft`),
-  //     topright: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.topright`),
-  //     bottomleft: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.bottomleft`),
-  //     bottomright: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.bottomright`),
-  //     centertop: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.centertop`),
-  //     centerbottom: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.centerbottom`),
-  //     random: i18n(`${MOUNT_UP_MODULE_NAME}.settings.pipPosition.random`),
+  //     topleft: i18n(`${CONSTANTS.MODULE_NAME}.settings.pipPosition.topleft`),
+  //     topright: i18n(`${CONSTANTS.MODULE_NAME}.settings.pipPosition.topright`),
+  //     bottomleft: i18n(`${CONSTANTS.MODULE_NAME}.settings.pipPosition.bottomleft`),
+  //     bottomright: i18n(`${CONSTANTS.MODULE_NAME}.settings.pipPosition.bottomright`),
+  //     centertop: i18n(`${CONSTANTS.MODULE_NAME}.settings.pipPosition.centertop`),
+  //     centerbottom: i18n(`${CONSTANTS.MODULE_NAME}.settings.pipPosition.centerbottom`),
+  //     random: i18n(`${CONSTANTS.MODULE_NAME}.settings.pipPosition.random`),
   //   },
   // });
 
   /** Whether or not riders should be locked to mounts */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'lock-riders', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderLock.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderLock.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'lock-riders', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.riderLock.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.riderLock.hint`),
     scope: 'world',
     config: true,
     // type: String,
@@ -131,16 +126,16 @@ export const registerSettings = function () {
     type: Number,
     default: 3,
     choices: {
-      0: `${MOUNT_UP_MODULE_NAME}.settings.riderLock.noLock`,
+      0: `${CONSTANTS.MODULE_NAME}.settings.riderLock.noLock`,
       1: 'Lock to location',
       2: 'Lock to mount bounds',
       3: 'Dismount when outside mount bounds',
     },
   });
 
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-rotate', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderRotate.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderRotate.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'rider-rotate', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.riderRotate.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.riderRotate.hint`),
     scope: 'world',
     config: true,
     type: Boolean,
@@ -148,9 +143,9 @@ export const registerSettings = function () {
   });
 
   /** Where to place the rider horizontally on the mount */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-x', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderX.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderX.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'rider-x', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.riderX.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.riderX.hint`),
     scope: 'world',
     config: true,
     // type: String,
@@ -165,9 +160,9 @@ export const registerSettings = function () {
   });
 
   /** Where to place the rider vertically on the mount */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'rider-y', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderY.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.riderY.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'rider-y', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.riderY.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.riderY.hint`),
     scope: 'world',
     config: true,
     // type: String,
@@ -182,9 +177,9 @@ export const registerSettings = function () {
   });
 
   /** Whether or not chat messages should be sent */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'should-chat', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.shouldChat.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.shouldChat.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'should-chat', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.shouldChat.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.shouldChat.hint`),
     scope: 'world',
     config: true,
     type: Boolean,
@@ -192,9 +187,9 @@ export const registerSettings = function () {
   });
 
   /** The mounting message */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'mount-message', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.mountMsg.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.mountMsg.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'mount-message', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.mountMsg.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.mountMsg.hint`),
     scope: 'world',
     config: true,
     type: String,
@@ -202,9 +197,9 @@ export const registerSettings = function () {
   });
 
   /** The dismounting message */
-  game.settings.register(MOUNT_UP_MODULE_NAME, 'dismount-message', {
-    name: i18n(`${MOUNT_UP_MODULE_NAME}.settings.dismountMsg.name`),
-    hint: i18n(`${MOUNT_UP_MODULE_NAME}.settings.dismountMsg.hint`),
+  game.settings.register(CONSTANTS.MODULE_NAME, 'dismount-message', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.dismountMsg.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.dismountMsg.hint`),
     scope: 'world',
     config: true,
     type: String,

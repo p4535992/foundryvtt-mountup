@@ -13,15 +13,15 @@
 
 // Import TypeScript modules
 import { preloadTemplates } from './module/preloadTemplates';
-import { registerSettings, MOUNT_UP_MODULE_NAME } from './module/settings';
 import { initHooks, readyHooks } from './module/module';
-import { game } from './module/settings';
+import { game, registerSettings } from './module/settings';
+import CONSTANTS from './module/constants';
 
 /* ------------------------------------ */
 /* Initialize module					*/
 /* ------------------------------------ */
 Hooks.once('init', async () => {
-  console.log(`${MOUNT_UP_MODULE_NAME} | Initializing ${MOUNT_UP_MODULE_NAME}`);
+  console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
   // Assign custom classes and constants here
 
   // Register custom module settings
@@ -51,19 +51,19 @@ Hooks.once('ready', () => {
   // Do anything once the module is ready
   if (!game.modules.get('lib-wrapper')?.active && game.user?.isGM) {
     ui.notifications?.error(
-      `The '${MOUNT_UP_MODULE_NAME}' module requires to install and activate the 'libWrapper' module.`,
+      `The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'libWrapper' module.`,
     );
     return;
   }
   if (!game.modules.get('token-attacher')?.active && game.user?.isGM) {
     ui.notifications?.error(
-      `The '${MOUNT_UP_MODULE_NAME}' module requires to install and activate the 'token-attacher' module.`,
+      `The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'token-attacher' module.`,
     );
     return;
   }
 
   // if (game.modules.get('mountup')?.active && game.user?.isGM) {
-  //   ui.notifications?.warn(`The 'mountup', is not needed anymore just use '${MOUNT_UP_MODULE_NAME}'`);
+  //   ui.notifications?.warn(`The 'mountup', is not needed anymore just use '${CONSTANTS.MODULE_NAME}'`);
   // }
 
   readyHooks();
@@ -74,7 +74,7 @@ Hooks.once('ready', () => {
 Hooks.once('libChangelogsReady', function () {
   //@ts-ignore
   libChangelogs.register(
-    MOUNT_UP_MODULE_NAME,
+    CONSTANTS.MODULE_NAME,
     `
     - Removed old flag set
     - Better center calculation coordinates

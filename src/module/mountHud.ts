@@ -1,8 +1,8 @@
 import { MountManager } from './mountManager';
-import { FlagScope, MOUNT_UP_MODULE_NAME } from './settings';
 import { SettingsForm } from './settings-form';
 import { findTokenById, Flags } from './utils';
 import { canvas, game } from './settings';
+import CONSTANTS from './constants';
 
 /**
  * Functinality class for managing the token HUD
@@ -70,7 +70,7 @@ export class MountHud {
 
   static addDismountButton(html, hudToken) {
     const rider: Token = findTokenById(hudToken._id);
-    const mount = findTokenById(<string>rider.document.getFlag(FlagScope, Flags.Mount));
+    const mount = findTokenById(<string>rider.document.getFlag(CONSTANTS.MODULE_NAME, Flags.Mount));
     let button = this.buildButton(html, `Dismount ${hudToken.name} from ${mount.name}`);
     button = this.addSlash(button);
 

@@ -1,5 +1,5 @@
+import CONSTANTS from './constants';
 import { MountManager } from './mountManager';
-import { MOUNT_UP_MODULE_NAME } from './settings';
 import { canvas, game } from './settings';
 import { SettingsForm } from './settings-form';
 
@@ -76,8 +76,8 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
       y: loc.y,
     });
 
-    let message = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
-      ? <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'mount-message')
+    let message = <string>game.settings.get(CONSTANTS.MODULE_NAME, 'mount-message')
+      ? <string>game.settings.get(CONSTANTS.MODULE_NAME, 'mount-message')
       : `I mount this ${targets[0].name}`;
     message = message.replace('{rider}', riderToken.name);
     message = message.replace('{mount}', targets[0].name);
@@ -145,8 +145,8 @@ export const dismountDropTarget = async function (mountToken: Token, target: Tok
     for (let i = 0; i < targets.length; i++) {
       const targ: Token = targets[i];
 
-      let message = <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'dismount-message')
-        ? <string>game.settings.get(MOUNT_UP_MODULE_NAME, 'dismount-message')
+      let message = <string>game.settings.get(CONSTANTS.MODULE_NAME, 'dismount-message')
+        ? <string>game.settings.get(CONSTANTS.MODULE_NAME, 'dismount-message')
         : `Get off ${targ.name}!`;
       message = message.replace('{rider}', targ.name);
       message = message.replace('{mount}', mountToken.name);
