@@ -5,11 +5,12 @@ import { canvas, game } from './settings';
 /**
  * Flag Info
  */
-export const Flags = {
+export const MountUpFlags = {
   Mount: 'mount',
   Riders: 'riders',
   OrigSize: 'origsize',
   MountMove: 'mountMove',
+  OrigElevation: 'origelevation'
 };
 
 /**

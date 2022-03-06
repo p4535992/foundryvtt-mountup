@@ -7,7 +7,7 @@ import EffectInterface from './effects/effect-interface';
 import { error, getElevationToken } from './lib/lib';
 import { MountManager } from './mountManager';
 import { MountupEffectDefinitions } from './mountup-effect-definition';
-import { findTokenById, findTokenByName, Flags } from './utils';
+import { findTokenById, findTokenByName, MountUpFlags } from './utils';
 
 const API = {
   effectInterface: EffectInterface,
@@ -49,7 +49,7 @@ const API = {
 
     if (rider) {
       if (MountManager.isaRider(rider.id)) {
-        const mountToken = findTokenById(<string>rider.document.getFlag(CONSTANTS.MODULE_NAME, Flags.Mount));
+        const mountToken = findTokenById(<string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount));
         MountManager.doRemoveMount(rider, mountToken);
       } else {
         error(`Token '${riderName}' is not a rider`);
@@ -69,7 +69,7 @@ const API = {
 
     if (mount) {
       if (MountManager.isaMount(mount.id)) {
-        const riders = <string[]>mount.document.getFlag(CONSTANTS.MODULE_NAME, Flags.Riders);
+        const riders = <string[]>mount.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         for (const rider in riders) {
           const riderToken: Token = findTokenById(rider);
           MountManager.doRemoveMount(riderToken, mount);
@@ -91,7 +91,7 @@ const API = {
     const riderToken = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
     const mountToken = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
 
-    if (riderToken.document.getFlag(CONSTANTS.MODULE_NAME, Flags.Mount) == mountToken.id) {
+    if (riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id) {
       API.dismount(riderNameOrId);
     } else {
       API.mount(riderNameOrId, mountNameOrId);

@@ -1,9 +1,9 @@
 import CONSTANTS from './constants';
-import { manageAEOnDismountUp, manageAEOnMountUp } from './lib/lib';
+import { getElevationToken, manageAEOnDismountUp, manageAEOnMountUp } from './lib/lib';
 import { MountManager } from './mountManager';
 import { canvas, game } from './settings';
 import { SettingsForm } from './settings-form';
-import { Flags } from './utils';
+import { MountUpFlags } from './utils';
 
 export const mountUp = async function (riderToken: Token, mountToken: Token) {
   if (!riderToken || !mountToken) {
@@ -71,11 +71,18 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     // riderToken.document.data.y = newRiderCoords.y;
     // riderToken.document.data.height = newHeightRiderSize;
     // riderToken.document.data.width = newWidthRiderSize;
+    const mountElevation = getElevationToken(mountToken) || 0;
+    const backupRiderElevation = getElevationToken(riderToken) || 0;
+    await riderToken.document.setFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation,backupRiderElevation);
 
     const loc: { x; y } = MountManager.getRiderInitialLocation(riderToken, mountToken);
     await riderToken.document.update({
       x: loc.x,
       y: loc.y,
+      data: {
+        elevation: mountElevation
+      },
+      elevation: mountElevation
     });
 
     let message = <string>game.settings.get(CONSTANTS.MODULE_NAME, 'mount-message')
@@ -116,7 +123,7 @@ export const dismountDropAll = async function (mountToken: Token) {
   if (!mountToken) {
     return;
   }
-  // tokenAttacher.detachAllElementsFromToken(mountToken, true);
+
   await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
 
   let message = `Everyone and everything get off from {mount}!`;
@@ -136,10 +143,23 @@ export const dismountDropAll = async function (mountToken: Token) {
   //@ts-ignore
   ChatMessage.create(chatData);
 
-  // Manage active effect
-  if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableActiveEffect')) {
-    const riderTokens: Token[] = <Token[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, Flags.Riders);
-    for (const riderToken of riderTokens) {
+  const riderTokens: string[] = <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+  for (const riderTokenS of riderTokens) {
+    const riderToken = <Token>canvas.tokens?.placeables.find((rt) =>{
+      return rt.id === riderTokenS;
+    });
+    const backupRiderElevation = <number>riderToken.document.getFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation);
+    if(backupRiderElevation){
+      await riderToken.document.update({
+        data: {
+          elevation: backupRiderElevation
+        },
+        elevation: backupRiderElevation
+      });
+      await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation);
+    }
+    // Manage active effect
+    if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableActiveEffect')) {
       await manageAEOnDismountUp(riderToken, mountToken);
     }
   }
@@ -154,7 +174,7 @@ export const dismountDropTarget = async function (mountToken: Token, riderToken:
     if (targets.length > 1) {
       return ui.notifications?.error("Can't follow more then one token!");
     }
-    //await tokenAttacher.detachElementsFromToken(targets, token, true);
+
     await window['tokenAttacher'].detachElementsFromToken(targets, mountToken, true);
     //dismountDropAll(token);
     for (let i = 0; i < targets.length; i++) {
@@ -186,6 +206,17 @@ export const dismountDropTarget = async function (mountToken: Token, riderToken:
       ChatMessage.create(chatData);
     }
 
+    const backupRiderElevation = <number>riderToken.document.getFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation);
+    if(backupRiderElevation){
+      await riderToken.document.update({
+        data: {
+          elevation: backupRiderElevation
+        },
+        elevation: backupRiderElevation
+      });
+      await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation);
+    }
+
     // Manage active effect
     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableActiveEffect')) {
       await manageAEOnDismountUp(riderToken, mountToken);
@@ -197,7 +228,7 @@ export const detachAllFromToken = async function (mountToken: Token) {
   if (!mountToken) {
     return;
   }
-  // tokenAttacher.detachAllElementsFromToken(mountToken, true);
+
   await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
 
   // let message = `Everyone and everything get off from {mount}!`;
