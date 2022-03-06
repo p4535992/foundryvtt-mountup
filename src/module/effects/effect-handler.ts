@@ -1,4 +1,4 @@
-import { error, i18n, log } from '../lib/lib';
+import { error, i18n, isStringEquals, log } from '../lib/lib';
 import FoundryHelpers from './foundry-helpers';
 import { canvas, game } from '../settings';
 import Effect, { EffectSupport } from './effect';
@@ -78,18 +78,10 @@ export default class EffectHandler {
    */
   async hasEffectApplied(effectName: string, uuid: string) {
     const actor = await this._foundryHelpers.getActorByUuid(uuid);
-    const regex = /[^A-Za-z0-9]/g;
     const isApplied = actor?.data?.effects?.some(
       // (activeEffect) => <boolean>activeEffect?.data?.flags?.isConvenient && <string>activeEffect?.data?.label == effectName,
       (activeEffect) => {
-        if (
-          (activeEffect?.data?.label.toLowerCase() == effectName.toLowerCase() ||
-            activeEffect?.data?.label
-              .replace(regex, '')
-              .toLowerCase()
-              .startsWith(effectName.replace(regex, '').toLowerCase())) &&
-          !activeEffect?.data?.disabled
-        ) {
+        if (isStringEquals(activeEffect?.data?.label, effectName) && !activeEffect?.data?.disabled) {
           return true;
         } else {
           return false;
@@ -282,15 +274,12 @@ export default class EffectHandler {
     let effect = <Effect>this._customEffects.find((effect: Effect) => effect.name == effectName);
     if (!effect) {
       const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>actor?.data.effects;
-      // regex expression to match all non-alphanumeric characters in string
-      const regex = /[^A-Za-z0-9]/g;
       for (const effectEntity of actorEffects) {
         const effectNameToSet = effectEntity.name ? effectEntity.name : effectEntity.data.label;
         if (!effectNameToSet) {
           continue;
         }
-        // use replace() method to match and remove all the non-alphanumeric characters
-        if (effectNameToSet.replace(regex, '').toLowerCase().startsWith(effectName.replace(regex, '').toLowerCase())) {
+        if (isStringEquals(effectNameToSet, effectName)) {
           effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
         }
       }
@@ -345,15 +334,12 @@ export default class EffectHandler {
       return effect;
     }
     const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>actor?.data.effects;
-    // regex expression to match all non-alphanumeric characters in string
-    const regex = /[^A-Za-z0-9]/g;
     for (const effectEntity of actorEffects) {
       const effectNameToSet = effectEntity.name ? effectEntity.name : effectEntity.data.label;
       if (!effectNameToSet) {
         continue;
       }
-      // use replace() method to match and remove all the non-alphanumeric characters
-      if (effectNameToSet.replace(regex, '').toLowerCase().startsWith(effectName.replace(regex, '').toLowerCase())) {
+      if (isStringEquals(effectNameToSet, effectName)) {
         // effect = this.convertToEffectClass(effectEntity);
         effect = effectEntity;
         break;
@@ -392,17 +378,12 @@ export default class EffectHandler {
     }
     const actor = await this._foundryHelpers.getActorByUuid(uuid);
     const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>actor?.data.effects;
-    const regex = /[^A-Za-z0-9]/g;
     const isApplied = actorEffects.some(
       // (activeEffect) => <boolean>activeEffect?.data?.flags?.isConvenient && <string>activeEffect?.data?.label == effectName,
       (activeEffect) => {
         if (includeDisabled) {
           if (
-            activeEffect?.data?.label.replace(regex, '').toLowerCase() == effectName.replace(regex, '').toLowerCase() ||
-            activeEffect?.data?.label
-              .replace(regex, '')
-              .toLowerCase()
-              .startsWith(effectName.replace(regex, '').toLowerCase())
+            isStringEquals(activeEffect?.data?.label, effectName)
             // && !activeEffect?.data?.disabled
           ) {
             return true;
@@ -410,15 +391,7 @@ export default class EffectHandler {
             return false;
           }
         } else {
-          if (
-            (activeEffect?.data?.label.replace(regex, '').toLowerCase() ==
-              effectName.replace(regex, '').toLowerCase() ||
-              activeEffect?.data?.label
-                .replace(regex, '')
-                .toLowerCase()
-                .startsWith(effectName.replace(regex, '').toLowerCase())) &&
-            !activeEffect?.data?.disabled
-          ) {
+          if (isStringEquals(activeEffect?.data?.label, effectName) && !activeEffect?.data?.disabled) {
             return true;
           } else {
             return false;
@@ -725,15 +698,12 @@ export default class EffectHandler {
     if (!effectName) {
       return effect;
     }
-    // regex expression to match all non-alphanumeric characters in string
-    const regex = /[^A-Za-z0-9]/g;
     for (const effectEntity of actorEffects) {
       const effectNameToSet = effectEntity.data.label;
       if (!effectNameToSet) {
         continue;
       }
-      // use replace() method to match and remove all the non-alphanumeric characters
-      if (effectNameToSet.replace(regex, '').toLowerCase().startsWith(effectName.replace(regex, '').toLowerCase())) {
+      if (isStringEquals(effectNameToSet, effectName)) {
         //effect = Effect.convertActiveEffectDataPropertiesToActiveEffect(effectEntity);
         effect = effectEntity;
         break;
@@ -773,17 +743,12 @@ export default class EffectHandler {
     const token = await this._foundryHelpers.getTokenByUuid(uuid);
     // const tokenEffects = <PropertiesToSource<ActiveEffectDataProperties>[]>token?.data.actorData.effects ?? [];
     const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>token.actor?.data.effects;
-    const regex = /[^A-Za-z0-9]/g;
     const isApplied = actorEffects.some(
       // (activeEffect) => <boolean>activeEffect?.data?.flags?.isConvenient && <string>activeEffect?.data?.label == effectName,
       (activeEffect) => {
         if (includeDisabled) {
           if (
-            activeEffect?.data.label.replace(regex, '').toLowerCase() == effectName.replace(regex, '').toLowerCase() ||
-            activeEffect?.data.label
-              .replace(regex, '')
-              .toLowerCase()
-              .startsWith(effectName.replace(regex, '').toLowerCase())
+            isStringEquals(activeEffect?.data.label, effectName)
             // && !activeEffect.disabled
           ) {
             return true;
@@ -791,14 +756,7 @@ export default class EffectHandler {
             return false;
           }
         } else {
-          if (
-            (activeEffect?.data.label.replace(regex, '').toLowerCase() == effectName.replace(regex, '').toLowerCase() ||
-              activeEffect?.data.label
-                .replace(regex, '')
-                .toLowerCase()
-                .startsWith(effectName.replace(regex, '').toLowerCase())) &&
-            !activeEffect.data.disabled
-          ) {
+          if (isStringEquals(activeEffect?.data.label, effectName) && !activeEffect.data.disabled) {
             return true;
           } else {
             return false;

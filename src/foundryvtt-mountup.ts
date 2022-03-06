@@ -14,7 +14,8 @@
 // Import TypeScript modules
 import { preloadTemplates } from './module/preloadTemplates';
 import { initHooks, readyHooks } from './module/module';
-import { game, registerSettings } from './module/settings';
+import { registerSettings } from './module/settings';
+import { game } from './module/settings';
 import CONSTANTS from './module/constants';
 
 /* ------------------------------------ */

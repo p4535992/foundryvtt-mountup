@@ -100,6 +100,7 @@ There three type of these AE used and supported from this module:
 | `ATMU.toMountOnDismount`| boolean  | Transfer this active effect from the rider to the mount when "Dismount Up" | `ATMU.toMountOnDismount = true`, `ATMU.toMountOnDismount = false` |
 | `ATMU.toRiderOnMount`   | boolean  | Transfer this active effect from the mount to the rider when "Mount Up"   | `ATMU.toRiderOnMount = true`, `ATMU.toRiderOnMount = false` |
 | `ATMU.toRiderOnDismount`| boolean  | Transfer this active effect from the mount to the rider when "Dismount Up" | `ATMU.toRiderOnDismount = true`, `ATMU.toRiderOnDismount = false` |
+| `ATMU.flying`   | true  | Check is the mount is a flying one  | `ATMU.flying = true`, `ATMU.flying = false` |
 
 For now no automatic UI is prepared (and don't think we need one) just created  a active effect and add this changes on it.
 

@@ -196,4 +196,5 @@ export class ActiveTokenMountUpData {
   toMountOnDismount: Map<string, Effect>;
   toRiderOnMount: Map<string, Effect>;
   toRiderOnDismount: Map<string, Effect>;
+  flyingMount: Map<string, Effect>;
 }

@@ -3,6 +3,7 @@ import { ActorData } from '@league-of-foundry-developers/foundry-vtt-types/src/f
 import API from '../api';
 import CONSTANTS from '../constants';
 import Effect, { EffectSupport } from '../effects/effect';
+import { MountupEffectDefinitions } from '../mountup-effect-definition';
 import { canvas, game } from '../settings';
 import { ActiveTokenMountUpData } from '../utils';
 
@@ -85,6 +86,28 @@ export function dialogWarning(message, icon = 'fas fa-exclamation-triangle') {
         <strong style="font-size:1.2rem;">${CONSTANTS.MODULE_NAME}</strong>
         <br><br>${message}
     </p>`;
+}
+
+export function cleanUpString(stringToCleanUp: string) {
+  // regex expression to match all non-alphanumeric characters in string
+  const regex = /[^A-Za-z0-9]/g;
+  if (stringToCleanUp) {
+    return i18n(stringToCleanUp).replace(regex, '').toLowerCase();
+  } else {
+    return stringToCleanUp;
+  }
+}
+
+export function isStringEquals(stringToCheck1: string, stringToCheck2: string, startsWith = true): boolean {
+  if (stringToCheck1 && stringToCheck2) {
+    if (startsWith) {
+      return cleanUpString(stringToCheck1).startsWith(cleanUpString(stringToCheck2));
+    } else {
+      return cleanUpString(stringToCheck1) === cleanUpString(stringToCheck2);
+    }
+  } else {
+    return stringToCheck1 === stringToCheck2;
+  }
 }
 
 // =========================================================================================
@@ -205,11 +228,11 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
   const toMountOnDismount = new Map<string, Effect>();
   const toRiderOnMount = new Map<string, Effect>();
   const toRiderOnDismount = new Map<string, Effect>();
+  const flyingMount = new Map<string, Effect>();
 
   const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>token.actor?.data.effects;
   // const atmuArr:ActiveEffect[] = [];
   for (const effectEntity of actorEffects) {
-    const regex = /[^A-Za-z0-9]/g;
     const effectNameToSet = effectEntity.name ? effectEntity.name : effectEntity.data.label;
     if (!effectNameToSet) {
       continue;
@@ -217,28 +240,35 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
     const atmuChanges = EffectSupport.retrieveChangesOrderedByPriorityFromAE(effectEntity);
     //atmuValue = effectEntity.data.changes.find((aee) => {
     atmuChanges.forEach((aee) => {
-      if (aee.key.replace(regex, '').toLowerCase().startsWith('ATMU.toMountOnMount'.replace(regex, '').toLowerCase())) {
+      if (isStringEquals(aee.key, 'ATMU.toMountOnMount')) {
         if (aee.value && Boolean(aee.value)) {
-          toMountOnMount.set(<string>effectEntity.id, EffectSupport.convertActiveEffectToEffect(effectEntity));
+          const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
+          toMountOnMount.set(<string>effectEntity.id, effect);
         }
       }
-      if (
-        aee.key.replace(regex, '').toLowerCase().startsWith('ATMU.toMountOnDismount'.replace(regex, '').toLowerCase())
-      ) {
+      if (isStringEquals(aee.key, 'ATMU.toMountOnDismount')) {
         if (aee.value && Boolean(aee.value)) {
-          toMountOnDismount.set(<string>effectEntity.id, EffectSupport.convertActiveEffectToEffect(effectEntity));
+          const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
+          toMountOnDismount.set(<string>effectEntity.id, effect);
         }
       }
-      if (aee.key.replace(regex, '').toLowerCase().startsWith('ATMU.toRiderOnMount'.replace(regex, '').toLowerCase())) {
+      if (isStringEquals(aee.key, 'ATMU.toRiderOnMount')) {
         if (aee.value && Boolean(aee.value)) {
-          toRiderOnMount.set(<string>effectEntity.id, EffectSupport.convertActiveEffectToEffect(effectEntity));
+          const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
+          toRiderOnMount.set(<string>effectEntity.id, effect);
         }
       }
-      if (
-        aee.key.replace(regex, '').toLowerCase().startsWith('ATMU.toRiderOnDismount'.replace(regex, '').toLowerCase())
-      ) {
+      if (isStringEquals(aee.key, 'ATMU.toRiderOnDismount')) {
         if (aee.value && Boolean(aee.value)) {
-          toRiderOnDismount.set(<string>effectEntity.id, EffectSupport.convertActiveEffectToEffect(effectEntity));
+          const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
+          toRiderOnDismount.set(<string>effectEntity.id, effect);
+        }
+      }
+      if (isStringEquals(aee.key, 'ATMU.flying')) {
+        if (aee.value && Boolean(aee.value)) {
+          const elevation = getElevationToken(token);
+          const effect = MountupEffectDefinitions.flying(elevation);
+          flyingMount.set(<string>effectEntity.id, effect);
         }
       }
     });
@@ -247,6 +277,7 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
   activeTokenMountUpData.toMountOnMount = toMountOnMount;
   activeTokenMountUpData.toRiderOnDismount = toRiderOnDismount;
   activeTokenMountUpData.toRiderOnMount = toRiderOnMount;
+  activeTokenMountUpData.flyingMount = flyingMount;
   return activeTokenMountUpData;
 }
 
@@ -254,20 +285,35 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
   const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
   riderData.toMountOnMount.forEach(async (value, key) => {
-    await API.addEffectOnToken(mountToken.id, value.name, value);
+    if (!(await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true))) {
+      await API.addEffectOnToken(mountToken.id, value.name, value);
+      info(`Apply effect ${value.name} on mount  up from rider ${riderToken.name} to mount ${mountToken.name}`);
+    }
   });
   mountData.toRiderOnMount.forEach(async (value, key) => {
-    await API.addEffectOnToken(riderToken.id, value.name, value);
+    if (!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true))) {
+      await API.addEffectOnToken(riderToken.id, value.name, value);
+      info(`Apply effect ${value.name} on mount up from mount ${mountToken.name} to rider ${riderToken.name}`);
+    }
   });
 
   riderData.toMountOnDismount.forEach(async (value, key) => {
     if (await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true)) {
       await API.removeEffectFromIdOnToken(mountToken.id, key);
+      info(`Remove effect ${value.name} on mount up from rider ${riderToken.name} to mount ${mountToken.name}`);
     }
   });
   mountData.toRiderOnDismount.forEach(async (value, key) => {
     if (await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) {
       await API.removeEffectFromIdOnToken(riderToken.id, key);
+      info(`Remove effect ${value.name} on mount up from mount ${mountToken.name} to rider ${riderToken.name}`);
+    }
+  });
+
+  mountData.flyingMount.forEach(async (value, key) => {
+    if (!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true))) {
+      await API.addEffectOnToken(riderToken.id, value.name, value);
+      info(`Apply flying effect ${value.name} on mount up from mount ${mountToken.name} to rider ${riderToken.name}`);
     }
   });
 }
@@ -277,19 +323,30 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
   riderData.toMountOnDismount.forEach(async (value, key) => {
     await API.addEffectOnToken(mountToken.id, value.name, value);
+    info(`Apply effect ${value.name} on dismount from rider ${riderToken.name} to mount ${mountToken.name}`);
   });
   mountData.toRiderOnDismount.forEach(async (value, key) => {
     await API.addEffectOnToken(riderToken.id, value.name, value);
+    info(`Apply effect ${value.name} on dismount from mount ${mountToken.name} to rider ${riderToken.name}`);
   });
 
   mountData.toRiderOnMount.forEach(async (value, key) => {
     if (await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) {
       await API.removeEffectFromIdOnToken(riderToken.id, key);
+      info(`Remove effect ${value.name} on dismount from rider ${riderToken.name} to mount ${mountToken.name}`);
     }
   });
   riderData.toMountOnMount.forEach(async (value, key) => {
     if (await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true)) {
       await API.removeEffectFromIdOnToken(mountToken.id, key);
+      info(`Remove effect ${value.name} on dismount from mount ${mountToken.name} to rider ${riderToken.name}`);
+    }
+  });
+
+  mountData.flyingMount.forEach(async (value, key) => {
+    if (await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) {
+      await API.removeEffectFromIdOnToken(riderToken.id, key);
+      info(`Remove flying effect ${value.name} on dismount from rider ${riderToken.name} to mount ${mountToken.name}`);
     }
   });
 }

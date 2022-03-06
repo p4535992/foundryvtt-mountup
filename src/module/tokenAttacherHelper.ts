@@ -106,8 +106,8 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     await window['tokenAttacher'].setElementsLockStatus(riderToken, false, true);
 
     // Manage active effect
-    if(game.settings.get(CONSTANTS.MODULE_NAME,'enableActiveEffect')){
-      await manageAEOnMountUp(riderToken,mountToken);
+    if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableActiveEffect')) {
+      await manageAEOnMountUp(riderToken, mountToken);
     }
   }
 };
@@ -137,10 +137,10 @@ export const dismountDropAll = async function (mountToken: Token) {
   ChatMessage.create(chatData);
 
   // Manage active effect
-  if(game.settings.get(CONSTANTS.MODULE_NAME,'enableActiveEffect')){
-    const riderTokens:Token[] = <Token[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME,Flags.Riders);
-    for(const riderToken of riderTokens){
-      await manageAEOnDismountUp(riderToken,mountToken);
+  if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableActiveEffect')) {
+    const riderTokens: Token[] = <Token[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, Flags.Riders);
+    for (const riderToken of riderTokens) {
+      await manageAEOnDismountUp(riderToken, mountToken);
     }
   }
 };
@@ -187,8 +187,8 @@ export const dismountDropTarget = async function (mountToken: Token, riderToken:
     }
 
     // Manage active effect
-    if(game.settings.get(CONSTANTS.MODULE_NAME,'enableActiveEffect')){
-      await manageAEOnDismountUp(riderToken,mountToken);
+    if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableActiveEffect')) {
+      await manageAEOnDismountUp(riderToken, mountToken);
     }
   }
 };
