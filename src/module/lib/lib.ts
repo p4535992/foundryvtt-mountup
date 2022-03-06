@@ -23,9 +23,9 @@ export function wait(ms) {
 // 0 = none, warnings = 1, debug = 2, all = 3
 
 export function debug(msg, args = '') {
-  if (game.settings.get(CONSTANTS.MODULE_NAME, 'debug')) {
-    console.log(`DEBUG | ${CONSTANTS.MODULE_NAME} | ${msg}`, args);
-  }
+  // if (game.settings.get(CONSTANTS.MODULE_NAME, 'debug')) {
+  console.log(`DEBUG | ${CONSTANTS.MODULE_NAME} | ${msg}`, args);
+  // }
   return msg;
 }
 
@@ -187,12 +187,12 @@ export function getFirstPlayerToken(): Token | null {
   return token;
 }
 
-function getElevationToken(token: Token): number {
+export function getElevationToken(token: Token): number {
   const base = token.document.data;
   return getElevationPlaceableObject(base);
 }
 
-function getElevationWall(wall: Wall): number {
+export function getElevationWall(wall: Wall): number {
   const base = wall.document.data;
   return getElevationPlaceableObject(base);
 }
@@ -285,35 +285,65 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
   const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
   riderData.toMountOnMount.forEach(async (value, key) => {
-    if (!(await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true))) {
-      await API.addEffectOnToken(mountToken.id, value.name, value);
-      info(`Apply effect ${value.name} on mount  up from rider ${riderToken.name} to mount ${mountToken.name}`);
+    if (
+      //!(await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true)) ||
+      !(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))
+    ) {
+      await API.addEffectOnToken(mountToken.id, i18n(value.name), value);
+      info(
+        `Apply effect '${i18n(value.name)}' on mount  up from rider '${riderToken.name}' to mount '${mountToken.name}'`,
+      );
     }
   });
   mountData.toRiderOnMount.forEach(async (value, key) => {
-    if (!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true))) {
-      await API.addEffectOnToken(riderToken.id, value.name, value);
-      info(`Apply effect ${value.name} on mount up from mount ${mountToken.name} to rider ${riderToken.name}`);
+    if (
+      //!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) ||
+      !(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))
+    ) {
+      await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
+      info(
+        `Apply effect '${i18n(value.name)}' on mount up from mount '${mountToken.name}' to rider '${riderToken.name}'`,
+      );
     }
   });
 
   riderData.toMountOnDismount.forEach(async (value, key) => {
-    if (await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true)) {
-      await API.removeEffectFromIdOnToken(mountToken.id, key);
-      info(`Remove effect ${value.name} on mount up from rider ${riderToken.name} to mount ${mountToken.name}`);
+    if (
+      //await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
+      await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
+    ) {
+      //await API.removeEffectFromIdOnToken(mountToken.id, key);
+      await API.removeEffectOnToken(mountToken.id, i18n(value.name));
+      info(
+        `Remove effect '${i18n(value.name)}' on mount up from rider '${riderToken.name}' to mount '${mountToken.name}'`,
+      );
     }
   });
   mountData.toRiderOnDismount.forEach(async (value, key) => {
-    if (await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) {
-      await API.removeEffectFromIdOnToken(riderToken.id, key);
-      info(`Remove effect ${value.name} on mount up from mount ${mountToken.name} to rider ${riderToken.name}`);
+    if (
+      //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
+      await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
+    ) {
+      //await API.removeEffectFromIdOnToken(riderToken.id, key);
+      await API.removeEffectOnToken(riderToken.id, i18n(value.name));
+      info(
+        `Remove effect '${i18n(value.name)}' on mount up from mount '${mountToken.name}' to rider '${riderToken.name}'`,
+      );
     }
   });
 
   mountData.flyingMount.forEach(async (value, key) => {
-    if (!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true))) {
-      await API.addEffectOnToken(riderToken.id, value.name, value);
-      info(`Apply flying effect ${value.name} on mount up from mount ${mountToken.name} to rider ${riderToken.name}`);
+    if (
+      //!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) ||
+      !(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))
+    ) {
+      await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
+      await API.applyFlying(mountToken);
+      info(
+        `Apply flying effect '${i18n(value.name)}' on mount up from mount '${mountToken.name}' to rider '${
+          riderToken.name
+        }'`,
+      );
     }
   });
 }
@@ -322,31 +352,67 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
   const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
   riderData.toMountOnDismount.forEach(async (value, key) => {
-    await API.addEffectOnToken(mountToken.id, value.name, value);
-    info(`Apply effect ${value.name} on dismount from rider ${riderToken.name} to mount ${mountToken.name}`);
+    if (
+      //!await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
+      !(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))
+    ) {
+      await API.addEffectOnToken(mountToken.id, i18n(value.name), value);
+      info(
+        `Apply effect '${i18n(value.name)}' on dismount from rider '${riderToken.name}' to mount '${mountToken.name}'`,
+      );
+    }
   });
   mountData.toRiderOnDismount.forEach(async (value, key) => {
-    await API.addEffectOnToken(riderToken.id, value.name, value);
-    info(`Apply effect ${value.name} on dismount from mount ${mountToken.name} to rider ${riderToken.name}`);
+    if (
+      //!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) ||
+      !(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))
+    ) {
+      await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
+      info(
+        `Apply effect '${i18n(value.name)}' on dismount from mount '${mountToken.name}' to rider '${riderToken.name}'`,
+      );
+    }
   });
 
   mountData.toRiderOnMount.forEach(async (value, key) => {
-    if (await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) {
-      await API.removeEffectFromIdOnToken(riderToken.id, key);
-      info(`Remove effect ${value.name} on dismount from rider ${riderToken.name} to mount ${mountToken.name}`);
+    if (
+      //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
+      await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
+    ) {
+      //await API.removeEffectFromIdOnToken(riderToken.id, key);
+      await API.removeEffectOnToken(riderToken.id, i18n(value.name));
+      info(
+        `Remove effect '${i18n(value.name)}' on dismount from rider '${riderToken.name}' to mount '${mountToken.name}'`,
+      );
     }
   });
   riderData.toMountOnMount.forEach(async (value, key) => {
-    if (await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true)) {
-      await API.removeEffectFromIdOnToken(mountToken.id, key);
-      info(`Remove effect ${value.name} on dismount from mount ${mountToken.name} to rider ${riderToken.name}`);
+    if (
+      //await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
+      await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
+    ) {
+      //await API.removeEffectFromIdOnToken(mountToken.id, key);
+      await API.removeEffectOnToken(mountToken.id, i18n(value.name));
+      info(
+        `Remove effect '${i18n(value.name)}' on dismount from mount '${mountToken.name}' to rider '${riderToken.name}'`,
+      );
     }
   });
 
   mountData.flyingMount.forEach(async (value, key) => {
-    if (await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) {
-      await API.removeEffectFromIdOnToken(riderToken.id, key);
-      info(`Remove flying effect ${value.name} on dismount from rider ${riderToken.name} to mount ${mountToken.name}`);
+    if (
+      //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
+      await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
+    ) {
+      //await API.removeEffectFromIdOnToken(riderToken.id, key);
+      await API.removeEffectOnToken(riderToken.id, i18n(value.name));
+      await API.removeFlying(mountToken);
+      await API.removeFlying(riderToken);
+      info(
+        `Remove flying effect '${i18n(value.name)}' on dismount from rider '${riderToken.name}' to mount '${
+          mountToken.name
+        }'`,
+      );
     }
   });
 }

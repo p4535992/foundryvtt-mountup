@@ -7,13 +7,7 @@ import { canvas, game } from './settings';
  * Defines all of the effect definitions
  */
 export class MountupEffectDefinitions {
-  constructor() {
-    if (game.modules.get('tokenmagic')?.active) {
-      const params = MountupEffectDefinitions.flyingEffect(CONSTANTS.MODULE_NAME + '-Flying');
-      //@ts-ignore
-      TokenMagic.addPreset(CONSTANTS.MODULE_NAME + '-Flying', params);
-    }
-  }
+  constructor() {}
 
   /**
    * Get all effects
@@ -75,7 +69,7 @@ export class MountupEffectDefinitions {
         {
           key: 'ATMU.flying',
           mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-          value: number && number > 0 ? `${number}` : `0`,
+          value: number && number > 0 ? `${number}` : `data.elevation`,
           priority: 5,
         },
       ],
@@ -83,7 +77,8 @@ export class MountupEffectDefinitions {
         {
           key: 'macro.tokenMagic',
           mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-          value: CONSTANTS.MODULE_NAME + '-Flying', // 'bloom',
+          value: CONSTANTS.TM_FLYING, // 'bloom',
+          priority: 5,
         },
       ],
       isTemporary: false,
@@ -156,11 +151,11 @@ export class MountupEffectDefinitions {
    * @param tokenInstance
    * @param elevation
    */
-  static flyingEffect(tokenMagicEffectId: string, elevation = 0): any {
+  static tokenMagicParamsFlying(tokenMagicEffectId: string, elevation = 0): any {
     //const elevation: number = getProperty(tokenInstance.data, 'elevation');
     // const elevation: number = getElevationToken(tokenInstance);
     //const tokenInstance = canvas.tokens?.get(tokenID);
-    //const tokenMagicEffectId = CONSTANTS.MODULE_NAME + '-Shadows';
+    //const tokenMagicEffectId = CONSTANTS.TM_FLYING;
     const twist = {
       filterType: 'transform',
       filterId: tokenMagicEffectId,
@@ -211,12 +206,5 @@ export class MountupEffectDefinitions {
     ////}
     const params = [shadow, twist];
     return params;
-    // const filter = elevation > 5 ? true : false;
-    //@ts-ignore
-    // await tokenInstance.TMFXdeleteFilters(tokenMagicEffectId);
-    // if (filter) {
-    //   //@ts-ignore
-    //   await TokenMagic.addUpdateFilters(tokenInstance, params);
-    // }
   }
 }

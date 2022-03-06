@@ -4,8 +4,9 @@ import { ActorData } from '@league-of-foundry-developers/foundry-vtt-types/src/f
 import CONSTANTS from './constants';
 import Effect, { EffectSupport } from './effects/effect';
 import EffectInterface from './effects/effect-interface';
-import { error } from './lib/lib';
+import { error, getElevationToken } from './lib/lib';
 import { MountManager } from './mountManager';
+import { MountupEffectDefinitions } from './mountup-effect-definition';
 import { findTokenById, findTokenByName, Flags } from './utils';
 
 const API = {
@@ -376,6 +377,32 @@ const API = {
   },
 
   // =======================================================================================
+
+  async applyFlying(token: Token) {
+    if (!token) {
+      token = <Token>canvas?.tokens?.controlled[0];
+    }
+    const elevation = getElevationToken(token);
+    // const filter = elevation > 5 ? true : false;
+    const tokenMagicEffectId = CONSTANTS.TM_FLYING;
+    const params = MountupEffectDefinitions.tokenMagicParamsFlying(tokenMagicEffectId, elevation);
+    //@ts-ignore
+    await TokenMagic.addUpdateFilters(token, params);
+    //@ts-ignore
+    // await tokenInstance.TMFXdeleteFilters(tokenMagicEffectId);
+    // if (filter) {
+    //  //@ts-ignore
+    //  await TokenMagic.addUpdateFilters(tokenInstance, params);
+    // }
+  },
+
+  async removeFlying(token: Token) {
+    if (!token) {
+      token = <Token>canvas?.tokens?.controlled[0];
+    }
+    //@ts-ignore
+    await TokenMagic.deleteFilters(token, CONSTANTS.TM_FLYING);
+  },
 };
 
 export default API;

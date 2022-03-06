@@ -6,23 +6,25 @@ import { canvas, game } from './settings';
 import CONSTANTS from './constants';
 import { debug, warn } from './lib/lib';
 import HOOKS from './hooks';
+import EffectInterface from './effects/effect-interface';
+import { MountupEffectDefinitions } from './mountup-effect-definition';
 
 export const initHooks = () => {
   warn('Init Hooks processing');
 
-  if (game.settings.get(CONSTANTS.MODULE_NAME, 'debugHooks')) {
-    for (const hook of Object.values(HOOKS)) {
-      if (typeof hook === 'string') {
-        Hooks.on(hook, (...args) => debug(`Hook called: ${hook}`, ...args));
-        debug(`Registered hook: ${hook}`);
-      } else {
-        for (const innerHook of Object.values(hook)) {
-          Hooks.on(<string>innerHook, (...args) => debug(`Hook called: ${innerHook}`, ...args));
-          debug(`Registered hook: ${innerHook}`);
-        }
-      }
-    }
-  }
+  // if (game.settings.get(CONSTANTS.MODULE_NAME, 'debugHooks')) {
+  //   for (const hook of Object.values(HOOKS)) {
+  //     if (typeof hook === 'string') {
+  //       Hooks.on(hook, (...args) => debug(`Hook called: ${hook}`, ...args));
+  //       debug(`Registered hook: ${hook}`);
+  //     } else {
+  //       for (const innerHook of Object.values(hook)) {
+  //         Hooks.on(<string>innerHook, (...args) => debug(`Hook called: ${innerHook}`, ...args));
+  //         debug(`Registered hook: ${innerHook}`);
+  //       }
+  //     }
+  //   }
+  // }
 
   //@ts-ignore
   window[CONSTANTS.MODULE_NAME] = {
@@ -51,6 +53,10 @@ export const setupHooks = async (): Promise<void> => {
   window.MountUp.API.effectInterface = new EffectInterface(CONSTANTS.MODULE_NAME);
   //@ts-ignore
   window.MountUp.API.effectInterface.initialize();
+  //@ts-ignore
+  window[CONSTANTS.MODULE_NAME].API.effectInterface = new EffectInterface(CONSTANTS.MODULE_NAME);
+  //@ts-ignore
+  window[CONSTANTS.MODULE_NAME].API.effectInterface.initialize();
 
   if (game[CONSTANTS.MODULE_NAME]) {
     game[CONSTANTS.MODULE_NAME] = {};
@@ -108,4 +114,10 @@ export const readyHooks = async () => {
     await MountManager.handleTokenDelete(token._id);
     //return true;
   });
+
+  if (game.modules.get('tokenmagic')?.active) {
+    const params = MountupEffectDefinitions.tokenMagicParamsFlying(CONSTANTS.TM_FLYING);
+    //@ts-ignore
+    TokenMagic.addPreset(CONSTANTS.TM_FLYING, params);
+  }
 };

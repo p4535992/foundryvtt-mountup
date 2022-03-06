@@ -13,7 +13,7 @@
 
 // Import TypeScript modules
 import { preloadTemplates } from './module/preloadTemplates';
-import { initHooks, readyHooks } from './module/module';
+import { initHooks, readyHooks, setupHooks } from './module/module';
 import { registerSettings } from './module/settings';
 import { game } from './module/settings';
 import CONSTANTS from './module/constants';
@@ -39,10 +39,7 @@ Hooks.once('init', async () => {
 /* Setup module							*/
 /* ------------------------------------ */
 Hooks.once('setup', function () {
-  // Do anything after initialization but before ready
-  // setupModules();
-
-  registerSettings();
+  setupHooks();
 });
 
 /* ------------------------------------ */
@@ -56,13 +53,6 @@ Hooks.once('ready', () => {
     );
     return;
   }
-  if (!game.modules.get('token-attacher')?.active && game.user?.isGM) {
-    ui.notifications?.error(
-      `The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'token-attacher' module.`,
-    );
-    return;
-  }
-
   // if (game.modules.get('mountup')?.active && game.user?.isGM) {
   //   ui.notifications?.warn(`The 'mountup', is not needed anymore just use '${CONSTANTS.MODULE_NAME}'`);
   // }
@@ -70,16 +60,19 @@ Hooks.once('ready', () => {
   readyHooks();
 });
 
-// Add any additional hooks if necessary
+/* ------------------------------------ */
+/* Other Hooks							*/
+/* ------------------------------------ */
 
 Hooks.once('libChangelogsReady', function () {
   //@ts-ignore
-  libChangelogs.register(
+  libChangelogs.registerConflict(
     CONSTANTS.MODULE_NAME,
-    `
-    - Removed old flag set
-    - Better center calculation coordinates
-  `,
-    'minor',
+    'mountup',
+    `The 'mountup', is not needed anymore just use '${CONSTANTS.MODULE_NAME}'`,
+    'major',
   );
+
+  //@ts-ignore
+  libChangelogs.register(CONSTANTS.MODULE_NAME, ` `, 'minor');
 });
