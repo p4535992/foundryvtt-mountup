@@ -142,7 +142,8 @@ export const readyHooks = async () => {
               );
               //updateData.elevation = mountElevation;
               await tokenDocument.update({
-                elevation: <number>tokenDocument.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) || mountElevation,
+                elevation:
+                  <number>tokenDocument.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) || mountElevation,
               });
             }
           }
@@ -165,7 +166,7 @@ export const readyHooks = async () => {
   if (game.modules.get('tokenmagic')?.active) {
     const params = MountupEffectDefinitions.tokenMagicParamsFlying(CONSTANTS.TM_FLYING);
     //@ts-ignore
-    if(!TokenMagic.getPreset(CONSTANTS.TM_FLYING)){
+    if (!TokenMagic.getPreset(CONSTANTS.TM_FLYING)) {
       //@ts-ignore
       TokenMagic.addPreset(CONSTANTS.TM_FLYING, params);
     }

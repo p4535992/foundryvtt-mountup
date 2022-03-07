@@ -114,7 +114,10 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     ChatMessage.create(chatData);
 
     await window['tokenAttacher'].attachElementToToken(riderToken, targets[0], true);
-    await window['tokenAttacher'].setElementsLockStatus(riderToken, false, true);
+    const isLocked = false;
+    await window['tokenAttacher'].setElementsLockStatus(riderToken, isLocked, true);
+    const canMoveConstrained = <boolean>game.settings.get(CONSTANTS.MODULE_NAME, 'enableCanMoveConstrained') || true;
+    await window['tokenAttacher'].setElementsMoveConstrainedStatus(riderToken, canMoveConstrained, true);
 
     // Manage active effect
     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableActiveEffect')) {

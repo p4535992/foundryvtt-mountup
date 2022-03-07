@@ -45,6 +45,24 @@ This module uses the [token-z](https://github.com/theripper93/token-z) library l
 - If you scale the token mount the rider position can be a little out of coordinates... i can ignore this if a solve the first point
 - The multi rider functionality on the same mount work partially, but it should be enough for most use cases... i can ignore this if a solve the first point
 
+## Settings
+
+- **Icon:** The icon to show in the HUD
+- **HUD Column:** Which HUD column to place the button in
+- **HUD Top/Bottom:** Where to place the button in the column
+- **Should riders be locked to mounts?:** _[No need anymore]_ If enabled, riders will be unable to move seperately from their mount until dismounted. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.
+- **Should riders rotate with mounts?:** _[No need anymore]_ If enabled, rider rotation will be updated to match mount rotation. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount."
+- **Rider Horizontal Alignment:** _[No need anymore]_ By default is center. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.
+- **Rider Vertical Alignment:** _[No need anymore]_ By default is center. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.
+- **Send messages to chat:** Should chat messages about mounting/carrying and dismounting/dropping be sent to chat?
+- **Mount Message Format:** How mounting chat messages should be formatted if enabled. (use {rider} and {mount} for name substitution)
+- **Dismount Message Format:** How dismounting chat messages should be formatted if enabled. (use {rider} and {mount} for name substitution)
+- **Rider Position:** _[No need anymore]_ Set the position for the rider by default is center. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.
+- **Enable active token mount up management:** Every time you mount up or dismount on the mount token and/or rider token some active effect can be added or removed based on the changes configuration on both rider and mount
+- **Enable auto update elevation:** If enabled thi setting will make sure to always sync the riders elevation with the mount elevation
+- **Enable 'can move constrained':** Enable the the new 'Can Move Constrained' feature from Token Attacher
+
+
 ## Usage
 
 ### Mounting
@@ -68,9 +86,15 @@ To dismount a token from a token:
 
 ![img](./img/multimount_partial.png)
 
-### Auto Elevation
+### Can Move Constrained
 
-If enabled thi setting will make sure to always sync the riders elevation with the mount elevation
+Kneel before the genius of [KayelGee](https://github.com/KayelGee/) author of [Token Attacher](https://github.com/KayelGee/token-attacher) and thank discord for this amazing feature.
+
+![img](./img/constrained_movement.gif)
+
+### Auto Elevation [EXPERIMENTAL]
+
+If enabled thi setting will make sure to always sync the riders elevation with the mount elevation, it can be useful for scene with the levels module
 
 ![img](./img/feature_auto_elevation.gif)
 

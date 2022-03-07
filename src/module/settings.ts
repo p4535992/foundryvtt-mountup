@@ -63,6 +63,15 @@ export const registerSettings = function () {
     default: false,
   });
 
+  game.settings.register(CONSTANTS.MODULE_NAME, 'enableCanMoveConstrained', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.setting.enableCanMoveConstrained.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.setting.enableCanMoveConstrained.hint`),
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: true,
+  });
+
   /** Which Icon should be used */
   game.settings.register(CONSTANTS.MODULE_NAME, 'icon', {
     name: i18n(`${CONSTANTS.MODULE_NAME}.setting.icon.name`),

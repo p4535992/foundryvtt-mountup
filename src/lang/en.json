@@ -27,20 +27,20 @@
       },
       "riderLock": {
         "name": "Should riders be locked to mounts?",
-        "hint": "If enabled, riders will be unable to move seperately from their mount until dismounted.",
+        "hint": "[No need anymore] If enabled, riders will be unable to move seperately from their mount until dismounted. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.",
         "noLock": "No lock"
       },
       "riderRotate": {
         "name": "Should riders rotate with mounts?",
-        "hint": "If enabled, rider rotation will be updated to match mount rotation"
+        "hint": "[No need anymore] If enabled, rider rotation will be updated to match mount rotation. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount."
       },
       "riderX": {
         "name": "Rider Horizontal Alignment",
-        "hint": " "
+        "hint": "[No need anymore] By default is center. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount."
       },
       "riderY": {
         "name": "Rider Vertical Alignment",
-        "hint": " "
+        "hint": "[No need anymore] By default is center. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount."
       },
       "shouldChat": {
         "name": "Send messages to chat",
@@ -56,7 +56,7 @@
       },
       "pipPosition": {
         "name": "Rider Position",
-        "hint": "Set the position for the rider",
+        "hint": "[No need anymore] Set the position for the rider (by default is center). NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.",
         "topleft": "Top Left",
         "topright": "Top Right",
         "bottomleft": "Bottom Left",
@@ -72,6 +72,10 @@
       "enableAutoUpdateElevation": {
         "name": "Enable auto update elevation",
         "hint": "If enabled thi setting will make sure to always sync the riders elevation with the mount elevation"
+      },
+      "enableCanMoveConstrained": {
+        "name": "Enable 'can move constrained'",
+        "hint": "Enable the new 'Can Move Constrained' feature from Token Attacher"
       }
     }
   }
