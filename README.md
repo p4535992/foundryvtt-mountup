@@ -68,9 +68,29 @@ To dismount a token from a token:
 
 ![img](./img/multimount_partial.png)
 
-## Active Effect of Mount Up
+### Auto Elevation
 
-### How the active effect name is checked on the module ?
+If enabled thi setting will make sure to always sync the riders elevation with the mount elevation
+
+![img](./img/feature_auto_elevation.gif)
+
+### Flying away !!!!
+
+Now when you mount some flying mount with the active effect `ATMU.flying = true` a beauty shadow effect is apllie dwith the module [Token Magic](https://github.com/Feu-Secret/Tokenmagic).
+
+![img](./img/ShadowEffects.png)
+
+![img](./img/feature_flying.gif)
+
+**NOTE:** You must enable the active effect management for this to work.
+
+### Active Effect of Mount Up and Dismount up
+
+Every time you mount up or dismount on the mount token and/or rider token some active effect can be added or removed based on the changes configuration on both rider and mount
+
+![img](./img/feature_ae_management.gif)
+
+#### How the active effect name is checked on the module ?
 
 You can use any active effect where the name is founded from the following code of the module:
 
@@ -88,7 +108,7 @@ for(const effect of effects){
 return result;
 ```
 
-## What active effect data changes are used from this module ?
+#### What active effect data changes are used from this module ?
 
 Every active effect data of this is module use any changes with the prefix `ATMU` acronim for _Active Token Mount Up_ .
 
@@ -100,11 +120,12 @@ There three type of these AE used and supported from this module:
 | `ATMU.toMountOnDismount`| boolean  | Transfer this active effect from the rider to the mount when "Dismount Up" | `ATMU.toMountOnDismount = true`, `ATMU.toMountOnDismount = false` |
 | `ATMU.toRiderOnMount`   | boolean  | Transfer this active effect from the mount to the rider when "Mount Up"   | `ATMU.toRiderOnMount = true`, `ATMU.toRiderOnMount = false` |
 | `ATMU.toRiderOnDismount`| boolean  | Transfer this active effect from the mount to the rider when "Dismount Up" | `ATMU.toRiderOnDismount = true`, `ATMU.toRiderOnDismount = false` |
-| `ATMU.flying`   | true  | Check is the mount is a flying one  | `ATMU.flying = true`, `ATMU.flying = false` |
+| `ATMU.flying`   | true  | Check is the mount is a flying one. If tru we apply the token magic effect "flying" | `ATMU.flying = true`, `ATMU.flying = false` |
 
 For now no automatic UI is prepared (and don't think we need one) just created  a active effect and add this changes on it.
 
-**NOTE:** by default all _effect_ from this module are _temporary_
+**NOTE:** by default all _effect_ from this module are _temporary_, but you can customize like you want.
+
 
 
 ## API
@@ -222,7 +243,14 @@ Any issues, bugs, or feature requests are always welcome to be reported directly
 
 ## License
 
+- **[Condition Management](https://github.com/kandashi/condition-automation)** : [???](https://github.com/kandashi/condition-automation/blob/master/LICENSE)
+
 This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
+
+
+## Credit
+
+- A little part of code is inspired from [kandashi](https://github.com/kandashi/) and the module [Condition Management](https://github.com/kandashi/condition-automation)
 
 ## Acknowledgements
 

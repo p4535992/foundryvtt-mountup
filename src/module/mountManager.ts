@@ -83,7 +83,9 @@ export class MountManager {
 
   static async dismount(hudToken) {
     const riderToken: Token = findTokenById(hudToken._id);
-    const mountToken: Token = findTokenById(<string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount));
+    const mountToken: Token = findTokenById(
+      <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount),
+    );
     // MOD 4535992
     // CALL TOKEN ATTACHER MOVED UP
     dismountDropTarget(mountToken, riderToken);
@@ -118,7 +120,10 @@ export class MountManager {
     // await mountToken.document.update({ flags: { mountup: { riders: riders } } });
     await riderToken.document.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount, mountToken.id);
     if (!riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)) {
-      await riderToken.document.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize, { w: riderToken.w, h: riderToken.h });
+      await riderToken.document.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize, {
+        w: riderToken.w,
+        h: riderToken.h,
+      });
     }
 
     // NO NEED ANYMORE TOKEN ATTACHER DO THE WORK
@@ -446,7 +451,9 @@ export class MountManager {
     const token = findTokenById(tokenId);
     if (token) {
       const riders: string[] = <string[]>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-      return <string[]>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) != undefined && riders.length > 0;
+      return (
+        <string[]>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) != undefined && riders.length > 0
+      );
     } else {
       return false;
     }

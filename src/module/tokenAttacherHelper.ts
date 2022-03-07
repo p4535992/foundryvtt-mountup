@@ -71,19 +71,23 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
     // riderToken.document.data.y = newRiderCoords.y;
     // riderToken.document.data.height = newHeightRiderSize;
     // riderToken.document.data.width = newWidthRiderSize;
-    const mountElevation = getElevationToken(mountToken) || 0;
-    const backupRiderElevation = getElevationToken(riderToken) || 0;
-    await riderToken.document.setFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation,backupRiderElevation);
 
     const loc: { x; y } = MountManager.getRiderInitialLocation(riderToken, mountToken);
-    await riderToken.document.update({
-      x: loc.x,
-      y: loc.y,
-      data: {
-        elevation: mountElevation
-      },
-      elevation: mountElevation
-    });
+    if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableAutoUpdateElevation')) {
+      const mountElevation = getElevationToken(mountToken) || 0;
+      const backupRiderElevation = getElevationToken(riderToken) || 0;
+      await riderToken.document.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation, backupRiderElevation);
+      await riderToken.document.update({
+        x: loc.x,
+        y: loc.y,
+        elevation: mountElevation,
+      });
+    } else {
+      await riderToken.document.update({
+        x: loc.x,
+        y: loc.y,
+      });
+    }
 
     let message = <string>game.settings.get(CONSTANTS.MODULE_NAME, 'mount-message')
       ? <string>game.settings.get(CONSTANTS.MODULE_NAME, 'mount-message')
@@ -145,18 +149,19 @@ export const dismountDropAll = async function (mountToken: Token) {
 
   const riderTokens: string[] = <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
   for (const riderTokenS of riderTokens) {
-    const riderToken = <Token>canvas.tokens?.placeables.find((rt) =>{
+    const riderToken = <Token>canvas.tokens?.placeables.find((rt) => {
       return rt.id === riderTokenS;
     });
-    const backupRiderElevation = <number>riderToken.document.getFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation);
-    if(backupRiderElevation){
-      await riderToken.document.update({
-        data: {
-          elevation: backupRiderElevation
-        },
-        elevation: backupRiderElevation
-      });
-      await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation);
+    if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableAutoUpdateElevation')) {
+      const backupRiderElevation = <number>(
+        riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+      );
+      if (backupRiderElevation) {
+        await riderToken.document.update({
+          elevation: backupRiderElevation,
+        });
+        await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
+      }
     }
     // Manage active effect
     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableActiveEffect')) {
@@ -205,18 +210,17 @@ export const dismountDropTarget = async function (mountToken: Token, riderToken:
       //@ts-ignore
       ChatMessage.create(chatData);
     }
-
-    const backupRiderElevation = <number>riderToken.document.getFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation);
-    if(backupRiderElevation){
-      await riderToken.document.update({
-        data: {
-          elevation: backupRiderElevation
-        },
-        elevation: backupRiderElevation
-      });
-      await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME,MountUpFlags.OrigElevation);
+    if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableAutoUpdateElevation')) {
+      const backupRiderElevation = <number>(
+        riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+      );
+      if (backupRiderElevation) {
+        await riderToken.document.update({
+          elevation: backupRiderElevation,
+        });
+        await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
+      }
     }
-
     // Manage active effect
     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableActiveEffect')) {
       await manageAEOnDismountUp(riderToken, mountToken);

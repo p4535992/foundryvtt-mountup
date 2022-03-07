@@ -67,7 +67,11 @@
       },
       "enableActiveEffect": {
         "name": "Enable active token mount up management",
-        "hint": "Every time you mount up or dismount a token active effect can be added or removed base on the active effect changes configuration"
+        "hint": "Every time you mount up or dismount on the mount token and/or rider token some active effect can be added or removed based on the changes configuration on both rider and mount"
+      },
+      "enableAutoUpdateElevation": {
+        "name": "Enable auto update elevation",
+        "hint": "If enabled thi setting will make sure to always sync the riders elevation with the mount elevation"
       }
     }
   }

@@ -10,7 +10,7 @@ export const MountUpFlags = {
   Riders: 'riders',
   OrigSize: 'origsize',
   MountMove: 'mountMove',
-  OrigElevation: 'origelevation'
+  OrigElevation: 'origelevation',
 };
 
 /**

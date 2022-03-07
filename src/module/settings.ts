@@ -54,6 +54,15 @@ export const registerSettings = function () {
     default: false,
   });
 
+  game.settings.register(CONSTANTS.MODULE_NAME, 'enableAutoUpdateElevation', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.setting.enableAutoUpdateElevation.name`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.setting.enableAutoUpdateElevation.hint`),
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+
   /** Which Icon should be used */
   game.settings.register(CONSTANTS.MODULE_NAME, 'icon', {
     name: i18n(`${CONSTANTS.MODULE_NAME}.setting.icon.name`),
