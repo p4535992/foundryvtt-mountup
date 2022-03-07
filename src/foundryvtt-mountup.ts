@@ -74,5 +74,15 @@ Hooks.once('libChangelogsReady', function () {
   );
 
   //@ts-ignore
-  libChangelogs.register(CONSTANTS.MODULE_NAME, ` `, 'minor');
+  libChangelogs.register(
+    CONSTANTS.MODULE_NAME,
+    `
+  - Auto update of the elevation parameter of the rider when mount and dismount, so the elevation of the rider is always syn with the elevation of the mount useful for flying mount with levels.
+  - New active effect management for add and remove custom active effect when mount and dismount, you mount a tank ? you got some active effect on the defense !
+  - Add token magic effect for apply the "flying" effect, for when a mount is set to be a flying one "just a token amgic effect"
+  - Set up for the new token attacher parameters for the mount up macro "Add _canMoveConstrained_ flag and API to set this flag so a attached element is allowed to move within area of base token. This is only supported for Tokens for now."
+  - Abbandoned support for 0.8.9
+  `,
+    'minor',
+  );
 });
