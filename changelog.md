@@ -1,3 +1,7 @@
+## 3.2.8
+
+- Bug fixing module.json
+
 ## 3.2.7
 
 - Auto update of the elevation parameter of the rider when mount and dismount, so the elevation of the rider is always syn with the elevation of the mount useful for flying mount with levels.
