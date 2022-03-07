@@ -46,7 +46,7 @@
   "system": [],
   "esmodules": ["foundryvtt-mountup.js"],
   "styles": [],
-  "minimumCoreVersion": "0.8.9",
+  "minimumCoreVersion": "9",
   "compatibleCoreVersion": "9",
   "url": "https://github.com/p4535992/MountUp",
   "manifest": "https://github.com/p4535992/MountUp/releases/latest/download/module.json",
