@@ -27,7 +27,7 @@
       },
       "riderLock": {
         "name": "Should riders be locked to mounts?",
-        "hint": "[No need anymore] If enabled, riders will be unable to move seperately from their mount until dismounted. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.",
+        "hint": "[No need anymore] If enabled, riders will be unable to move separately from their mount until dismounted. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.",
         "noLock": "No lock"
       },
       "riderRotate": {

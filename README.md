@@ -50,7 +50,7 @@ This module uses the [token-z](https://github.com/theripper93/token-z) library l
 - **Icon:** The icon to show in the HUD
 - **HUD Column:** Which HUD column to place the button in
 - **HUD Top/Bottom:** Where to place the button in the column
-- **Should riders be locked to mounts?:** _[No need anymore]_ If enabled, riders will be unable to move seperately from their mount until dismounted. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.
+- **Should riders be locked to mounts?:** _[No need anymore]_ If enabled, riders will be unable to move separately from their mount until dismounted. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.
 - **Should riders rotate with mounts?:** _[No need anymore]_ If enabled, rider rotation will be updated to match mount rotation. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount."
 - **Rider Horizontal Alignment:** _[No need anymore]_ By default is center. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.
 - **Rider Vertical Alignment:** _[No need anymore]_ By default is center. NOTE: with the new 'can Move Constrained' from Token Attacher you don't need to touch this anymore, but i leave if anyone find useful for set a initial position of the rider on the mount.
@@ -100,7 +100,7 @@ If enabled thi setting will make sure to always sync the riders elevation with t
 
 ### Flying away !!!!
 
-Now when you mount some flying mount with the active effect `ATMU.flying = true` a beauty shadow effect is apllie dwith the module [Token Magic](https://github.com/Feu-Secret/Tokenmagic).
+Now when you mount some flying mount with the active effect `ATMU.flying = true` a beauty shadow effect is applied with the module [Token Magic](https://github.com/Feu-Secret/Tokenmagic).
 
 ![img](./img/ShadowEffects.png)
 
@@ -134,7 +134,7 @@ return result;
 
 #### What active effect data changes are used from this module ?
 
-Every active effect data of this is module use any changes with the prefix `ATMU` acronim for _Active Token Mount Up_ .
+Every active effect data of this is module use any changes with the prefix `ATMU` acronym for _Active Token Mount Up_ .
 
 There three type of these AE used and supported from this module:
 
@@ -144,7 +144,7 @@ There three type of these AE used and supported from this module:
 | `ATMU.toMountOnDismount`| boolean  | Transfer this active effect from the rider to the mount when "Dismount Up" | `ATMU.toMountOnDismount = true`, `ATMU.toMountOnDismount = false` |
 | `ATMU.toRiderOnMount`   | boolean  | Transfer this active effect from the mount to the rider when "Mount Up"   | `ATMU.toRiderOnMount = true`, `ATMU.toRiderOnMount = false` |
 | `ATMU.toRiderOnDismount`| boolean  | Transfer this active effect from the mount to the rider when "Dismount Up" | `ATMU.toRiderOnDismount = true`, `ATMU.toRiderOnDismount = false` |
-| `ATMU.flying`   | true  | Check is the mount is a flying one. If tru we apply the token magic effect "flying" | `ATMU.flying = true`, `ATMU.flying = false` |
+| `ATMU.flying`           | boolean  | Check is the mount is a flying one. If tru we apply the token magic effect "flying" | `ATMU.flying = true`, `ATMU.flying = false` |
 
 For now no automatic UI is prepared (and don't think we need one) just created  a active effect and add this changes on it.
 

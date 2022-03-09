@@ -1,3 +1,7 @@
+## 3.2.9
+
+- Bug fix and performance , for multi rider management
+
 ## 3.2.8
 
 - Bug fixing module.json

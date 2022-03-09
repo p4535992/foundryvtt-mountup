@@ -5,7 +5,7 @@ import { canvas, game } from './settings';
 import { SettingsForm } from './settings-form';
 import { MountUpFlags } from './utils';
 
-export const mountUp = async function (riderToken: Token, mountToken: Token) {
+export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
   if (!riderToken || !mountToken) {
     return;
   }
@@ -126,7 +126,7 @@ export const mountUp = async function (riderToken: Token, mountToken: Token) {
   }
 };
 
-export const dismountDropAll = async function (mountToken: Token) {
+export const dismountDropAllTA = async function (mountToken: Token) {
   if (!mountToken) {
     return;
   }
@@ -173,7 +173,7 @@ export const dismountDropAll = async function (mountToken: Token) {
   }
 };
 
-export const dismountDropTarget = async function (mountToken: Token, riderToken: Token) {
+export const dismountDropTargetTA = async function (mountToken: Token, riderToken: Token) {
   if (!mountToken || !riderToken) {
     return;
   }
@@ -231,12 +231,14 @@ export const dismountDropTarget = async function (mountToken: Token, riderToken:
   }
 };
 
-export const detachAllFromToken = async function (mountToken: Token) {
+export const detachAllFromTokenTA = async function (mountToken: Token) {
   if (!mountToken) {
     return;
   }
 
   await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
+
+  // Chatter.dismountMessage(riderToken.id, mountToken.id);
 
   // let message = `Everyone and everything get off from {mount}!`;
   // message = message.replace('{rider}',riderToken.name);
