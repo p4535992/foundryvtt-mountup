@@ -11,7 +11,7 @@ export const MountUpFlags = {
   OrigSize: 'origsize',
   MountMove: 'mountMove',
   OrigElevation: 'origelevation',
-  AlreadyMounted: 'alreadymounted'
+  AlreadyMounted: 'alreadymounted',
 };
 
 /**

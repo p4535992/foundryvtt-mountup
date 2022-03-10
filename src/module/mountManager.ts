@@ -1,5 +1,11 @@
 import { SettingsForm } from './settings-form';
-import { detachAllFromTokenTA, dismountDropAllTA, dismountDropTargetTA, mountUpTA, moveToken } from './tokenAttacherHelper';
+import {
+  detachAllFromTokenTA,
+  dismountDropAllTA,
+  dismountDropTargetTA,
+  mountUpTA,
+  moveToken,
+} from './tokenAttacherHelper';
 import { findTokenById, MountUpFlags, getTokenCenter, riderLock, riderX, riderY, socketAction } from './utils';
 import { canvas, game } from './settings';
 import { error, log, warn } from './lib/lib';
@@ -18,7 +24,7 @@ export class MountManager {
     const mountToken = <Token>canvas.tokens?.controlled.find((t) => t.id == hudToken._id);
     const tokensToCheck = canvas.tokens?.controlled || [];
     for (const riderToken of tokensToCheck) {
-      if(riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)){
+      if (riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)) {
         continue;
       }
       if (riderToken.id != mountToken.id) {
@@ -113,7 +119,7 @@ export class MountManager {
    * @param {object} mountToken - The mount token
    */
   static async doCreateMount(riderToken: Token, mountToken: Token): Promise<boolean> {
-    if(riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)){
+    if (riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)) {
       return false;
     }
     let riders = <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);

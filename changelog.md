@@ -1,6 +1,7 @@
 ## 3.2.9
 
 - Bug fix and performance , for multi rider management
+- added flag isalready mounted for avoid the "double mouting" of the same rider
 
 ## 3.2.8
 
