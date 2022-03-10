@@ -69,6 +69,14 @@ export function registerSocket() {
   mountUpSocket.register('removeEffectFromIdOnToken', (...args) => API.removeEffectFromIdOnTokenArr(...args));
   mountUpSocket.register('toggleEffectFromIdOnToken', (...args) => API.toggleEffectFromIdOnTokenArr(...args));
   mountUpSocket.register('findEffectByNameOnToken', (...args) => API.findEffectByNameOnTokenArr(...args));
+  mountUpSocket.register('updateEffectFromIdOnToken', (...args) => API.updateEffectFromIdOnTokenArr(...args));
+  mountUpSocket.register('updateEffectFromNameOnToken', (...args) => API.updateEffectFromNameOnTokenArr(...args));
+  mountUpSocket.register('updateActiveEffectFromIdOnToken', (...args) =>
+    API.updateActiveEffectFromIdOnTokenArr(...args),
+  );
+  mountUpSocket.register('updateActiveEffectFromNameOnToken', (...args) =>
+    API.updateActiveEffectFromNameOnTokenArr(...args),
+  );
   return mountUpSocket;
 }
 
