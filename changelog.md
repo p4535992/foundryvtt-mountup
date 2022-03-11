@@ -1,3 +1,7 @@
+## 3.2.10
+
+- Avoid reset of the socket handler
+
 ## 3.2.9
 
 - Bug fix and performance , for multi rider management

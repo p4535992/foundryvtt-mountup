@@ -25,6 +25,9 @@ export let mountUpSocket;
 
 export function registerSocket() {
   debug('Registered mountUpSocket');
+  if(mountUpSocket){
+    return mountUpSocket;
+  }
   //@ts-ignore
   mountUpSocket = socketlib.registerModule(CONSTANTS.MODULE_NAME);
 
