@@ -82,7 +82,7 @@ export const registerSettings = function () {
     // default: 'Horse',
     type: Number,
     default: 0,
-    choices: {
+    choices: <any>{
       0: 'Horse',
       1: 'People Carrying',
       2: 'Hands',
@@ -102,7 +102,7 @@ export const registerSettings = function () {
     // default: 'Left',
     type: Number,
     default: 0,
-    choices: {
+    choices: <any>{
       0: 'Left',
       1: 'Right',
     },
@@ -118,7 +118,7 @@ export const registerSettings = function () {
     // default: 'Top',
     type: Number,
     default: 0,
-    choices: {
+    choices: <any>{
       0: 'Top',
       1: 'Bottom',
     },
@@ -152,7 +152,7 @@ export const registerSettings = function () {
     // default: 'Dismount when outside mount bounds',
     type: Number,
     default: 3,
-    choices: {
+    choices: <any>{
       0: `${CONSTANTS.MODULE_NAME}.setting.riderLock.noLock`,
       1: 'Lock to location',
       2: 'Lock to mount bounds',
@@ -179,7 +179,7 @@ export const registerSettings = function () {
     // default: 'Center',
     type: Number,
     default: 1,
-    choices: {
+    choices: <any>{
       0: 'Left',
       1: 'Center',
       2: 'Right',
@@ -196,7 +196,7 @@ export const registerSettings = function () {
     // default: 'Top',
     type: Number,
     default: 1,
-    choices: {
+    choices: <any>{
       0: 'Top',
       1: 'Center',
       2: 'Bottom',
