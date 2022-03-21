@@ -59,10 +59,10 @@ export const setupHooks = async (): Promise<void> => {
   //@ts-ignore
   window[CONSTANTS.MODULE_NAME].API.effectInterface.initialize();
 
-  if (game[CONSTANTS.MODULE_NAME]) {
+  if (!game[CONSTANTS.MODULE_NAME]) {
     game[CONSTANTS.MODULE_NAME] = {};
   }
-  if (game[CONSTANTS.MODULE_NAME].API) {
+  if (!game[CONSTANTS.MODULE_NAME].API) {
     game[CONSTANTS.MODULE_NAME].API = {};
   }
   //@ts-ignore
@@ -163,7 +163,8 @@ export const readyHooks = async () => {
     //return true;
   });
 
-  if (game.modules.get('tokenmagic')?.active) {
+  //@ts-ignore
+  if (game.modules.get('tokenmagic')?.active && TokenMagic) {
     const params = MountupEffectDefinitions.tokenMagicParamsFlying(CONSTANTS.TM_FLYING);
     //@ts-ignore
     if (!TokenMagic.getPreset(CONSTANTS.TM_FLYING)) {

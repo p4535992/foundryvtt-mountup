@@ -1,3 +1,7 @@
+## 3.2.11
+
+- bug fix
+
 ## 3.2.10
 
 - Avoid reset of the socket handler
