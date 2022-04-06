@@ -100,7 +100,7 @@ export const readyHooks = async () => {
   //   MountManager.popAllRiders();
   // });
 
-  Hooks.on('updateToken', async (tokenDocument: TokenDocument, updateData: any, options: any, userId:string) => {
+  Hooks.on('updateToken', async (tokenDocument: TokenDocument, updateData: any, options: any, userId: string) => {
     const sourceToken = <Token>tokenDocument.object;
     if (!sourceToken) {
       return;
@@ -124,24 +124,18 @@ export const readyHooks = async () => {
     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableAutoUpdateElevation')) {
       if (
         hasProperty(updateData, 'elevation') &&
-        (
-          (
-          sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != undefined &&
-          sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != null
-          )
+        ((sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != undefined &&
+          sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != null) ||
           // TODO to remove
-          ||
-          (
-          sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != undefined &&
-          sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != null
-          )
-        )
+          (sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != undefined &&
+            sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != null))
       ) {
         if (MountManager.isaMount(<string>updateData._id)) {
           const mountElevation = getElevationToken(sourceToken) || updateData.elevation;
-          const riders: string[] = <string[]>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+          const riders: string[] =
+            <string[]>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
             // TODO to remove
-            || <string[]>sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+            <string[]>sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
           for (const rider of riders) {
             const riderToken = <Token>findTokenById(<string>rider);
             if (riderToken) {
@@ -156,10 +150,11 @@ export const readyHooks = async () => {
         }
 
         if (MountManager.isaRider(updateData._id)) {
-          const mountTokenId = <string>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+          const mountTokenId =
+            <string>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
             // TODO to remove
-            || <string>tokenDocument.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
-          const mountToken = <Token>(findTokenById(mountTokenId));
+            <string>tokenDocument.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+          const mountToken = <Token>findTokenById(mountTokenId);
           if (mountToken) {
             const mountElevation = getElevationToken(mountToken);
             const riderElevation = getElevationToken(<Token>tokenDocument.object) || updateData.elevation;
@@ -171,10 +166,10 @@ export const readyHooks = async () => {
               //updateData.elevation = mountElevation;
               await tokenDocument.update({
                 elevation:
-                  <number>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+                  <number>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) ||
                   // TODO to remove
-                  || <number>tokenDocument.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
-                  || mountElevation,
+                  <number>tokenDocument.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) ||
+                  mountElevation,
               });
             }
           }
@@ -183,7 +178,7 @@ export const readyHooks = async () => {
     }
   });
 
-  Hooks.on('controlToken', async (token:Token) => {
+  Hooks.on('controlToken', async (token: Token) => {
     const isPlayerOwned = <boolean>token.document.isOwner;
     if (!game.user?.isGM && !isPlayerOwned) {
       return;
@@ -193,7 +188,7 @@ export const readyHooks = async () => {
     }
   });
 
-  Hooks.on('preDeleteToken', async (scene, token:Token) => {
+  Hooks.on('preDeleteToken', async (scene, token: Token) => {
     const isPlayerOwned = <boolean>token.document.isOwner;
     if (!game.user?.isGM && !isPlayerOwned) {
       return;

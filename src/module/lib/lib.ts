@@ -332,7 +332,7 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
     }
     const atmuChanges = EffectSupport.retrieveChangesOrderedByPriorityFromAE(effectEntity);
     //atmuValue = effectEntity.data.changes.find((aee) => {
-    for(const aee of atmuChanges) {
+    for (const aee of atmuChanges) {
       if (isStringEquals(aee.key, 'ATMU.toMountOnMount')) {
         if (aee.value && Boolean(aee.value)) {
           const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
@@ -377,20 +377,16 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
 export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
   const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
-  for(const value of riderData.toMountOnMount.values()) {
-    if (
-      !(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))
-    ) {
+  for (const value of riderData.toMountOnMount.values()) {
+    if (!(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))) {
       await API.addEffectOnToken(mountToken.id, i18n(value.name), value);
       info(
         `Apply effect '${i18n(value.name)}' on mount  up from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
     }
   }
-  for(const value of mountData.toRiderOnMount.values()) {
-    if (
-      !(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))
-    ) {
+  for (const value of mountData.toRiderOnMount.values()) {
+    if (!(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))) {
       await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
       info(
         `Apply effect '${i18n(value.name)}' on mount up from mount '${mountToken.name}' to rider '${riderToken.name}'`,
@@ -398,7 +394,7 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
     }
   }
 
-  for(const value of riderData.toMountOnDismount.values()) {
+  for (const value of riderData.toMountOnDismount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
@@ -410,7 +406,7 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
       );
     }
   }
-  for(const value of mountData.toRiderOnDismount.values()) {
+  for (const value of mountData.toRiderOnDismount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
@@ -423,10 +419,8 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
     }
   }
 
-  for(const value of mountData.flyingMount.values()) {
-    if (
-      !(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))
-    ) {
+  for (const value of mountData.flyingMount.values()) {
+    if (!(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))) {
       await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
       await API.applyFlying(mountToken);
       info(
@@ -441,20 +435,16 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
 export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token) {
   const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
-  for(const value of riderData.toMountOnDismount.values()) {
-    if (
-      !(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))
-    ) {
+  for (const value of riderData.toMountOnDismount.values()) {
+    if (!(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))) {
       await API.addEffectOnToken(mountToken.id, i18n(value.name), value);
       info(
         `Apply effect '${i18n(value.name)}' on dismount from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
     }
   }
-  for(const value of mountData.toRiderOnDismount.values()) {
-    if (
-      !(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))
-    ) {
+  for (const value of mountData.toRiderOnDismount.values()) {
+    if (!(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))) {
       await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
       info(
         `Apply effect '${i18n(value.name)}' on dismount from mount '${mountToken.name}' to rider '${riderToken.name}'`,
@@ -462,7 +452,7 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
     }
   }
 
-  for(const value of mountData.toRiderOnMount.values()) {
+  for (const value of mountData.toRiderOnMount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
@@ -474,7 +464,7 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
       );
     }
   }
-  for(const value of riderData.toMountOnMount.values()) {
+  for (const value of riderData.toMountOnMount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
@@ -487,7 +477,7 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
     }
   }
 
-  for(const value of mountData.flyingMount.values()) {
+  for (const value of mountData.flyingMount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)

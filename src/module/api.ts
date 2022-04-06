@@ -1,6 +1,9 @@
 import EmbeddedCollection from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs';
 import { EffectChangeData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
-import { ActiveEffectData, ActorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
+import {
+  ActiveEffectData,
+  ActorData,
+} from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
 import CONSTANTS from './constants';
 import Effect, { EffectSupport } from './effects/effect';
 import EffectInterface from './effects/effect-interface';
@@ -50,9 +53,10 @@ const API = {
 
     if (rider) {
       if (MountManager.isaRider(rider.id)) {
-        const mountTokenId = <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+        const mountTokenId =
+          <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
           // TODO to remove
-          || <string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+          <string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
         const mountToken = findTokenById(mountTokenId);
         MountManager.doRemoveMount(rider, mountToken);
       } else {
@@ -73,8 +77,9 @@ const API = {
 
     if (mount) {
       if (MountManager.isaMount(mount.id)) {
-        const riders = <string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
-          || <string[]>mount.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+        const riders =
+          <string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
+          <string[]>mount.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         for (const rider in riders) {
           const riderToken: Token = findTokenById(rider);
           MountManager.doRemoveMount(riderToken, mount);
@@ -96,9 +101,10 @@ const API = {
     const riderToken = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
     const mountToken = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
 
-    if (riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id
+    if (
+      riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id ||
       // TODO to remove
-      || riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id
+      riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id
     ) {
       API.dismount(riderNameOrId);
     } else {

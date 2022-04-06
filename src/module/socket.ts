@@ -25,7 +25,7 @@ export let mountUpSocket;
 
 export function registerSocket() {
   debug('Registered mountUpSocket');
-  if(mountUpSocket){
+  if (mountUpSocket) {
     return mountUpSocket;
   }
   //@ts-ignore

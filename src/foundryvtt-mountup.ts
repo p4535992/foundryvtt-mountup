@@ -71,9 +71,7 @@ Hooks.once('ready', () => {
     throw error(`Requires the 'token-z' module. Please ${word} it.`);
   }
   if (game.modules.get('mountup')?.active && game.user?.isGM) {
-    dialogWarning(
-      `With 'mountup' module enabled and active. The module "Mount Up" breaks the API.`,
-    );
+    dialogWarning(`With 'mountup' module enabled and active. The module "Mount Up" breaks the API.`);
   }
 
   readyHooks();

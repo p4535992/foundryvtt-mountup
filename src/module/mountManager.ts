@@ -24,17 +24,19 @@ export class MountManager {
     const mountToken = <Token>canvas.tokens?.controlled.find((t) => t.id == hudToken._id);
     const tokensToCheck = canvas.tokens?.controlled || [];
     for (const riderToken of tokensToCheck) {
-      const riderId = riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)
+      const riderId =
+        riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted) ||
         // TODO to remove
-        || riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)
+        riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted);
       if (riderId) {
         continue;
       }
       if (riderToken.id != mountToken.id) {
-        const mountId = <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+        const mountId =
+          <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
           // TODO to remove
-          || <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
-        const mountTokenTmp = <Token>(findTokenById(mountId));
+          <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+        const mountTokenTmp = <Token>findTokenById(mountId);
         // check that the new rider isn't already a rider of a different mount
         if (this.isaRider(riderToken.id) && !this.isRidersMount(riderToken.id, hudToken._id)) {
           warn(`Couldn't mount '${riderToken.name}' on to '${hudToken.name}' because \
@@ -48,9 +50,10 @@ export class MountManager {
         if (this.isAncestor(mountToken.id, riderToken.id)) {
           continue;
         }
-        let riders: string[] = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+        let riders: string[] =
+          <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
           // TODO to remove
-          || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+          <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         if (riders == undefined) {
           riders = [];
         }
@@ -63,10 +66,10 @@ export class MountManager {
         await mountToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders, riders);
         await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount, mountToken.id);
         if (
-          !riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)
+          !riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize) ||
           // TODO to remove
-          || !riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)
-          ) {
+          !riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)
+        ) {
           await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize, {
             w: riderToken.w,
             h: riderToken.h,
@@ -104,9 +107,10 @@ export class MountManager {
 
   static async dismount(hudToken) {
     const riderToken: Token = findTokenById(hudToken._id);
-    const mountTokenId = <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+    const mountTokenId =
+      <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
       // TODO to remove
-      || <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+      <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
     const mountToken: Token = findTokenById(mountTokenId);
     // MOD 4535992
     // CALL TOKEN ATTACHER MOVED UP
@@ -118,9 +122,10 @@ export class MountManager {
     const mountToken: Token = findTokenById(hudToken._id);
     // CALL TOKEN ATTACHER
     dismountDropAllTA(mountToken);
-    const ridersIds = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+    const ridersIds =
+      <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
       // TODO to remove
-      || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+      <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
     const riders: string[] = ridersIds;
     for (const riderId of riders) {
       const riderToken = findTokenById(riderId);
@@ -135,15 +140,17 @@ export class MountManager {
    * @param {object} mountToken - The mount token
    */
   static async doCreateMount(riderToken: Token, mountToken: Token): Promise<boolean> {
-    if (riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)
+    if (
+      riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted) ||
       // TODO to remove
-      || riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)
+      riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)
     ) {
       return false;
     }
-    let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+    let riders =
+      <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
       // TODO to remove
-      || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+      <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
     if (riders == undefined) riders = [];
     if (!riders.includes(riderToken.id)) {
       riders.push(riderToken.id);
@@ -153,9 +160,9 @@ export class MountManager {
     // await mountToken.document.update({ flags: { mountup: { riders: riders } } });
     await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount, mountToken.id);
     if (
-      !riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)
+      !riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize) ||
       // TODO to remove
-      || !riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)
+      !riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)
     ) {
       await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize, {
         w: riderToken.w,
@@ -189,9 +196,10 @@ export class MountManager {
     dismountDropTargetTA(mountToken, riderToken);
 
     // Chatter.dismountMessage(riderToken.id, mountToken.id);
-    const riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+    const riders =
+      <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
       // TODO to remove
-      || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+      <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
     await mountToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
     // TODO to remove
     await mountToken.document?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
@@ -233,19 +241,22 @@ export class MountManager {
    */
   static async restoreRiderSize(riderToken: Token) {
     // MOD 4535992 ADD CHECK FOR RIDERS FLAGS
-    const mountTokenId = <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+    const mountTokenId =
+      <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
       // TODO to remove
-      || <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+      <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
     const mountToken = findTokenById(mountTokenId);
-    const riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+    const riders =
+      <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
       // TODO to remove
-      || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+      <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
     if (riders && riders.includes(riderToken.id)) {
       // let mount = findTokenById(riderToken);
       // let rider = findTokenById(<string[]>mount.actor.getFlag(CONSTANTS.MODULE_NAME, Flags.Riders));
-      const origsize = <{ w; h }>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)
+      const origsize =
+        <{ w; h }>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize) ||
         // TODO to remove
-        || <{ w; h }>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize);
+        <{ w; h }>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize);
       // MOD 4535992 REMOVED IF
       //if (riderToken.w < origsize.w || riderToken.h < origsize.h) {
       const grid = <number>canvas.scene?.data.grid;
@@ -275,9 +286,10 @@ export class MountManager {
       }
 
       if (this.isaRider(token.id)) {
-        const mountId =<string>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+        const mountId =
+          <string>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
           // TODO to remove
-          || <string>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+          <string>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
         const mount = findTokenById(mountId);
         // MOD 4535992 CHECK IF TOKEN IS ALREADY DELETED
         if (mount) {
@@ -288,9 +300,10 @@ export class MountManager {
       }
 
       if (this.isaMount(token.id)) {
-        const riders = <string[]>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+        const riders =
+          <string[]>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
           // TODO to remove
-          || <string[]>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+          <string[]>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         for (const riderTmp in riders) {
           const rider: Token = findTokenById(riderTmp);
           // MOD 4535992 CHECK IF TOKEN IS ALREADY DELETED
@@ -314,7 +327,7 @@ export class MountManager {
    * Pops all rider tokens on top of their mount tokens (canvas wide)
    */
   static async popAllRiders() {
-    for(const token of <Token[]>canvas.tokens?.placeables) {
+    for (const token of <Token[]>canvas.tokens?.placeables) {
       if (this.isaMount(token.id) && !this.isaRider(token.id)) {
         this.popRider(token.id);
       }
@@ -328,7 +341,7 @@ export class MountManager {
   static async popRider(mountId: string, callcount = 0) {
     if (callcount > 100) {
       error('Pop riders called too many times. Breaking all rides for safety.');
-      for(const t of <Token[]>canvas.tokens?.placeables) {
+      for (const t of <Token[]>canvas.tokens?.placeables) {
         await t.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         await t.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
         // TODO to remove
@@ -338,9 +351,10 @@ export class MountManager {
       return true;
     }
     const mountToken: Token = findTokenById(mountId);
-    const riders: string[] = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+    const riders: string[] =
+      <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
       // TODO to remove
-      || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+      <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
     for (const riderId of riders) {
       const riderToken = findTokenById(riderId);
       if (riderToken) {
@@ -370,15 +384,17 @@ export class MountManager {
   static async doPostTokenUpdate(tokenId: string, updateData) {
     if (this.isaRider(tokenId)) {
       const riderToken = findTokenById(tokenId);
-      const mountTokenId = <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+      const mountTokenId =
+        <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
         // TODO to remove
-        || <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+        <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
       const mountToken = findTokenById(mountTokenId);
       // MOD 4535992 ADD CHECK FOR RIDERS FLAGS
       if (mountToken) {
-        const riders: string[] = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+        const riders: string[] =
+          <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
           // TODO to remove
-          || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+          <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         // if (riders && riders.includes(riderToken.id)) {
         //   // shrink the rider if needed
         //   if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
@@ -465,15 +481,17 @@ export class MountManager {
   static async doTokenUpdateOnlyCheckBoundHandler(tokenId, updateData) {
     if (this.isaRider(tokenId)) {
       const riderToken = findTokenById(tokenId);
-      const mountTokenId = <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
+      const mountTokenId =
+        <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
         // TODO to remove
         <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
       const mountToken = findTokenById(mountTokenId);
       // MOD 4535992 ADD CHECK FOR RIDERS FLAGS
       if (mountToken) {
-        const riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+        const riders =
+          <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
           // TODO to remove
-          || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+          <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         if (riders && riders.includes(riderToken.id)) {
           const newLocation = {
             x: updateData.x !== undefined ? updateData.x : riderToken.x,
@@ -481,15 +499,13 @@ export class MountManager {
           };
 
           if (
-            !riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove)
+            !riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove) ||
             // TODO to remove
-            || !riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove)
-            ) {
+            !riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove)
+          ) {
             if (
-              !canvas.tokens?.controlled
-                .map((t) => t.id)
-                .includes(mountTokenId)
-                //.includes(<string>riderToken.actor.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount))
+              !canvas.tokens?.controlled.map((t) => t.id).includes(mountTokenId)
+              //.includes(<string>riderToken.actor.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount))
             ) {
               switch (SettingsForm.getRiderLock()) {
                 case riderLock.NoLock:
@@ -534,12 +550,11 @@ export class MountManager {
   static isaMount(tokenId: string) {
     const token = findTokenById(tokenId);
     if (token) {
-      const riders: string[] = <string[]>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+      const riders: string[] =
+        <string[]>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
         // TODO to remove
-        || <string[]>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ;
-      return (
-        riders != undefined && riders.length > 0
-      );
+        <string[]>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+      return riders != undefined && riders.length > 0;
     } else {
       return false;
     }
@@ -552,9 +567,10 @@ export class MountManager {
   static isaRider(tokenId) {
     const token = findTokenById(tokenId);
     if (token) {
-      const mount = token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+      const mount =
+        token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
         // TODO to remove
-        || token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+        token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
       return mount != undefined;
     } else {
       return false;
@@ -569,9 +585,10 @@ export class MountManager {
   static isRidersMount(riderId, mountId) {
     const rider = findTokenById(riderId);
     const mount = findTokenById(mountId);
-    const mountIdTmp = <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+    const mountIdTmp =
+      <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
       // TODO to remove
-      || <string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+      <string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
     return mountIdTmp === mount.id;
   }
 
@@ -586,9 +603,10 @@ export class MountManager {
     const height = riderToken.h;
 
     // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
-    const riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+    const riders =
+      <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
       // TODO to remove
-      || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+      <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
     const index = riders.indexOf(riderToken.id); // 1
     const offset: number = (riderToken.w / 4) * index;
     // END MOD 4535992 SET UP OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
@@ -661,9 +679,10 @@ export class MountManager {
   static isAncestor(childId: string, ancestorId: string) {
     if (this.isaRider(childId)) {
       const child: Token = findTokenById(childId);
-      const parentId = <string>child.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+      const parentId =
+        <string>child.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
         // TODO to remove
-        || <string>child.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+        <string>child.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
       const parent: Token = findTokenById(parentId);
       if (parent.id == ancestorId) {
         return true;
