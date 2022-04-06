@@ -9,6 +9,7 @@ import HOOKS from './hooks';
 import EffectInterface from './effects/effect-interface';
 import { MountupEffectDefinitions } from './mountup-effect-definition';
 import { findTokenById, MountUpFlags } from './utils';
+import { setApi } from '../foundryvtt-mountup';
 
 export const initHooks = () => {
   warn('Init Hooks processing');
