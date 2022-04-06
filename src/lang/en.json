@@ -76,6 +76,10 @@
       "enableCanMoveConstrained": {
         "name": "Enable 'can move constrained'",
         "hint": "Enable the new 'Can Move Constrained' feature from Token Attacher"
+      },
+      "debug": {
+        "name": "Enable debugging",
+        "hint": "Prints debug messages to the console"
       }
     }
   }

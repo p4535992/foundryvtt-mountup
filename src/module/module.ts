@@ -76,8 +76,10 @@ export const readyHooks = async () => {
     MountHud.renderMountHud(app, html, data);
   });
 
-  Hooks.on('preUpdateToken', async (scene: Scene, token: Token, updateData: TokenData) => {
-    const isPlayerOwned = <boolean>token.document.isOwner;
+  // TOKEN ATTAHCER IS DOING THE WORK NOW
+  /*
+  Hooks.on('preUpdateToken', async (tokenDocument: TokenDocument, data:any, updateData: TokenData) => {
+    const isPlayerOwned = <boolean>tokenDocument.isOwner;
     if (!game.user?.isGM && !isPlayerOwned) {
       return;
     }
@@ -87,13 +89,13 @@ export const readyHooks = async () => {
       // NO NEED ANYMORE TOKEN ATTACHER DO THE WORK
       // await MountManager.doTokenUpdate(token._id, updateData);
 
-      await MountManager.doTokenUpdateOnlyCheckBoundHandler(token.document.id, updateData);
-      if (MountManager.isaRider(token.document.id)) {
-        await MountManager.doPostTokenUpdate(<string>token.document.id, updateData);
+      await MountManager.doTokenUpdateOnlyCheckBoundHandler(tokenDocument.id, updateData);
+      if (MountManager.isaRider(tokenDocument.id)) {
+        await MountManager.doPostTokenUpdate(<string>tokenDocument.id, updateData);
       }
     }
   });
-
+  */
   // REMOVED ?????
 
   // Hooks.on('canvasReady', async () => {

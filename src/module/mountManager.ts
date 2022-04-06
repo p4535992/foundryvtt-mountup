@@ -472,76 +472,76 @@ export class MountManager {
     }
   }
 
-  /**
-   * Called when a token is moved in the game.
-   * Determines if the token being moved is a mount - if it is, moves the rider to match
-   * @param {String} tokenId - The ID of the token being moved
-   * @param {Object} updateData - Update data being sent by the game
-   */
-  static async doTokenUpdateOnlyCheckBoundHandler(tokenId, updateData) {
-    if (this.isaRider(tokenId)) {
-      const riderToken = findTokenById(tokenId);
-      const mountTokenId =
-        <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
-        // TODO to remove
-        <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
-      const mountToken = findTokenById(mountTokenId);
-      // MOD 4535992 ADD CHECK FOR RIDERS FLAGS
-      if (mountToken) {
-        const riders =
-          <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
-          // TODO to remove
-          <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-        if (riders && riders.includes(riderToken.id)) {
-          const newLocation = {
-            x: updateData.x !== undefined ? updateData.x : riderToken.x,
-            y: updateData.y !== undefined ? updateData.y : riderToken.y,
-          };
+  // /**
+  //  * Called when a token is moved in the game.
+  //  * Determines if the token being moved is a mount - if it is, moves the rider to match
+  //  * @param {String} tokenId - The ID of the token being moved
+  //  * @param {Object} updateData - Update data being sent by the game
+  //  */
+  // static async doTokenUpdateOnlyCheckBoundHandler(tokenId, updateData) {
+  //   if (this.isaRider(tokenId)) {
+  //     const riderToken = findTokenById(tokenId);
+  //     const mountTokenId =
+  //       <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
+  //       // TODO to remove
+  //       <string>riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+  //     const mountToken = findTokenById(mountTokenId);
+  //     // MOD 4535992 ADD CHECK FOR RIDERS FLAGS
+  //     if (mountToken) {
+  //       const riders =
+  //         <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
+  //         // TODO to remove
+  //         <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+  //       if (riders && riders.includes(riderToken.id)) {
+  //         const newLocation = {
+  //           x: updateData.x !== undefined ? updateData.x : riderToken.x,
+  //           y: updateData.y !== undefined ? updateData.y : riderToken.y,
+  //         };
 
-          if (
-            !riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove) ||
-            // TODO to remove
-            !riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove)
-          ) {
-            if (
-              !canvas.tokens?.controlled.map((t) => t.id).includes(mountTokenId)
-              //.includes(<string>riderToken.actor.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount))
-            ) {
-              switch (SettingsForm.getRiderLock()) {
-                case riderLock.NoLock:
-                  break;
-                case riderLock.LockLocation:
-                  delete updateData.x;
-                  delete updateData.y;
-                  warn(`${riderToken.name} is currently locked to a mount`);
-                  break;
-                case riderLock.LockBounds:
-                  if (!this.isInsideTokenBounds(newLocation, mountToken)) {
-                    delete updateData.x;
-                    delete updateData.y;
-                    warn(`${riderToken.name} is currently locked inside a mount`);
-                  }
-                  break;
-                case riderLock.Dismount:
-                  if (!this.isInsideTokenBounds(newLocation, mountToken)) {
-                    this.doRemoveMount(riderToken, mountToken);
-                  }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+  //         if (
+  //           !riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove) ||
+  //           // TODO to remove
+  //           !riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove)
+  //         ) {
+  //           if (
+  //             !canvas.tokens?.controlled.map((t) => t.id).includes(mountTokenId)
+  //             //.includes(<string>riderToken.actor.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount))
+  //           ) {
+  //             switch (SettingsForm.getRiderLock()) {
+  //               case riderLock.NoLock:
+  //                 break;
+  //               case riderLock.LockLocation:
+  //                 delete updateData.x;
+  //                 delete updateData.y;
+  //                 warn(`${riderToken.name} is currently locked to a mount`);
+  //                 break;
+  //               case riderLock.LockBounds:
+  //                 if (!this.isInsideTokenBounds(newLocation, mountToken)) {
+  //                   delete updateData.x;
+  //                   delete updateData.y;
+  //                   warn(`${riderToken.name} is currently locked inside a mount`);
+  //                 }
+  //                 break;
+  //               case riderLock.Dismount:
+  //                 if (!this.isInsideTokenBounds(newLocation, mountToken)) {
+  //                   this.doRemoveMount(riderToken, mountToken);
+  //                 }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
-  static isInsideTokenBounds(location: { x; y }, token: Token) {
-    const x = token.x + token.w;
-    const y = token.y + token.h;
+  // static isInsideTokenBounds(location: { x; y }, token: Token) {
+  //   const x = token.x + token.w;
+  //   const y = token.y + token.h;
 
-    return (
-      location.x >= token.x && location.x < token.x + token.w && location.y >= token.y && location.y < token.y + token.h
-    );
-  }
+  //   return (
+  //     location.x >= token.x && location.x < token.x + token.w && location.y >= token.y && location.y < token.y + token.h
+  //   );
+  // }
 
   /**
    * Returns true if the token is currently serving as a mount in any existing ride link
