@@ -11,21 +11,88 @@ import { ActiveTokenMountUpData } from '../utils';
 // Module Generic function
 // =============================
 
-export function isGMConnected(): boolean {
-  return Array.from(<Users>game.users).find((user) => user.isGM && user.active) ? true : false;
+export async function getToken(documentUuid) {
+  const document = await fromUuid(documentUuid);
+  //@ts-ignore
+  return document?.token ?? document;
+}
+
+export function getOwnedTokens(priorityToControlledIfGM: boolean): Token[] {
+  const gm = game.user?.isGM;
+  if (gm) {
+    if (priorityToControlledIfGM) {
+      return <Token[]>canvas.tokens?.controlled;
+    } else {
+      return <Token[]>canvas.tokens?.placeables;
+    }
+  }
+  let ownedTokens = <Token[]>canvas.tokens?.placeables.filter((token) => token.isOwner && (!token.data.hidden || gm));
+  if (ownedTokens.length === 0 || !canvas.tokens?.controlled[0]) {
+    ownedTokens = <Token[]>(
+      canvas.tokens?.placeables.filter((token) => (token.observer || token.isOwner) && (!token.data.hidden || gm))
+    );
+  }
+  return ownedTokens;
+}
+
+export function is_UUID(inId) {
+  return typeof inId === 'string' && (inId.match(/\./g) || []).length && !inId.endsWith('.');
+}
+
+export function getUuid(target) {
+  // If it's an actor, get its TokenDocument
+  // If it's a token, get its Document
+  // If it's a TokenDocument, just use it
+  // Otherwise fail
+  const document = getDocument(target);
+  return document?.uuid ?? false;
+}
+
+export function getDocument(target) {
+  if (target instanceof foundry.abstract.Document) return target;
+  return target?.document;
+}
+
+export function is_real_number(inNumber) {
+  return !isNaN(inNumber) && typeof inNumber === 'number' && isFinite(inNumber);
+}
+
+export function isGMConnected() {
+  return !!Array.from(<Users>game.users).find((user) => user.isGM && user.active);
+}
+
+export function isGMConnectedAndSocketLibEnable() {
+  return isGMConnected() && !game.settings.get(CONSTANTS.MODULE_NAME, 'doNotUseSocketLibFeature');
 }
 
 export function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export function isActiveGM(user) {
+  return user.active && user.isGM;
+}
+
+export function getActiveGMs() {
+  return game.users?.filter(isActiveGM);
+}
+
+export function isResponsibleGM() {
+  if (!game.user?.isGM) return false;
+  return !getActiveGMs()?.some((other) => other.data._id < <string>game.user?.data._id);
+}
+
+// ================================
+// Logger utility
+// ================================
+
 // export let debugEnabled = 0;
 // 0 = none, warnings = 1, debug = 2, all = 3
 
 export function debug(msg, args = '') {
-  // if (game.settings.get(CONSTANTS.MODULE_NAME, 'debug')) {
-  console.log(`DEBUG | ${CONSTANTS.MODULE_NAME} | ${msg}`, args);
-  // }
+  if (game.settings.get(CONSTANTS.MODULE_NAME, 'debug')) {
+    console.log(`DEBUG | ${CONSTANTS.MODULE_NAME} | ${msg}`, args);
+  }
   return msg;
 }
 
@@ -88,6 +155,8 @@ export function dialogWarning(message, icon = 'fas fa-exclamation-triangle') {
     </p>`;
 }
 
+// =========================================================================================
+
 export function cleanUpString(stringToCleanUp: string) {
   // regex expression to match all non-alphanumeric characters in string
   const regex = /[^A-Za-z0-9]/g;
@@ -100,13 +169,37 @@ export function cleanUpString(stringToCleanUp: string) {
 
 export function isStringEquals(stringToCheck1: string, stringToCheck2: string, startsWith = true): boolean {
   if (stringToCheck1 && stringToCheck2) {
+    const s1 = cleanUpString(stringToCheck1) ?? '';
+    const s2 = cleanUpString(stringToCheck2) ?? '';
     if (startsWith) {
-      return cleanUpString(stringToCheck1).startsWith(cleanUpString(stringToCheck2));
+      return s1.startsWith(s2) || s2.startsWith(s1);
     } else {
-      return cleanUpString(stringToCheck1) === cleanUpString(stringToCheck2);
+      return s1 === s2;
     }
   } else {
     return stringToCheck1 === stringToCheck2;
+  }
+}
+
+/**
+ * The duplicate function of foundry keep converting my stirng value to "0"
+ * i don't know why this methos is a brute force solution for avoid that problem
+ */
+export function duplicateExtended(obj: any): any {
+  try {
+    //@ts-ignore
+    if (structuredClone) {
+      //@ts-ignore
+      return structuredClone(obj);
+    } else {
+      // Shallow copy
+      // const newObject = jQuery.extend({}, oldObject);
+      // Deep copy
+      // const newObject = jQuery.extend(true, {}, oldObject);
+      return jQuery.extend(true, {}, obj);
+    }
+  } catch (e) {
+    return duplicate(obj);
   }
 }
 
@@ -129,12 +222,12 @@ export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O):
  * @param prop
  */
 export function mergeByProperty(target: any[], source: any[], prop: any) {
-  source.forEach((sourceElement) => {
+  for (const sourceElement of source) {
     const targetElement = target.find((targetElement) => {
       return sourceElement[prop] === targetElement[prop];
     });
     targetElement ? Object.assign(targetElement, sourceElement) : target.push(sourceElement);
-  });
+  }
   return target;
 }
 
@@ -192,7 +285,7 @@ export function getElevationToken(token: Token): number {
   return getElevationPlaceableObject(base);
 }
 
-export function getElevationWall(wall: Wall): number {
+function getElevationWall(wall: Wall): number {
   const base = wall.document.data;
   return getElevationPlaceableObject(base);
 }
@@ -239,7 +332,7 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
     }
     const atmuChanges = EffectSupport.retrieveChangesOrderedByPriorityFromAE(effectEntity);
     //atmuValue = effectEntity.data.changes.find((aee) => {
-    atmuChanges.forEach((aee) => {
+    for(const aee of atmuChanges) {
       if (isStringEquals(aee.key, 'ATMU.toMountOnMount')) {
         if (aee.value && Boolean(aee.value)) {
           const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
@@ -271,7 +364,7 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
           flyingMount.set(<string>effectEntity.id, effect);
         }
       }
-    });
+    }
   }
   activeTokenMountUpData.toMountOnDismount = toMountOnDismount;
   activeTokenMountUpData.toMountOnMount = toMountOnMount;
@@ -284,9 +377,8 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
 export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
   const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
-  riderData.toMountOnMount.forEach(async (value, key) => {
+  for(const value of riderData.toMountOnMount.values()) {
     if (
-      //!(await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true)) ||
       !(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))
     ) {
       await API.addEffectOnToken(mountToken.id, i18n(value.name), value);
@@ -294,10 +386,9 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
         `Apply effect '${i18n(value.name)}' on mount  up from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
     }
-  });
-  mountData.toRiderOnMount.forEach(async (value, key) => {
+  }
+  for(const value of mountData.toRiderOnMount.values()) {
     if (
-      //!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) ||
       !(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))
     ) {
       await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
@@ -305,9 +396,9 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
         `Apply effect '${i18n(value.name)}' on mount up from mount '${mountToken.name}' to rider '${riderToken.name}'`,
       );
     }
-  });
+  }
 
-  riderData.toMountOnDismount.forEach(async (value, key) => {
+  for(const value of riderData.toMountOnDismount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
@@ -318,8 +409,8 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
         `Remove effect '${i18n(value.name)}' on mount up from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
     }
-  });
-  mountData.toRiderOnDismount.forEach(async (value, key) => {
+  }
+  for(const value of mountData.toRiderOnDismount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
@@ -330,11 +421,10 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
         `Remove effect '${i18n(value.name)}' on mount up from mount '${mountToken.name}' to rider '${riderToken.name}'`,
       );
     }
-  });
+  }
 
-  mountData.flyingMount.forEach(async (value, key) => {
+  for(const value of mountData.flyingMount.values()) {
     if (
-      //!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) ||
       !(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))
     ) {
       await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
@@ -345,15 +435,14 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
         }'`,
       );
     }
-  });
+  }
 }
 
 export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token) {
   const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
-  riderData.toMountOnDismount.forEach(async (value, key) => {
+  for(const value of riderData.toMountOnDismount.values()) {
     if (
-      //!await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
       !(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))
     ) {
       await API.addEffectOnToken(mountToken.id, i18n(value.name), value);
@@ -361,10 +450,9 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
         `Apply effect '${i18n(value.name)}' on dismount from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
     }
-  });
-  mountData.toRiderOnDismount.forEach(async (value, key) => {
+  }
+  for(const value of mountData.toRiderOnDismount.values()) {
     if (
-      //!(await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true)) ||
       !(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))
     ) {
       await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
@@ -372,9 +460,9 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
         `Apply effect '${i18n(value.name)}' on dismount from mount '${mountToken.name}' to rider '${riderToken.name}'`,
       );
     }
-  });
+  }
 
-  mountData.toRiderOnMount.forEach(async (value, key) => {
+  for(const value of mountData.toRiderOnMount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
@@ -385,8 +473,8 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
         `Remove effect '${i18n(value.name)}' on dismount from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
     }
-  });
-  riderData.toMountOnMount.forEach(async (value, key) => {
+  }
+  for(const value of riderData.toMountOnMount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
@@ -397,9 +485,9 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
         `Remove effect '${i18n(value.name)}' on dismount from mount '${mountToken.name}' to rider '${riderToken.name}'`,
       );
     }
-  });
+  }
 
-  mountData.flyingMount.forEach(async (value, key) => {
+  for(const value of mountData.flyingMount.values()) {
     if (
       //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
       await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
@@ -414,5 +502,5 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
         }'`,
       );
     }
-  });
+  }
 }

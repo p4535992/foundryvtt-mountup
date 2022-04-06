@@ -76,7 +76,7 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableAutoUpdateElevation')) {
       const mountElevation = getElevationToken(mountToken) || 0;
       const backupRiderElevation = getElevationToken(riderToken) || 0;
-      await riderToken.document.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation, backupRiderElevation);
+      await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation, backupRiderElevation);
       await riderToken.document.update({
         x: loc.x,
         y: loc.y,
@@ -150,19 +150,25 @@ export const dismountDropAllTA = async function (mountToken: Token) {
   //@ts-ignore
   ChatMessage.create(chatData);
 
-  const riderTokens: string[] = <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+  const riderTokens: string[] = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+    // TODO to remove
+    || <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
   for (const riderTokenS of riderTokens) {
     const riderToken = <Token>canvas.tokens?.placeables.find((rt) => {
       return rt.id === riderTokenS;
     });
     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableAutoUpdateElevation')) {
       const backupRiderElevation = <number>(
-        riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+        riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+        // TODO to remove
+        || riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
       );
       if (backupRiderElevation) {
         await riderToken.document.update({
           elevation: backupRiderElevation,
         });
+        await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
+        // TODO to remove
         await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
       }
     }
@@ -215,12 +221,16 @@ export const dismountDropTargetTA = async function (mountToken: Token, riderToke
     }
     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableAutoUpdateElevation')) {
       const backupRiderElevation = <number>(
-        riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+        riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+        // TODO to remove
+        || riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
       );
       if (backupRiderElevation) {
         await riderToken.document.update({
           elevation: backupRiderElevation,
         });
+        await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
+        // TODO to remove
         await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
       }
     }

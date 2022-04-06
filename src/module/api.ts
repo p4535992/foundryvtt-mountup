@@ -50,7 +50,10 @@ const API = {
 
     if (rider) {
       if (MountManager.isaRider(rider.id)) {
-        const mountToken = findTokenById(<string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount));
+        const mountTokenId = <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+          // TODO to remove
+          || <string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+        const mountToken = findTokenById(mountTokenId);
         MountManager.doRemoveMount(rider, mountToken);
       } else {
         error(`Token '${riderName}' is not a rider`);
@@ -70,7 +73,8 @@ const API = {
 
     if (mount) {
       if (MountManager.isaMount(mount.id)) {
-        const riders = <string[]>mount.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+        const riders = <string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+          || <string[]>mount.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         for (const rider in riders) {
           const riderToken: Token = findTokenById(rider);
           MountManager.doRemoveMount(riderToken, mount);
@@ -92,7 +96,10 @@ const API = {
     const riderToken = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
     const mountToken = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
 
-    if (riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id) {
+    if (riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id
+      // TODO to remove
+      || riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id
+    ) {
       API.dismount(riderNameOrId);
     } else {
       API.mount(riderNameOrId, mountNameOrId);
@@ -117,7 +124,7 @@ const API = {
       throw error('toggleEffectArr | inAttributes must be of type array');
     }
     const [effectName, params] = inAttributes;
-    const result = await this.effectInterface.toggleEffect(effectName, params);
+    const result = await (<EffectInterface>this.effectInterface).toggleEffect(effectName, params);
     return result;
   },
 
@@ -135,7 +142,33 @@ const API = {
       throw error('hasEffectAppliedArr | inAttributes must be of type array');
     }
     const [effectName, uuid] = inAttributes;
-    const result = await (<EffectInterface>this.effectInterface)._effectHandler.hasEffectApplied(effectName, uuid);
+    const result = (<EffectInterface>this.effectInterface)._effectHandler.hasEffectApplied(effectName, uuid);
+    return result;
+  },
+
+  async hasEffectAppliedOnActorArr(...inAttributes: any[]) {
+    if (!Array.isArray(inAttributes)) {
+      throw error('hasEffectAppliedOnActorArr | inAttributes must be of type array');
+    }
+    const [effectName, uuid, includeDisabled] = inAttributes;
+    const result = (<EffectInterface>this.effectInterface)._effectHandler.hasEffectAppliedOnActor(
+      effectName,
+      uuid,
+      includeDisabled,
+    );
+    return result;
+  },
+
+  async hasEffectAppliedFromIdOnActorArr(...inAttributes: any[]) {
+    if (!Array.isArray(inAttributes)) {
+      throw error('hasEffectAppliedFromIdOnActorArr | inAttributes must be of type array');
+    }
+    const [effectId, uuid, includeDisabled] = inAttributes;
+    const result = (<EffectInterface>this.effectInterface)._effectHandler.hasEffectAppliedFromIdOnActor(
+      effectId,
+      uuid,
+      includeDisabled,
+    );
     return result;
   },
 
@@ -202,6 +235,32 @@ const API = {
     return result;
   },
 
+  async hasEffectAppliedOnTokenArr(...inAttributes: any[]) {
+    if (!Array.isArray(inAttributes)) {
+      throw error('hasEffectAppliedOnTokenArr | inAttributes must be of type array');
+    }
+    const [effectName, uuid, includeDisabled] = inAttributes;
+    const result = (<EffectInterface>this.effectInterface)._effectHandler.hasEffectAppliedOnToken(
+      effectName,
+      uuid,
+      includeDisabled,
+    );
+    return result;
+  },
+
+  async hasEffectAppliedFromIdOnTokenArr(...inAttributes: any[]) {
+    if (!Array.isArray(inAttributes)) {
+      throw error('hasEffectAppliedFromIdOnTokenArr | inAttributes must be of type array');
+    }
+    const [effectId, uuid, includeDisabled] = inAttributes;
+    const result = (<EffectInterface>this.effectInterface)._effectHandler.hasEffectAppliedFromIdOnToken(
+      effectId,
+      uuid,
+      includeDisabled,
+    );
+    return result;
+  },
+
   async addEffectOnTokenArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
       throw error('addEffectOnTokenArr | inAttributes must be of type array');
@@ -238,6 +297,18 @@ const API = {
     return result;
   },
 
+  async removeEffectFromIdOnTokenMultipleArr(...inAttributes: any[]) {
+    if (!Array.isArray(inAttributes)) {
+      throw error('removeEffectFromIdOnTokenMultipleArr | inAttributes must be of type array');
+    }
+    const [effectIds, uuid] = inAttributes;
+    const result = await (<EffectInterface>this.effectInterface)._effectHandler.removeEffectFromIdOnTokenMultiple(
+      effectIds,
+      uuid,
+    );
+    return result;
+  },
+
   async toggleEffectFromIdOnTokenArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
       throw error('addEffectOnTokenArr | inAttributes must be of type array');
@@ -261,6 +332,18 @@ const API = {
     const result = await (<EffectInterface>this.effectInterface)._effectHandler.findEffectByNameOnToken(
       effectName,
       uuid,
+    );
+    return result;
+  },
+
+  async addActiveEffectOnTokenArr(...inAttributes: any[]) {
+    if (!Array.isArray(inAttributes)) {
+      throw error('addActiveEffectOnTokenArr | inAttributes must be of type array');
+    }
+    const [tokenId, activeEffectData] = inAttributes;
+    const result = (<EffectInterface>this.effectInterface)._effectHandler.addActiveEffectOnToken(
+      <string>tokenId,
+      activeEffectData,
     );
     return result;
   },
@@ -330,22 +413,22 @@ const API = {
   // ======================
   /*
   async addEffectOnActor(actorId: string, effectName: string, effect: Effect) {
-    const result = await API.effectInterface.addEffectOnActor(effectName, <string>actorId, effect);
+    const result = await (<EffectInterface>this.effectInterface).addEffectOnActor(effectName, <string>actorId, effect);
     return result;
-  }.
+  },
 
   async findEffectByNameOnActor(actorId: string, effectName: string): Promise<ActiveEffect | null> {
-    const result = await API.effectInterface.findEffectByNameOnActor(effectName, <string>actorId);
+    const result = await (<EffectInterface>this.effectInterface).findEffectByNameOnActor(effectName, <string>actorId);
     return result;
   },
 
   async hasEffectAppliedOnActor(actorId: string, effectName: string, includeDisabled:boolean) {
-    const result = await API.effectInterface.hasEffectAppliedOnActor(effectName, <string>actorId, includeDisabled);
+    const result = (<EffectInterface>this.effectInterface).hasEffectAppliedOnActor(effectName, <string>actorId, includeDisabled);
     return result;
   },
 
   async hasEffectAppliedFromIdOnActor(actorId: string, effectId: string, includeDisabled:boolean) {
-    const result = await API.effectInterface.hasEffectAppliedFromIdOnActor(effectId, <string>actorId, includeDisabled);
+    const result = (<EffectInterface>this.effectInterface).hasEffectAppliedFromIdOnActor(effectId, <string>actorId, includeDisabled);
     return result;
   },
 
@@ -356,7 +439,7 @@ const API = {
     forceEnabled?: boolean,
     forceDisabled?: boolean,
   ) {
-    const result = await API.effectInterface.toggleEffectFromIdOnActor(
+    const result = await (<EffectInterface>this.effectInterface).toggleEffectFromIdOnActor(
       effectId,
       <string>actorId,
       alwaysDelete,
@@ -366,18 +449,18 @@ const API = {
     return result;
   },
 
-  async addActiveEffectOnActor(actorId: string, activeEffect: ActiveEffect) {
-    const result = API.effectInterface.addActiveEffectOnActor(<string>actorId, activeEffect.data);
+  async addActiveEffectOnActor(actorId: string, activeEffectData: ActiveEffectData) {
+    const result = (<EffectInterface>this.effectInterface).addActiveEffectOnActor(<string>actorId, activeEffectData);
     return result;
   },
 
-  static async removeEffectOnActor(actorId: string, effectName: string) {
-    const result = await API.effectInterface.removeEffectOnActor(effectName, <string>actorId);
+  async removeEffectOnActor(actorId: string, effectName: string) {
+    const result = await (<EffectInterface>this.effectInterface).removeEffectOnActor(effectName, <string>actorId);
     return result;
-  }
+  },
 
   async removeEffectFromIdOnActor(actorId: string, effectId: string) {
-    const result = await API.effectInterface.removeEffectFromIdOnActor(effectId, <string>actorId);
+    const result = await (<EffectInterface>this.effectInterface).removeEffectFromIdOnActor(effectId, <string>actorId);
     return result;
   },
   */
@@ -386,22 +469,30 @@ const API = {
   // ======================
 
   async addEffectOnToken(tokenId: string, effectName: string, effect: Effect) {
-    const result = await this.effectInterface.addEffectOnToken(effectName, <string>tokenId, effect);
+    const result = await (<EffectInterface>this.effectInterface).addEffectOnToken(effectName, <string>tokenId, effect);
     return result;
   },
 
   async findEffectByNameOnToken(tokenId: string, effectName: string): Promise<ActiveEffect | null> {
-    const result = await this.effectInterface.findEffectByNameOnToken(effectName, <string>tokenId);
+    const result = await (<EffectInterface>this.effectInterface).findEffectByNameOnToken(effectName, <string>tokenId);
     return result;
   },
 
   async hasEffectAppliedOnToken(tokenId: string, effectName: string, includeDisabled: boolean) {
-    const result = await this.effectInterface.hasEffectAppliedOnToken(effectName, <string>tokenId, includeDisabled);
+    const result = (<EffectInterface>this.effectInterface).hasEffectAppliedOnToken(
+      effectName,
+      <string>tokenId,
+      includeDisabled,
+    );
     return result;
   },
 
   async hasEffectAppliedFromIdOnToken(tokenId: string, effectId: string, includeDisabled: boolean) {
-    const result = await this.effectInterface.hasEffectAppliedFromIdOnToken(effectId, <string>tokenId, includeDisabled);
+    const result = (<EffectInterface>this.effectInterface).hasEffectAppliedFromIdOnToken(
+      effectId,
+      <string>tokenId,
+      includeDisabled,
+    );
     return result;
   },
 
@@ -412,7 +503,7 @@ const API = {
     forceEnabled?: boolean,
     forceDisabled?: boolean,
   ) {
-    const result = await this.effectInterface.toggleEffectFromIdOnToken(
+    const result = await (<EffectInterface>this.effectInterface).toggleEffectFromIdOnToken(
       effectId,
       <string>tokenId,
       alwaysDelete,
@@ -422,23 +513,34 @@ const API = {
     return result;
   },
 
-  async addActiveEffectOnToken(tokenId: string, activeEffect: ActiveEffect) {
-    const result = this.effectInterface.addActiveEffectOnToken(<string>tokenId, activeEffect.data);
+  async addActiveEffectOnToken(tokenId: string, activeEffectData: ActiveEffectData) {
+    const result = await (<EffectInterface>this.effectInterface).addActiveEffectOnToken(
+      <string>tokenId,
+      activeEffectData,
+    );
     return result;
   },
 
   async removeEffectOnToken(tokenId: string, effectName: string) {
-    const result = await this.effectInterface.removeEffectOnToken(effectName, <string>tokenId);
+    const result = await (<EffectInterface>this.effectInterface).removeEffectOnToken(effectName, <string>tokenId);
     return result;
   },
 
   async removeEffectFromIdOnToken(tokenId: string, effectId: string) {
-    const result = await this.effectInterface.removeEffectFromIdOnToken(effectId, <string>tokenId);
+    const result = await (<EffectInterface>this.effectInterface).removeEffectFromIdOnToken(effectId, <string>tokenId);
+    return result;
+  },
+
+  async removeEffectFromIdOnTokenMultiple(tokenId: string, effectIds: string[]) {
+    const result = await (<EffectInterface>this.effectInterface).removeEffectFromIdOnTokenMultiple(
+      effectIds,
+      <string>tokenId,
+    );
     return result;
   },
 
   async updateEffectFromIdOnToken(tokenId: string, effectId: string, origin, overlay, effectUpdated: Effect) {
-    const result = await this.effectInterface.updateEffectFromIdOnToken(
+    const result = await (<EffectInterface>this.effectInterface).updateEffectFromIdOnToken(
       effectId,
       tokenId,
       origin,
@@ -449,7 +551,7 @@ const API = {
   },
 
   async updateEffectFromNameOnToken(tokenId: string, effectName: string, origin, overlay, effectUpdated: Effect) {
-    const result = await this.effectInterface.updateEffectFromNameOnToken(
+    const result = await (<EffectInterface>this.effectInterface).updateEffectFromNameOnToken(
       effectName,
       tokenId,
       origin,
@@ -466,7 +568,7 @@ const API = {
     overlay,
     effectUpdated: ActiveEffectData,
   ) {
-    const result = await this.effectInterface.updateActiveEffectFromIdOnToken(
+    const result = await (<EffectInterface>this.effectInterface).updateActiveEffectFromIdOnToken(
       effectId,
       tokenId,
       origin,
@@ -483,7 +585,7 @@ const API = {
     overlay,
     effectUpdated: ActiveEffectData,
   ) {
-    const result = await this.effectInterface.updateActiveEffectFromNameOnToken(
+    const result = await (<EffectInterface>this.effectInterface).updateActiveEffectFromNameOnToken(
       effectName,
       tokenId,
       origin,

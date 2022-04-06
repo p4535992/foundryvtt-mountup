@@ -17,6 +17,8 @@ import { initHooks, readyHooks, setupHooks } from './module/module';
 import { registerSettings } from './module/settings';
 import { game } from './module/settings';
 import CONSTANTS from './module/constants';
+import API from './module/api';
+import { dialogWarning, error } from './module/lib/lib';
 
 /* ------------------------------------ */
 /* Initialize module					*/
@@ -53,9 +55,26 @@ Hooks.once('ready', () => {
     );
     return;
   }
-  // if (game.modules.get('mountup')?.active && game.user?.isGM) {
-  //   ui.notifications?.warn(`The 'mountup', is not needed anymore just use '${CONSTANTS.MODULE_NAME}'`);
-  // }
+  if (!game.modules.get('lib-wrapper')?.active && game.user?.isGM) {
+    let word = 'install and activate';
+    if (game.modules.get('lib-wrapper')) word = 'activate';
+    throw error(`Requires the 'libWrapper' module. Please ${word} it.`);
+  }
+  if (!game.modules.get('token-attacher')?.active && game.user?.isGM) {
+    let word = 'install and activate';
+    if (game.modules.get('token-attacher')) word = 'activate';
+    throw error(`Requires the 'token-attacher' module. Please ${word} it.`);
+  }
+  if (!game.modules.get('token-z')?.active && game.user?.isGM) {
+    let word = 'install and activate';
+    if (game.modules.get('token-z')) word = 'activate';
+    throw error(`Requires the 'token-z' module. Please ${word} it.`);
+  }
+  if (game.modules.get('mountup')?.active && game.user?.isGM) {
+    dialogWarning(
+      `With 'mountup' module enabled and active. The module "Mount Up" breaks the API.`,
+    );
+  }
 
   readyHooks();
 });
@@ -63,6 +82,46 @@ Hooks.once('ready', () => {
 /* ------------------------------------ */
 /* Other Hooks							*/
 /* ------------------------------------ */
+export interface MountUpModuleData {
+  api: typeof API;
+  socket: any;
+}
+
+/**
+ * Initialization helper, to set API.
+ * @param api to set to game module.
+ */
+export function setApi(api: typeof API): void {
+  const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as MountUpModuleData;
+  data.api = api;
+}
+
+/**
+ * Returns the set API.
+ * @returns Api from games module.
+ */
+export function getApi(): typeof API {
+  const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as MountUpModuleData;
+  return data.api;
+}
+
+/**
+ * Initialization helper, to set Socket.
+ * @param socket to set to game module.
+ */
+export function setSocket(socket: any): void {
+  const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as MountUpModuleData;
+  data.socket = socket;
+}
+
+/*
+ * Returns the set socket.
+ * @returns Socket from games module.
+ */
+export function getSocket() {
+  const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as MountUpModuleData;
+  return data.socket;
+}
 
 Hooks.once('libChangelogsReady', function () {
   //@ts-ignore
@@ -77,12 +136,8 @@ Hooks.once('libChangelogsReady', function () {
   libChangelogs.register(
     CONSTANTS.MODULE_NAME,
     `
-  - Auto update of the elevation parameter of the rider when mount and dismount, so the elevation of the rider is always syn with the elevation of the mount useful for flying mount with levels.
-  - New active effect management for add and remove custom active effect when mount and dismount, you mount a tank ? you got some active effect on the defense !
-  - Add token magic effect for apply the "flying" effect, for when a mount is set to be a flying one "just a token amgic effect"
-  - Set up for the new token attacher parameters for the mount up macro "Add _canMoveConstrained_ flag and API to set this flag so a attached element is allowed to move within area of base token. This is only supported for Tokens for now."
-  - Abbandoned support for 0.8.9
-  `,
+    - Some bug fix
+    `,
     'minor',
   );
 });

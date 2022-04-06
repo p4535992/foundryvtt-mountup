@@ -70,7 +70,10 @@ export class MountHud {
 
   static addDismountButton(html, hudToken) {
     const rider: Token = findTokenById(hudToken._id);
-    const mount = findTokenById(<string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount));
+    const mountId = <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+      // TODO to remove
+      || <string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+    const mount = findTokenById(mountId);
     let button = this.buildButton(html, `Dismount ${hudToken.name} from ${mount.name}`);
     button = this.addSlash(button);
 

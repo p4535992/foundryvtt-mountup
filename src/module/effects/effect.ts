@@ -1,9 +1,8 @@
 import { ActiveEffectDataProperties } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData';
 import { EffectChangeData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
-import { EffectDurationData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectDurationData';
 import { PropertiesToSource } from '@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes';
-import { i18n } from '../lib/lib';
-import { game } from '../settings';
+import { duplicateExtended, i18n } from '../lib/lib';
+import { canvas, game } from '../settings';
 
 /**
  * Data class for defining an effect
@@ -197,7 +196,32 @@ export default class Effect {
   // =============================================
 
   _handleIntegrations() {
-    const arrChanges = this.changes || [];
+    const arrChanges = this?.changes || [];
+
+    if (this.atlChanges.length > 0) {
+      for (const atlChange of this.atlChanges) {
+        if (arrChanges.filter((e) => e.key === atlChange.key).length <= 0) {
+          arrChanges.push(atlChange);
+        }
+      }
+    }
+
+    if (this.tokenMagicChanges.length > 0) {
+      for (const tokenMagicChange of this.tokenMagicChanges) {
+        if (arrChanges.filter((e) => e.key === tokenMagicChange.key).length <= 0) {
+          arrChanges.push(tokenMagicChange);
+        }
+      }
+    }
+
+    if (this.atcvChanges.length > 0) {
+      for (const atcvChange of this.atcvChanges) {
+        if (arrChanges.filter((e) => e.key === atcvChange.key).length <= 0) {
+          arrChanges.push(atcvChange);
+        }
+      }
+    }
+    /*
     if (this.atlChanges.length > 0) {
       arrChanges.push(...this.atlChanges);
     }
@@ -209,7 +233,7 @@ export default class Effect {
     if (this.atcvChanges.length > 0) {
       arrChanges.push(...this.atcvChanges);
     }
-
+    */
     return arrChanges;
   }
 
@@ -249,18 +273,21 @@ export class Constants {
 
 export class EffectSupport {
   static buildDefault(
-    effectData: any,
+    // effectData: Effect,
+    id: string,
+    name: string,
+    icon: string,
     isPassive: boolean,
-    changes: any[] = [],
-    atlChanges: any[] = [],
-    tokenMagicChanges: any[] = [],
-    atcvChanges: any[] = [],
+    changes: EffectChangeData[] = [],
+    atlChanges: EffectChangeData[] = [],
+    tokenMagicChanges: EffectChangeData[] = [],
+    atcvChanges: EffectChangeData[] = [],
   ): Effect {
     return new Effect({
-      customId: effectData.id,
-      name: i18n(effectData.name),
+      customId: id,
+      name: i18n(name),
       description: ``,
-      icon: effectData.img,
+      icon: icon,
       tint: undefined,
       seconds: 0,
       rounds: 0,
@@ -269,7 +296,7 @@ export class EffectSupport {
         {},
         {
           core: {
-            statusId: isPassive ? undefined : effectData.id,
+            statusId: isPassive ? undefined : id,
             overlay: false,
           },
           isConvenient: true,
@@ -285,20 +312,46 @@ export class EffectSupport {
     });
   }
 
-  static _handleIntegrations(changes: any[]): EffectChangeData[] {
-    let arrChanges: EffectChangeData[] = [];
-    // if (this.atlChanges.length > 0) {
-    //   arrChanges.push(...this.atlChanges);
-    // }
+  static _handleIntegrations(effect: Effect): EffectChangeData[] {
+    const arrChanges: EffectChangeData[] = effect?.changes || [];
 
-    // if (this.tokenMagicChanges.length > 0) {
-    //   arrChanges.push(...this.tokenMagicChanges);
-    // }
+    if (effect.atlChanges.length > 0) {
+      for (const atlChange of effect.atlChanges) {
+        if (arrChanges.filter((e) => e.key === atlChange.key).length <= 0) {
+          arrChanges.push(atlChange);
+        }
+      }
+    }
 
-    // if (this.atcvChanges.length > 0) {
-    //   arrChanges.push(...this.atcvChanges);
-    // }
-    arrChanges = EffectSupport.retrieveChangesOrderedByPriority(changes);
+    if (effect.tokenMagicChanges.length > 0) {
+      for (const tokenMagicChange of effect.tokenMagicChanges) {
+        if (arrChanges.filter((e) => e.key === tokenMagicChange.key).length <= 0) {
+          arrChanges.push(tokenMagicChange);
+        }
+      }
+    }
+
+    if (effect.atcvChanges.length > 0) {
+      for (const atcvChange of effect.atcvChanges) {
+        if (arrChanges.filter((e) => e.key === atcvChange.key).length <= 0) {
+          arrChanges.push(atcvChange);
+        }
+      }
+    }
+    /*
+    if (effect.atlChanges && effect.atlChanges.length > 0) {
+      arrChanges.push(...effect.atlChanges);
+    }
+
+    if (effect.tokenMagicChanges && effect.tokenMagicChanges.length > 0) {
+      arrChanges.push(...effect.tokenMagicChanges);
+    }
+
+    if (effect.atcvChanges && effect.atcvChanges.length > 0) {
+      arrChanges.push(...effect.atcvChanges);
+    }
+    // arrChanges = EffectSupport.retrieveChangesOrderedByPriority(arrChanges);
+    */
     return arrChanges;
   }
 
@@ -312,7 +365,37 @@ export class EffectSupport {
     return result;
   }
 
-  static _getDurationData(seconds: number, rounds: number, turns: number) {
+  static _getDurationData(seconds: number, rounds: number, turns: number, isTemporary: boolean) {
+    const isPassive = !isTemporary;
+    if (game.combat) {
+      if (isPassive) {
+        return {
+          startTime: game.time.worldTime,
+          startRound: 0,
+          startTurn: 0,
+        };
+      } else {
+        return {
+          startRound: game.combat.round,
+          rounds: EffectSupport._getCombatRounds(seconds, rounds),
+          turns: turns,
+        };
+      }
+    } else {
+      if (isPassive) {
+        return {
+          startTime: game.time.worldTime,
+          startRound: 0,
+          startTurn: 0,
+        };
+      } else {
+        return {
+          startTime: game.time.worldTime,
+          seconds: EffectSupport._getSeconds(seconds, rounds),
+        };
+      }
+    }
+    /*
     if (game.combat) {
       return {
         startRound: game.combat.round,
@@ -325,6 +408,7 @@ export class EffectSupport {
         seconds: EffectSupport._getSeconds(seconds, rounds),
       };
     }
+    */
   }
 
   static _getCombatRounds(seconds: number, rounds: number) {
@@ -399,6 +483,7 @@ export class EffectSupport {
         <number>p.duration.seconds,
         <number>p.duration.rounds,
         <number>p.duration.turns,
+        !isPassive,
       ),
       flags: foundry.utils.mergeObject(p.flags, {
         core: {
@@ -414,23 +499,67 @@ export class EffectSupport {
       origin: origin ? origin : p.origin ? p.origin : '', // MOD 4535992
       transfer: p.transfer ?? false,
       //changes: p.changes, // MOD 4535992
-      changes: EffectSupport._handleIntegrations(p.changes),
+      changes: p.changes,
     });
   }
 
-  static retrieveChangesOrderedByPriority(changesTmp: EffectChangeData[]) {
-    // Organize non-disabled effects by their application priority
-    const changes = <EffectChangeData[]>changesTmp.reduce((changes) => {
-      return changes.map((c: EffectChangeData) => {
-        const c2 = <EffectChangeData>duplicate(c);
-        // c2.effect = e;
-        c2.priority = <number>c2.priority ?? c2.mode * 10;
-        return c2;
-      });
-    }, []);
-    changes.sort((a, b) => <number>a.priority - <number>b.priority);
-    return changes;
+  /**
+   * Converts the effect data to an active effect data object
+   *
+   * @param {object} params - the params to use for conversion
+   * @param {string} params.origin - the origin to add to the effect
+   * @param {boolean} params.overlay - whether the effect is an overlay or not
+   * @returns {object} The active effect data object for this effect
+   */
+  public static convertToActiveEffectData(effect: Effect): Record<string, unknown> {
+    const isPassive = !effect.isTemporary;
+    const myid = effect._id ? effect._id : effect.flags?.core?.statusId ? effect.flags.core.statusId : undefined;
+    const myoverlay = effect.overlay ? effect.overlay : effect.flags?.core?.overlay ? effect.flags.core.overlay : false;
+    return {
+      id: myid,
+      name: i18n(effect.name),
+      label: i18n(effect.name),
+      description: i18n(effect.description), // 4535992 this not make sense, but it doesn't hurt either
+      icon: effect.icon,
+      tint: effect.tint,
+      duration: EffectSupport._getDurationData(effect.seconds, effect.rounds, effect.turns, effect.isTemporary),
+      flags: foundry.utils.mergeObject(effect.flags, {
+        core: {
+          statusId: isPassive ? undefined : myid,
+          overlay: myoverlay,
+        },
+        isConvenient: true,
+        convenientDescription: i18n(effect.description),
+        dae: EffectSupport._isEmptyObject(effect.dae)
+          ? isPassive
+            ? { stackable: false, specialDuration: [], transfer: true }
+            : {}
+          : effect.dae,
+      }),
+      origin: effect.origin ? effect.origin : 'None', // MOD 4535992
+      transfer: isPassive ? false : effect.transfer,
+      //changes: this.changes, // MOD 4535992
+      changes: EffectSupport._handleIntegrations(effect),
+      // 4535992 these are not under data
+      // isDisabled: this.isDisabled ?? false,
+      // isTemporary: this.isTemporary ?? false,
+      // isSuppressed: this.isSuppressed ?? false,
+    };
   }
+
+  // static retrieveChangesOrderedByPriority(changesTmp: EffectChangeData[]) {
+  //   // Organize non-disabled effects by their application priority
+  //   const changes = <EffectChangeData[]>changesTmp.reduce((changes) => {
+  //     return changes.map((c: EffectChangeData) => {
+  //       const c2 = <EffectChangeData>duplicateExtended(c);
+  //       // c2.effect = e;
+  //       c2.priority = <number>c2.priority ?? c2.mode * 10;
+  //       return c2;
+  //     });
+  //   }, []);
+  //   changes.sort((a, b) => <number>a.priority - <number>b.priority);
+  //   return changes;
+  // }
 
   static retrieveChangesOrderedByPriorityFromAE(effectEntity: ActiveEffect) {
     // Organize non-disabled effects by their application priority
@@ -441,7 +570,8 @@ export class EffectSupport {
       return changes.concat(
         //@ts-ignore
         (<EffectChangeData[]>e.data.changes).map((c: EffectChangeData) => {
-          const c2 = <EffectChangeData>duplicate(c);
+          //@ts-ignore
+          const c2 = <EffectChangeData>duplicateExtended(c);
           // c2.effect = e;
           c2.priority = <number>c2.priority ?? c2.mode * 10;
           return c2;
@@ -450,5 +580,30 @@ export class EffectSupport {
     }, []);
     changes.sort((a, b) => <number>a.priority - <number>b.priority);
     return changes;
+  }
+
+  static prepareOriginForToken(tokenOrTokenId: Token | string): string {
+    let token: Token;
+    if (typeof tokenOrTokenId === 'string' || tokenOrTokenId instanceof String) {
+      const tokens = <Token[]>canvas.tokens?.placeables;
+      token = <Token>tokens.find((token) => token.id == <string>tokenOrTokenId);
+    } else {
+      token = tokenOrTokenId;
+    }
+    const sceneId = (token?.scene && token.scene.id) || canvas.scene?.id;
+    // const origin = `Scene.${sceneId}.Token.${token.id}`;
+    const origin = token.actor ? `Actor.${token.actor?.id}` : `Scene.${sceneId}.Token.${token.id}`;
+    return origin;
+  }
+
+  static prepareOriginForActor(actorOrAcotrId: Actor | string): string {
+    let actor: Actor;
+    if (typeof actorOrAcotrId === 'string' || actorOrAcotrId instanceof String) {
+      actor = <Actor>game.actors?.get(<string>actorOrAcotrId);
+    } else {
+      actor = actorOrAcotrId;
+    }
+    const origin = `Actor.${actor.id}`;
+    return origin;
   }
 }
