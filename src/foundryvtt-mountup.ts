@@ -134,7 +134,7 @@ Hooks.once('libChangelogsReady', function () {
   libChangelogs.register(
     CONSTANTS.MODULE_NAME,
     `
-    - Some bug fix
+    - Some bug fix and clean up
     `,
     'minor',
   );
