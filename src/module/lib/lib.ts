@@ -1,10 +1,9 @@
-import EmbeddedCollection from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs';
-import { ActorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
+import type EmbeddedCollection from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs';
+import type { ActorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
 import API from '../api';
 import CONSTANTS from '../constants';
 import Effect, { EffectSupport } from '../effects/effect';
 import { MountupEffectDefinitions } from '../mountup-effect-definition';
-import { canvas, game } from '../settings';
 import { ActiveTokenMountUpData } from '../utils';
 
 // =============================
@@ -249,7 +248,7 @@ export function getFirstPlayerTokenSelected(): Token | null {
     return null;
     //}
   }
-  return selectedTokens[0];
+  return <Token>selectedTokens[0];
 }
 
 /**
@@ -266,7 +265,7 @@ export function getFirstPlayerToken(): Token | null {
     return null;
   }
   // If exactly one token is selected, take that
-  token = controlled[0];
+  token = <Token>controlled[0];
   if (!token) {
     if (!controlled.length || controlled.length == 0) {
       // If no token is selected use the token of the users character

@@ -2,7 +2,6 @@ import API from './api';
 import { MountHud } from './mountHud';
 import { MountManager } from './mountManager';
 import { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs';
-import { canvas, game } from './settings';
 import CONSTANTS from './constants';
 import { debug, getElevationToken, warn } from './lib/lib';
 import HOOKS from './hooks';
@@ -201,7 +200,7 @@ export const readyHooks = async () => {
   });
 
   //@ts-ignore
-  if (game.modules.get('tokenmagic')?.active && TokenMagic) {
+  if (game.modules.get('tokenmagic')?.active && window.TokenMagic) {
     const params = MountupEffectDefinitions.tokenMagicParamsFlying(CONSTANTS.TM_FLYING);
     //@ts-ignore
     if (!TokenMagic.getPreset(CONSTANTS.TM_FLYING)) {

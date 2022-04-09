@@ -15,9 +15,8 @@
 import { preloadTemplates } from './module/preloadTemplates';
 import { initHooks, readyHooks, setupHooks } from './module/module';
 import { registerSettings } from './module/settings';
-import { game } from './module/settings';
 import CONSTANTS from './module/constants';
-import API from './module/api';
+import type API from './module/api';
 import { dialogWarning, error } from './module/lib/lib';
 
 /* ------------------------------------ */
@@ -71,7 +70,7 @@ Hooks.once('ready', () => {
     throw error(`Requires the 'token-z' module. Please ${word} it.`);
   }
   if (game.modules.get('mountup')?.active && game.user?.isGM) {
-    dialogWarning(`With 'mountup' module enabled and active. The module "Mount Up" breaks the API.`);
+    dialogWarning(`Remove 'mountup' module. The module "Mount Up" breaks the API.`);
   }
 
   readyHooks();
@@ -134,7 +133,7 @@ Hooks.once('libChangelogsReady', function () {
   libChangelogs.register(
     CONSTANTS.MODULE_NAME,
     `
-    - Some bug fix and clean up
+    - Some minor update
     `,
     'minor',
   );

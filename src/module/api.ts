@@ -1,17 +1,16 @@
 import EmbeddedCollection from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs';
 import { EffectChangeData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData';
-import {
+import type {
   ActiveEffectData,
   ActorData,
 } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
 import CONSTANTS from './constants';
-import Effect, { EffectSupport } from './effects/effect';
+import type Effect from './effects/effect';
 import EffectInterface from './effects/effect-interface';
 import { error, getElevationToken } from './lib/lib';
 import { MountManager } from './mountManager';
 import { MountupEffectDefinitions } from './mountup-effect-definition';
 import { findTokenById, findTokenByName, MountUpFlags } from './utils';
-import { game } from './settings';
 
 const API = {
   effectInterface: EffectInterface,

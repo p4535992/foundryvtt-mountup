@@ -1,5 +1,4 @@
 import CONSTANTS from './constants';
-import { game } from './settings';
 
 /**
  * Provides functionality for interaction with module settings

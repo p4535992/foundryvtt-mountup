@@ -1,3 +1,7 @@
+## 3.2.14
+
+- Some minor update
+
 ## 3.2.12-13
 
 - Some bug fix and clean up

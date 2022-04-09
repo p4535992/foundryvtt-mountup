@@ -7,7 +7,6 @@ import {
   moveToken,
 } from './tokenAttacherHelper';
 import { findTokenById, MountUpFlags, getTokenCenter, riderLock, riderX, riderY, socketAction } from './utils';
-import { canvas, game } from './settings';
 import { error, log, warn } from './lib/lib';
 import CONSTANTS from './constants';
 

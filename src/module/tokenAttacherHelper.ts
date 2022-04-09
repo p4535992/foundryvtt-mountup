@@ -1,7 +1,6 @@
 import CONSTANTS from './constants';
 import { getElevationToken, manageAEOnDismountUp, manageAEOnMountUp } from './lib/lib';
 import { MountManager } from './mountManager';
-import { canvas, game } from './settings';
 import { SettingsForm } from './settings-form';
 import { MountUpFlags } from './utils';
 
@@ -15,7 +14,7 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
       return ui.notifications?.error("Can't mount more then one token!");
     }
 
-    const mount = targets[0];
+    const mount = <Token>targets[0];
     const newMountCoords = {
       x: mount.document.data.x ? mount.document.data.x : mount.x,
       y: mount.document.data.y ? mount.document.data.y : mount.y,
@@ -91,9 +90,9 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 
     let message = <string>game.settings.get(CONSTANTS.MODULE_NAME, 'mount-message')
       ? <string>game.settings.get(CONSTANTS.MODULE_NAME, 'mount-message')
-      : `I mount this ${targets[0].name}`;
+      : `I mount this ${targets[0]?.name}`;
     message = message.replace('{rider}', riderToken.name);
-    message = message.replace('{mount}', targets[0].name);
+    message = message.replace('{mount}', <string>targets[0]?.name);
 
     const icon = `<span class="fa-stack">
         <i class="fas ${SettingsForm.getIconClass()} fa-stack-1x"></i>
@@ -194,7 +193,7 @@ export const dismountDropTargetTA = async function (mountToken: Token, riderToke
     await window['tokenAttacher'].detachElementsFromToken(targets, mountToken, true);
     //dismountDropAll(token);
     for (let i = 0; i < targets.length; i++) {
-      const targ: Token = targets[i];
+      const targ = <Token>targets[i];
 
       let message = <string>game.settings.get(CONSTANTS.MODULE_NAME, 'dismount-message')
         ? <string>game.settings.get(CONSTANTS.MODULE_NAME, 'dismount-message')
@@ -283,13 +282,13 @@ export const moveTokens = async function (riderTokens: Token[], mountToken: Toke
   if (game.user?.isGM && riderTokens.length > 0) {
     const pos = { x: mountToken.data.x, y: mountToken.data.y }; //riderToken.document.data.getLocalPosition(canvas.app?.stage);
     const mid = {
-      x: riderTokens[0].data.x, //<number>canvas.tokens?.controlled[0].data.x,
-      y: riderTokens[0].data.y, //<number>canvas.tokens?.controlled[0].data.y
+      x: <number>riderTokens[0]?.data.x, //<number>canvas.tokens?.controlled[0].data.x,
+      y: <number>riderTokens[0]?.data.y, //<number>canvas.tokens?.controlled[0].data.y
     };
     // for (let i = 1; i < <number>canvas.tokens?.controlled.length; i++) {
     for (let i = 1; i < <number>riderTokens.length; i++) {
-      mid.x += riderTokens[i].data.x; // <number>canvas.tokens?.controlled[i].data.x;
-      mid.y += riderTokens[i].data.y; // <number>canvas.tokens?.controlled[i].data.y;
+      mid.x += <number>riderTokens[i]?.data.x; // <number>canvas.tokens?.controlled[i].data.x;
+      mid.y += <number>riderTokens[i]?.data.y; // <number>canvas.tokens?.controlled[i].data.y;
     }
     mid.x = mid.x / riderTokens.length; // (mid.x / <number>canvas.tokens?.controlled.length);
     mid.y = mid.y / riderTokens.length; // (mid.y / <number>canvas.tokens?.controlled.length);
@@ -300,7 +299,7 @@ export const moveTokens = async function (riderTokens: Token[], mountToken: Toke
     });
     const updates: any[] = [];
     for (let i = 0; i < tokens.length; i++) {
-      const t = <Token>canvas.tokens?.get(tokens[i]);
+      const t = <Token>canvas.tokens?.get(<string>tokens[i]);
       const offsetx = mid.x - t.data.x;
       const offsety = mid.y - t.data.y;
       const gridPt = <PointArray>canvas.grid?.grid?.getGridPositionFromPixels(pos.x - offsetx, pos.y - offsety);

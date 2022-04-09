@@ -1,6 +1,5 @@
-import { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
-import Effect from './effects/effect';
-import { canvas, game } from './settings';
+import type { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
+import type Effect from './effects/effect';
 
 /**
  * Flag Info

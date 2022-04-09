@@ -1,7 +1,6 @@
 import { MountManager } from './mountManager';
 import { SettingsForm } from './settings-form';
 import { findTokenById, MountUpFlags } from './utils';
-import { canvas, game } from './settings';
 import CONSTANTS from './constants';
 
 /**
