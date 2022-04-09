@@ -41,9 +41,7 @@ This module uses the [token-z](https://github.com/theripper93/token-z) library l
 
 ## Known Issue\Limitation
 
-- This module can be a lot better with this feature asked to the [token-attacher](https://github.com/KayelGee/token-attacher) developer i invite you to support the request of this feature [[Feature Request] Allow the rider token to be moved as long as it does not leave the area of mount token](https://github.com/KayelGee/token-attacher/issues/67), sorry not smart enough for understand how can i do that by myself...
-- If you scale the token mount the rider position can be a little out of coordinates... i can ignore this if a solve the first point
-- The multi rider functionality on the same mount work partially, but it should be enough for most use cases... i can ignore this if a solve the first point
+- The multi rider functionality on the same mount work partially, but it should be enough for most use cases...
 
 ## Settings
 
