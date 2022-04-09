@@ -1,7 +1,7 @@
 import API from './api';
 import { MountHud } from './mountHud';
 import { MountManager } from './mountManager';
-import { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs';
+import type { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs';
 import CONSTANTS from './constants';
 import { debug, getElevationToken, warn } from './lib/lib';
 import HOOKS from './hooks';
@@ -190,12 +190,12 @@ export const readyHooks = async () => {
     }
   });
 
-  Hooks.on('preDeleteToken', async (scene, token: Token) => {
-    const isPlayerOwned = <boolean>token.document.isOwner;
+  Hooks.on('preDeleteToken', async (tokenDocument: TokenDocument, data:any, updateData: TokenData) => {
+    const isPlayerOwned = <boolean>tokenDocument.isOwner;
     if (!game.user?.isGM && !isPlayerOwned) {
       return;
     }
-    await MountManager.handleTokenDelete(token.id);
+    await MountManager.handleTokenDelete(<string>tokenDocument.id);
     //return true;
   });
 
