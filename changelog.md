@@ -1,4 +1,8 @@
 
+### 3.2.17
+
+- Bug fix on the elevation method utility
+
 ### 3.2.16
 
 - Add checker on 'isAncestor' method
