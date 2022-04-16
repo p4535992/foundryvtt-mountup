@@ -678,11 +678,19 @@ export class MountManager {
   static isAncestor(childId: string, ancestorId: string) {
     if (this.isaRider(childId)) {
       const child: Token = findTokenById(childId);
+      if(!child){
+        warn(`No child found on 'isAncestor' for id '${childId}' for ancestor '${ancestorId}'`, true);
+        return false;
+      }
       const parentId =
         <string>child.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
         // TODO to remove
         <string>child.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
       const parent: Token = findTokenById(parentId);
+      if(!parent){
+        warn(`No parent found on 'isAncestor' for id '${parentId}' for ancestor '${ancestorId}'`, true);
+        return false;
+      }
       if (parent.id == ancestorId) {
         return true;
       }
