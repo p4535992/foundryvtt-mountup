@@ -154,6 +154,8 @@ For now no automatic UI is prepared (and don't think we need one) just created  
 
 Some functionality is exposed to macros for repeatable usage. All macros will either accept a token ID or name (case insensitive).
 
+**NOTE:** It's advisable to use the `game.modules.get('foundryvtt-mountup').api.` insrtead `MountUp.` for best practices
+
 #### Macro to Mounting
 
 You can mount a rider to a mount using the following syntax:
@@ -181,6 +183,11 @@ You can have a mount drop its rider by passing the mount's name or id:
 You can have a mount drop its rider by passing the mount's name or id:
 
 `MountUp.toggleMount('RiderNameOrId', 'MountNameOrId')`
+
+
+#### Macro to clean up flags on token and actor
+
+`game.modules.get('foundryvtt-mountup').api.cleanUpTokenSelected()`
 
 # Build
 

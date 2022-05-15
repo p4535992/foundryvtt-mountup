@@ -5,7 +5,7 @@ import type {
 import CONSTANTS from './constants';
 import type Effect from './effects/effect';
 import EffectInterface from './effects/effect-interface';
-import { error, getElevationToken } from './lib/lib';
+import { error, getElevationToken, info, warn } from './lib/lib';
 import { MountManager } from './mountManager';
 import { MountupEffectDefinitions } from './mountup-effect-definition';
 import { findTokenById, findTokenByName, MountUpFlags } from './utils';
@@ -627,6 +627,44 @@ const API = {
       }
       //@ts-ignore
       await TokenMagic.deleteFilters(token, CONSTANTS.TM_FLYING);
+    }
+  },
+
+  async cleanUpTokenSelected() {
+    const tokens = <Token[]>canvas.tokens?.controlled;
+    if (!tokens || tokens.length === 0) {
+      warn(`No tokens are selected`, true);
+      return;
+    }
+    for (const token of tokens) {
+      if (token && token.document) {
+        if (getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
+          const p = getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`);
+          for (const key in p) {
+            const senseOrConditionIdKey = key;
+            const senseOrConditionValue = <any>p[key];
+            await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+            info(`Cleaned up token '${token.name}'`, true);
+          }
+        }
+      } else {
+        warn(`No token found on the canvas for id '${token.id}'`, true);
+      }
+    }
+    for (const token of tokens) {
+      if (token && token.actor) {
+        if (getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
+          const p = getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`);
+          for (const key in p) {
+            const senseOrConditionIdKey = key;
+            const senseOrConditionValue = <any>p[key];
+            await token.actor.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+            info(`Cleaned up actor '${token.name}'`, true);
+          }
+        }
+      } else {
+        warn(`No token found on the canvas for id '${token.id}'`, true);
+      }
     }
   },
 };

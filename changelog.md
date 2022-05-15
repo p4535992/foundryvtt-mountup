@@ -1,3 +1,6 @@
+### 3.2.18
+
+- Add `cleanUpTokenSelected` to the API
 
 ### 3.2.17
 
