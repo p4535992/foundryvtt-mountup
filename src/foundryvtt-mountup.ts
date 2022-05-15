@@ -133,7 +133,7 @@ Hooks.once('libChangelogsReady', function () {
   libChangelogs.register(
     CONSTANTS.MODULE_NAME,
     `
-    - Some minor update
+    - Add icleanUpTokenSelectedi to the API
     `,
     'minor',
   );

@@ -85,6 +85,12 @@
   ],
   "flags": {
     "manifestPlusVersion": "1.2.0",
-    "allowBugReporter": true
+    "allowBugReporter": true,
+    "conflicts": [
+      {
+        "name": "mountup",
+        "description": "The 'mountup', is not needed anymore just use 'foundryvtt-mountup'."
+      }
+    ]
   }
 }
