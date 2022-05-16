@@ -644,8 +644,9 @@ const API = {
             const senseOrConditionIdKey = key;
             const senseOrConditionValue = <any>p[key];
             await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
-            info(`Cleaned up token '${token.name}'`, true);
           }
+          await window['tokenAttacher'].detachAllElementsFromToken(token, true);
+          info(`Cleaned up token '${token.name}'`, true);
         }
       } else {
         warn(`No token found on the canvas for id '${token.id}'`, true);
@@ -659,8 +660,8 @@ const API = {
             const senseOrConditionIdKey = key;
             const senseOrConditionValue = <any>p[key];
             await token.actor.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
-            info(`Cleaned up actor '${token.name}'`, true);
           }
+          info(`Cleaned up actor '${token.name}'`, true);
         }
       } else {
         warn(`No token found on the canvas for id '${token.id}'`, true);
