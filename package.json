@@ -3,7 +3,7 @@
   "name": "foundryvtt-mountup",
   "title": "FoundryVTT Mount Up!",
   "description": "Allows tokens to carry or be carried by other tokens. This is completely system agnostic, and fully customizable to fit right into your game.",
-  "version": "3.2.19",
+  "version": "3.2.20",
   "scripts": {
     "package": "gulp package",
     "build": "gulp build && gulp link",
@@ -17,7 +17,7 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "@league-of-foundry-developers/foundry-vtt-types": "^9.255.3",
+    "@league-of-foundry-developers/foundry-vtt-types": "^9.269.0",
     "@types/jquery": "^3.5.14",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",

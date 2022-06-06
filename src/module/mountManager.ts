@@ -1,11 +1,5 @@
 import { SettingsForm } from './settings-form';
-import {
-  detachAllFromTokenTA,
-  dismountDropAllTA,
-  dismountDropTargetTA,
-  mountUpTA,
-  moveToken,
-} from './tokenAttacherHelper';
+import { dismountDropAllTA, dismountDropTargetTA, mountUpTA } from './tokenAttacherHelper';
 import { findTokenById, MountUpFlags, getTokenCenter, riderLock, riderX, riderY, socketAction } from './utils';
 import { error, log, warn } from './lib/lib';
 import CONSTANTS from './constants';
@@ -211,6 +205,14 @@ export class MountManager {
     await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
     await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize);
     await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted);
+
+    // ADDED 2022-06-06
+    await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove);
+    await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
+
+    if ((<any[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders))?.length <= 0) {
+      await mountToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+    }
     // MOD 4535992 FORCE SHRINK TO OTHERS RIDERS
     //let riders = <string[]>mountToken.actor.getFlag(CONSTANTS.MODULE_NAME, Flags.Riders);
     // for (const riderTmp of riders) {
@@ -678,7 +680,7 @@ export class MountManager {
   static isAncestor(childId: string, ancestorId: string) {
     if (this.isaRider(childId)) {
       const child: Token = findTokenById(childId);
-      if(!child){
+      if (!child) {
         warn(`No child found on 'isAncestor' for id '${childId}' for ancestor '${ancestorId}'`, true);
         return false;
       }
@@ -687,7 +689,7 @@ export class MountManager {
         // TODO to remove
         <string>child.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
       const parent: Token = findTokenById(parentId);
-      if(!parent){
+      if (!parent) {
         warn(`No parent found on 'isAncestor' for id '${parentId}' for ancestor '${ancestorId}'`, true);
         return false;
       }

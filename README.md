@@ -187,7 +187,15 @@ You can have a mount drop its rider by passing the mount's name or id:
 
 #### Macro to clean up flags on token and actor
 
-`game.modules.get('foundryvtt-mountup').api.cleanUpTokenSelected()`
+Select some tokens on the canvas and run the following macro.
+
+`async  game.modules.get('foundryvtt-mountup').api.cleanUpTokenSelected()`
+
+#### Macro to clean specific token and linked cactor
+
+Select some tokens on the canvas and run the following macro.
+
+`async game.modules.get('foundryvtt-mountup').api.cleanUpToken(token: Token)`
 
 # Build
 

@@ -1,6 +1,11 @@
+### 3.2.20
+
+- Bug fixing and add hud button for clean up flag from token for strange use case
+
 ### 3.2.19
 
 - Update `cleanUpTokenSelected` to the API
+- 
 ### 3.2.18
 
 - Add `cleanUpTokenSelected` to the API

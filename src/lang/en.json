@@ -81,6 +81,12 @@
         "name": "Enable debugging",
         "hint": "Prints debug messages to the console"
       }
+    },
+    "dialogCleanUp": {
+      "title": "Clean up 'Mount Up' macro",
+      "message": "This action will run a fixing macro on the curren token for clean up any information of 'Mount Up' from this token and start everything from scratch, THIS IS USEFUL FOR THE USE CASES WHERE THE FLAGS REMAIN STUCKED, are you sure about this ?",
+      "yes": "Do the clean up",
+      "no": "Cancel clean up"
     }
   }
 }

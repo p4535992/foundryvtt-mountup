@@ -190,7 +190,7 @@ export const readyHooks = async () => {
     }
   });
 
-  Hooks.on('preDeleteToken', async (tokenDocument: TokenDocument, data:any, updateData: TokenData) => {
+  Hooks.on('preDeleteToken', async (tokenDocument: TokenDocument, data: any, updateData: TokenData) => {
     const isPlayerOwned = <boolean>tokenDocument.isOwner;
     if (!game.user?.isGM && !isPlayerOwned) {
       return;

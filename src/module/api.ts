@@ -5,7 +5,7 @@ import type {
 import CONSTANTS from './constants';
 import type Effect from './effects/effect';
 import EffectInterface from './effects/effect-interface';
-import { error, getElevationToken, info, warn } from './lib/lib';
+import { error, getElevationToken, i18n, info, isStringEquals, warn } from './lib/lib';
 import { MountManager } from './mountManager';
 import { MountupEffectDefinitions } from './mountup-effect-definition';
 import { findTokenById, findTokenByName, MountUpFlags } from './utils';
@@ -21,6 +21,14 @@ const API = {
   mount(riderNameOrId: string, mountNameOrId: string) {
     const rider: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
     const mount: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
+    if (!rider) {
+      warn(`No rider with reference '${riderNameOrId}' is been found`, true);
+      return;
+    }
+    if (!mount) {
+      warn(`No mount with reference '${mountNameOrId}' is been found`, true);
+      return;
+    }
 
     const mountName = mount.name;
     const riderName = rider.name;
@@ -46,6 +54,10 @@ const API = {
    */
   dismount(riderNameOrId: string) {
     const rider: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
+    if (!rider) {
+      warn(`No rider with reference '${riderNameOrId}' is been found`, true);
+      return;
+    }
     const riderName: string = rider.name;
 
     if (rider) {
@@ -55,6 +67,10 @@ const API = {
           // TODO to remove
           <string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
         const mountToken = findTokenById(mountTokenId);
+        if (!mountToken) {
+          warn(`No mount with reference '${mountTokenId}' is been found`, true);
+          return;
+        }
         MountManager.doRemoveMount(rider, mountToken);
       } else {
         error(`Token '${riderName}' is not a rider`);
@@ -70,6 +86,10 @@ const API = {
    */
   dropRider(mountNameOrId: string) {
     const mount: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
+    if (!mount) {
+      warn(`No mount with reference '${mountNameOrId}' is been found`, true);
+      return;
+    }
     const mountName: string = mount.name;
 
     if (mount) {
@@ -79,6 +99,10 @@ const API = {
           <string[]>mount.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         for (const rider in riders) {
           const riderToken: Token = findTokenById(rider);
+          if (!riderToken) {
+            warn(`No rider with reference '${rider}' is been found`, true);
+            return;
+          }
           MountManager.doRemoveMount(riderToken, mount);
         }
       } else {
@@ -97,6 +121,14 @@ const API = {
   toggleMount(riderNameOrId: string, mountNameOrId: string) {
     const riderToken = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
     const mountToken = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
+    if (!riderToken) {
+      warn(`No rider with reference '${riderNameOrId}' is been found`, true);
+      return;
+    }
+    if (!mountToken) {
+      warn(`No mount with reference '${mountNameOrId}' is been found`, true);
+      return;
+    }
 
     if (
       riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id ||
@@ -645,7 +677,10 @@ const API = {
             const senseOrConditionValue = <any>p[key];
             await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
           }
-          await window['tokenAttacher'].detachAllElementsFromToken(token, true);
+          const attached = token.document.getFlag('token-attacher', `attached`);
+          if (attached) {
+            await window['tokenAttacher'].detachAllElementsFromToken(token, true);
+          }
           info(`Cleaned up token '${token.name}'`, true);
         }
       } else {
@@ -667,6 +702,74 @@ const API = {
         warn(`No token found on the canvas for id '${token.id}'`, true);
       }
     }
+  },
+
+  async cleanUpToken(token: Token) {
+    if (token && token.document) {
+      if (getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
+        const p = getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`);
+        for (const key in p) {
+          const senseOrConditionIdKey = key;
+          const senseOrConditionValue = <any>p[key];
+          await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+        }
+        const attached = token.document.getFlag('token-attacher', `attached`);
+        if (attached) {
+          await window['tokenAttacher'].detachAllElementsFromToken(token, true);
+        }
+        info(`Cleaned up token '${token.name}'`, true);
+      }
+    } else {
+      warn(`No token found on the canvas for id '${token.id}'`, true);
+    }
+
+    if (token && token.actor) {
+      if (getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
+        const p = getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`);
+        for (const key in p) {
+          const senseOrConditionIdKey = key;
+          const senseOrConditionValue = <any>p[key];
+          await token.actor.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+        }
+        info(`Cleaned up actor '${token.name}'`, true);
+      }
+    } else {
+      warn(`No token found on the canvas for id '${token.id}'`, true);
+    }
+  },
+
+  async cleanUpTokenDialog(token: Token) {
+    if (!token) {
+      warn(`No tokens are selected`, true);
+      return;
+    }
+    new Dialog({
+      title: i18n(`${CONSTANTS.MODULE_NAME}.dialogCleanUp.title`),
+      content: `
+      <form>
+        <div class="form-group">
+          <label>${i18n(`${CONSTANTS.MODULE_NAME}.dialogCleanUp.message`)}</label>
+        </div>
+      </form>
+      `,
+      buttons: {
+        yes: {
+          icon: "<i class='fas fa-check'></i>",
+          label: i18n(`${CONSTANTS.MODULE_NAME}.dialogCleanUp.yes`),
+          callback: async (ev) => {
+            this.cleanUpToken(token);
+          },
+        },
+        no: {
+          icon: "<i class='fas fa-times'></i>",
+          label: i18n(`${CONSTANTS.MODULE_NAME}.dialogCleanUp.no`),
+        },
+      },
+      default: 'no',
+      close: (html) => {
+        // DO NOTHING
+      },
+    }).render(true);
   },
 };
 

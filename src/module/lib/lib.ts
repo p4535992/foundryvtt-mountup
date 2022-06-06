@@ -2,7 +2,8 @@ import type EmbeddedCollection from '@league-of-foundry-developers/foundry-vtt-t
 import type { ActorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs';
 import API from '../api';
 import CONSTANTS from '../constants';
-import Effect, { EffectSupport } from '../effects/effect';
+import type Effect from '../effects/effect';
+import { EffectSupport } from '../effects/effect-support';
 import { MountupEffectDefinitions } from '../mountup-effect-definition';
 import { ActiveTokenMountUpData } from '../utils';
 
@@ -166,7 +167,7 @@ export function cleanUpString(stringToCleanUp: string) {
   }
 }
 
-export function isStringEquals(stringToCheck1: string, stringToCheck2: string, startsWith = true): boolean {
+export function isStringEquals(stringToCheck1: string, stringToCheck2: string, startsWith = false): boolean {
   if (stringToCheck1 && stringToCheck2) {
     const s1 = cleanUpString(stringToCheck1) ?? '';
     const s2 = cleanUpString(stringToCheck2) ?? '';
