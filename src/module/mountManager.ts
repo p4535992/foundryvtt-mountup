@@ -294,13 +294,16 @@ export class MountManager {
         const mount = findTokenById(mountId);
         // MOD 4535992 CHECK IF TOKEN IS ALREADY DELETED
         if (mount) {
-          await mount.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-          // TODO to remove
-          await mount.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+          MountManager.doRemoveMount(token, mount);
+          // await mount.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+          // // TODO to remove
+          // await mount.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
         }
       }
 
       if (this.isaMount(token.id)) {
+        MountManager.removeAllRiders(token);
+        /*
         const riders =
           <string[]>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
           // TODO to remove
@@ -309,13 +312,14 @@ export class MountManager {
           const rider: Token = findTokenById(riderTmp);
           // MOD 4535992 CHECK IF TOKEN IS ALREADY DELETED
           if (rider) {
-            await rider.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
-            await rider.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize);
-            // TODO to remove
-            await rider.document?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
-            await rider.document?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize);
+            // await rider.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+            // await rider.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize);
+            // // TODO to remove
+            // await rider.document?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+            // await rider.document?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize);
           }
         }
+        */
       }
 
       return true;

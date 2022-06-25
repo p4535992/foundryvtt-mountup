@@ -1,3 +1,7 @@
+### 3.2.23
+
+- Add a checking for when is been dlete a rider or a mount attached
+
 ### 3.2.21-22
 
 - Update effcts api
