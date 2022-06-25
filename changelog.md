@@ -1,3 +1,7 @@
+### 3.2.21
+
+- Update effcts api
+
 ### 3.2.20
 
 - Bug fixing and add hud button for clean up flag from token for strange use case
