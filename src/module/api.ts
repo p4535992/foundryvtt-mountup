@@ -150,7 +150,7 @@ const API = {
       throw error('removeEffectArr | inAttributes must be of type array');
     }
     const [params] = inAttributes;
-    const result = await (<EffectInterface>this.effectInterface)._effectHandler.removeEffect(params);
+    const result = await (<EffectInterface>this.effectInterface)._effectHandler.removeEffectArr(params);
     return result;
   },
 
@@ -168,7 +168,7 @@ const API = {
       throw error('addEffectArr | inAttributes must be of type array');
     }
     const [params] = inAttributes;
-    const result = await (<EffectInterface>this.effectInterface)._effectHandler.addEffect(params);
+    const result = await (<EffectInterface>this.effectInterface)._effectHandler.addEffectArr(params);
     return result;
   },
 
