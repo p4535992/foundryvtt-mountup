@@ -1,3 +1,7 @@
+### 3.2.24
+
+- Made clean up hud button always aviable for gm
+
 ### 3.2.23
 
 - Add a checking for when is been dlete a rider or a mount attached

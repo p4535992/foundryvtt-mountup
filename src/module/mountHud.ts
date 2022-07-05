@@ -30,9 +30,8 @@ export class MountHud {
         this.addRemoveRidersButton(html, hudToken);
       } else if (MountManager.isaRider(mountOrRider.id)) {
         this.addDismountButton(html, hudToken);
-      } else {
-        this.addCleanupButton(html, hudToken);
       }
+      this.addCleanupButton(html, hudToken);
     } else if (<number>canvas.tokens?.controlled.length > 1) {
       //ui.notifications.warn(`${MODULE_NAME}! : You must be sure to select only the token mount`);
       this.addMountButton(html, hudToken);
@@ -126,11 +125,12 @@ export class MountHud {
     const token = <Token>canvas.tokens?.placeables.find((t: Token) => {
       return isStringEquals(hudToken._id, t.id);
     });
-    if (
-      token &&
-      getProperty(<Actor>token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`) &&
-      Object.keys(getProperty(<Actor>token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`)).length > 0
-    ) {
+    // if (
+    //   token &&
+    //   getProperty(<Actor>token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`) &&
+    //   Object.keys(getProperty(<Actor>token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`)).length > 0
+    // ) {
+    if (token && game.user?.isGM) {
       let button = this.buildButton(html, `Clean up munt up flags from ${hudToken.name}`, `fa-horse`);
       button = this.addSlashForFLags(button);
 
