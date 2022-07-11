@@ -81,6 +81,10 @@
     },
     {
       "name": "token-z"
+    },
+    {
+      "name": "active-effect-manager-lib",
+      "type": "module"
     }
   ],
   "flags": {

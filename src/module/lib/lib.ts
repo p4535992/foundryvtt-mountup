@@ -4,6 +4,7 @@ import API from '../api';
 import CONSTANTS from '../constants';
 import type Effect from '../effects/effect';
 import { EffectSupport } from '../effects/effect-support';
+import { aemlApi } from '../module';
 import { MountupEffectDefinitions } from '../mountup-effect-definition';
 import { ActiveTokenMountUpData } from '../utils';
 
@@ -378,16 +379,16 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
   const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
   for (const value of riderData.toMountOnMount.values()) {
-    if (!(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))) {
-      await API.addEffectOnToken(mountToken.id, i18n(value.name), value);
+    if (!(await aemlApi.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))) {
+      await aemlApi.addEffectOnToken(mountToken.id, i18n(value.name), value);
       info(
         `Apply effect '${i18n(value.name)}' on mount  up from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
     }
   }
   for (const value of mountData.toRiderOnMount.values()) {
-    if (!(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))) {
-      await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
+    if (!(await aemlApi.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))) {
+      await aemlApi.addEffectOnToken(riderToken.id, i18n(value.name), value);
       info(
         `Apply effect '${i18n(value.name)}' on mount up from mount '${mountToken.name}' to rider '${riderToken.name}'`,
       );
@@ -396,11 +397,11 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
 
   for (const value of riderData.toMountOnDismount.values()) {
     if (
-      //await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
-      await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
+      //await aemlApi.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
+      await aemlApi.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
     ) {
-      //await API.removeEffectFromIdOnToken(mountToken.id, key);
-      await API.removeEffectOnToken(mountToken.id, i18n(value.name));
+      //await aemlApi.removeEffectFromIdOnToken(mountToken.id, key);
+      await aemlApi.removeEffectOnToken(mountToken.id, i18n(value.name));
       info(
         `Remove effect '${i18n(value.name)}' on mount up from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
@@ -408,11 +409,11 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
   }
   for (const value of mountData.toRiderOnDismount.values()) {
     if (
-      //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
-      await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
+      //await aemlApi.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
+      await aemlApi.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
     ) {
-      //await API.removeEffectFromIdOnToken(riderToken.id, key);
-      await API.removeEffectOnToken(riderToken.id, i18n(value.name));
+      //await aemlApi.removeEffectFromIdOnToken(riderToken.id, key);
+      await aemlApi.removeEffectOnToken(riderToken.id, i18n(value.name));
       info(
         `Remove effect '${i18n(value.name)}' on mount up from mount '${mountToken.name}' to rider '${riderToken.name}'`,
       );
@@ -420,8 +421,8 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
   }
 
   for (const value of mountData.flyingMount.values()) {
-    if (!(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))) {
-      await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
+    if (!(await aemlApi.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))) {
+      await aemlApi.addEffectOnToken(riderToken.id, i18n(value.name), value);
       await API.applyFlying(mountToken);
       info(
         `Apply flying effect '${i18n(value.name)}' on mount up from mount '${mountToken.name}' to rider '${
@@ -436,16 +437,16 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
   const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
   const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
   for (const value of riderData.toMountOnDismount.values()) {
-    if (!(await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))) {
-      await API.addEffectOnToken(mountToken.id, i18n(value.name), value);
+    if (!(await aemlApi.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))) {
+      await aemlApi.addEffectOnToken(mountToken.id, i18n(value.name), value);
       info(
         `Apply effect '${i18n(value.name)}' on dismount from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
     }
   }
   for (const value of mountData.toRiderOnDismount.values()) {
-    if (!(await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))) {
-      await API.addEffectOnToken(riderToken.id, i18n(value.name), value);
+    if (!(await aemlApi.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true))) {
+      await aemlApi.addEffectOnToken(riderToken.id, i18n(value.name), value);
       info(
         `Apply effect '${i18n(value.name)}' on dismount from mount '${mountToken.name}' to rider '${riderToken.name}'`,
       );
@@ -454,11 +455,11 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
 
   for (const value of mountData.toRiderOnMount.values()) {
     if (
-      //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
-      await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
+      //await aemlApi.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
+      await aemlApi.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
     ) {
-      //await API.removeEffectFromIdOnToken(riderToken.id, key);
-      await API.removeEffectOnToken(riderToken.id, i18n(value.name));
+      //await aemlApi.removeEffectFromIdOnToken(riderToken.id, key);
+      await aemlApi.removeEffectOnToken(riderToken.id, i18n(value.name));
       info(
         `Remove effect '${i18n(value.name)}' on dismount from rider '${riderToken.name}' to mount '${mountToken.name}'`,
       );
@@ -466,11 +467,11 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
   }
   for (const value of riderData.toMountOnMount.values()) {
     if (
-      //await API.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
-      await API.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
+      //await aemlApi.hasEffectAppliedFromIdOnToken(mountToken.id, key, true) ||
+      await aemlApi.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true)
     ) {
-      //await API.removeEffectFromIdOnToken(mountToken.id, key);
-      await API.removeEffectOnToken(mountToken.id, i18n(value.name));
+      //await aemlApi.removeEffectFromIdOnToken(mountToken.id, key);
+      await aemlApi.removeEffectOnToken(mountToken.id, i18n(value.name));
       info(
         `Remove effect '${i18n(value.name)}' on dismount from mount '${mountToken.name}' to rider '${riderToken.name}'`,
       );
@@ -479,11 +480,11 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
 
   for (const value of mountData.flyingMount.values()) {
     if (
-      //await API.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
-      await API.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
+      //await aemlApi.hasEffectAppliedFromIdOnToken(riderToken.id, key, true) ||
+      await aemlApi.hasEffectAppliedOnToken(riderToken.id, i18n(value.name), true)
     ) {
-      //await API.removeEffectFromIdOnToken(riderToken.id, key);
-      await API.removeEffectOnToken(riderToken.id, i18n(value.name));
+      //await aemlApi.removeEffectFromIdOnToken(riderToken.id, key);
+      await aemlApi.removeEffectOnToken(riderToken.id, i18n(value.name));
       await API.removeFlying(mountToken);
       await API.removeFlying(riderToken);
       info(

@@ -39,6 +39,10 @@ This module uses the [token-attacher](https://github.com/KayelGee/token-attacher
 
 This module uses the [token-z](https://github.com/theripper93/token-z) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
+### active-effect-manager-lib
+
+This module uses the [active-effect-manager-lib](https://github.com/p4535992/foundryvtt-active-effect-manager-lib) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
+
 ## Known Issue\Limitation
 
 - The multi rider functionality on the same mount work partially, but it should be enough for most use cases...
