@@ -5,10 +5,13 @@ import type { TokenData } from '@league-of-foundry-developers/foundry-vtt-types/
 import CONSTANTS from './constants';
 import { debug, getElevationToken, warn } from './lib/lib';
 import HOOKS from './hooks';
-import EffectInterface from './effects/effect-interface';
+import { EffectInterfaceApi } from './effects/effect-interface-api';
 import { MountupEffectDefinitions } from './mountup-effect-definition';
 import { findTokenById, MountUpFlags } from './utils';
 import { setApi } from '../foundryvtt-mountup';
+import type { ActiveEffectManagerLibApi } from './effects/effect-api';
+
+export let aemlApi: ActiveEffectManagerLibApi;
 
 export const initHooks = () => {
   warn('Init Hooks processing');
@@ -49,16 +52,22 @@ export const initHooks = () => {
 
 export const setupHooks = async (): Promise<void> => {
   // setup all the hooks
-
-  // setup all the hooks
-  API.effectInterface = new EffectInterface(CONSTANTS.MODULE_NAME) as unknown as typeof EffectInterface;
   //@ts-ignore
-  API.effectInterface.initialize();
+  aemlApi = <ActiveEffectManagerLibApi>game.modules.get('active-effect-manager-lib').api;
+  aemlApi.effectInterface.initialize(CONSTANTS.MODULE_NAME);
 
   //@ts-ignore
-  window.MountUp.API.effectInterface = new EffectInterface(CONSTANTS.MODULE_NAME);
+  window.MountUp.API.effectInterface = aemlApi.effectInterface;
+
+  // // setup all the hooks
+  // API.effectInterface = new EffectInterface(CONSTANTS.MODULE_NAME) as unknown as typeof EffectInterface;
+  // //@ts-ignore
+  // API.effectInterface.initialize();
+
   //@ts-ignore
-  window.MountUp.API.effectInterface.initialize();
+  // window.MountUp.API.effectInterface = new EffectInterface(CONSTANTS.MODULE_NAME);
+  // //@ts-ignore
+  // window.MountUp.API.effectInterface.initialize();
 
   //@ts-ignore
   setApi(window.MountUp.API);
@@ -190,7 +199,7 @@ export const readyHooks = async () => {
     }
   });
 
-  Hooks.on('preDeleteToken', async (tokenDocument: TokenDocument, data:any, updateData: TokenData) => {
+  Hooks.on('preDeleteToken', async (tokenDocument: TokenDocument, data: any, updateData: TokenData) => {
     const isPlayerOwned = <boolean>tokenDocument.isOwner;
     if (!game.user?.isGM && !isPlayerOwned) {
       return;

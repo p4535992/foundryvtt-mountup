@@ -129,9 +129,10 @@ export const dismountDropAllTA = async function (mountToken: Token) {
   if (!mountToken) {
     return;
   }
-
-  await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
-
+  const attached = mountToken.document.getFlag('token-attacher', `attached`);
+  if (attached) {
+    await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
+  }
   let message = `Everyone and everything get off from {mount}!`;
   // message = message.replace('{rider}',riderToken.name);
   message = message.replace('{mount}', mountToken.name);
@@ -189,7 +190,7 @@ export const dismountDropTargetTA = async function (mountToken: Token, riderToke
     if (targets.length > 1) {
       return ui.notifications?.error("Can't follow more then one token!");
     }
-
+    // TODO add the control for attahced flag ???
     await window['tokenAttacher'].detachElementsFromToken(targets, mountToken, true);
     //dismountDropAll(token);
     for (let i = 0; i < targets.length; i++) {
@@ -247,8 +248,10 @@ export const detachAllFromTokenTA = async function (mountToken: Token) {
   if (!mountToken) {
     return;
   }
-
-  await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
+  const attached = mountToken.document.getFlag('token-attacher', `attached`);
+  if (attached) {
+    await window['tokenAttacher'].detachAllElementsFromToken(mountToken, true);
+  }
 
   // Chatter.dismountMessage(riderToken.id, mountToken.id);
 

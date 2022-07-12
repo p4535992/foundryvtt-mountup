@@ -1,6 +1,23 @@
+### 3.2.24
+
+- Made clean up hud button always aviable for gm
+
+### 3.2.23
+
+- Add a checking for when is been dlete a rider or a mount attached
+
+### 3.2.21-22
+
+- Update effcts api
+
+### 3.2.20
+
+- Bug fixing and add hud button for clean up flag from token for strange use case
+
 ### 3.2.19
 
 - Update `cleanUpTokenSelected` to the API
+- 
 ### 3.2.18
 
 - Add `cleanUpTokenSelected` to the API

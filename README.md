@@ -39,6 +39,10 @@ This module uses the [token-attacher](https://github.com/KayelGee/token-attacher
 
 This module uses the [token-z](https://github.com/theripper93/token-z) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
+### active-effect-manager-lib
+
+This module uses the [active-effect-manager-lib](https://github.com/p4535992/foundryvtt-active-effect-manager-lib) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
+
 ## Known Issue\Limitation
 
 - The multi rider functionality on the same mount work partially, but it should be enough for most use cases...
@@ -187,7 +191,15 @@ You can have a mount drop its rider by passing the mount's name or id:
 
 #### Macro to clean up flags on token and actor
 
-`game.modules.get('foundryvtt-mountup').api.cleanUpTokenSelected()`
+Select some tokens on the canvas and run the following macro.
+
+`async  game.modules.get('foundryvtt-mountup').api.cleanUpTokenSelected()`
+
+#### Macro to clean specific token and linked cactor
+
+Select some tokens on the canvas and run the following macro.
+
+`async game.modules.get('foundryvtt-mountup').api.cleanUpToken(token: Token)`
 
 # Build
 
