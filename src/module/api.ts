@@ -35,7 +35,7 @@ const API = {
 
     if (rider) {
       if (mount) {
-        if (rider.id != mount.id) {
+        if (rider.id !== mount.id) {
           MountManager.doCreateMount(rider, mount);
         } else {
           error('You cannot mount a token to itself');
@@ -131,9 +131,9 @@ const API = {
     }
 
     if (
-      riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id ||
+      riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) === mountToken.id ||
       // TODO to remove
-      riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) == mountToken.id
+      riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) === mountToken.id
     ) {
       API.dismount(riderNameOrId);
     } else {

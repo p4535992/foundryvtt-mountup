@@ -14,7 +14,7 @@ export class MountManager {
    * @param {Object} hudToken - The token from which the button was clicked on the hud
    */
   static async mountUpHud(hudToken) {
-    const mountToken = <Token>canvas.tokens?.controlled.find((t) => t.id == hudToken._id);
+    const mountToken = <Token>canvas.tokens?.controlled.find((t) => t.id === hudToken._id);
     const tokensToCheck = canvas.tokens?.controlled || [];
     for (const riderToken of tokensToCheck) {
       const riderId =
@@ -24,7 +24,7 @@ export class MountManager {
       if (riderId) {
         continue;
       }
-      if (riderToken.id != mountToken.id) {
+      if (riderToken.id !== mountToken.id) {
         const mountId =
           <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
           // TODO to remove
@@ -36,7 +36,7 @@ export class MountManager {
                         it is already mounted to '${mountTokenTmp.name}'.`);
           // MOD 4535992 ADD CHECK
           // const mountTokenTmp = findTokenById(<string>riderToken.actor.getFlag(CONSTANTS.MODULE_NAME, Flags.Mount));
-          if (mountToken.id != mountTokenTmp.id) {
+          if (mountToken.id !== mountTokenTmp.id) {
             continue;
           }
         }
@@ -47,7 +47,7 @@ export class MountManager {
           <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
           // TODO to remove
           <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-        if (riders == undefined) {
+        if (riders === undefined || riders === null) {
           riders = [];
         }
         if (!riders.includes(riderToken.id)) {
@@ -144,7 +144,7 @@ export class MountManager {
       <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
       // TODO to remove
       <string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-    if (riders == undefined) riders = [];
+    if (riders === undefined) riders = [];
     if (!riders.includes(riderToken.id)) {
       riders.push(riderToken.id);
     }
@@ -559,7 +559,7 @@ export class MountManager {
         <string[]>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
         // TODO to remove
         <string[]>token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-      return riders != undefined && riders.length > 0;
+      return riders !== undefined && riders.length > 0;
     } else {
       return false;
     }
@@ -576,7 +576,7 @@ export class MountManager {
         token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
         // TODO to remove
         token.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
-      return mount != undefined;
+      return mount !== undefined;
     } else {
       return false;
     }
@@ -697,7 +697,7 @@ export class MountManager {
         warn(`No parent found on 'isAncestor' for id '${parentId}' for ancestor '${ancestorId}'`, true);
         return false;
       }
-      if (parent.id == ancestorId) {
+      if (parent.id === ancestorId) {
         return true;
       }
       return this.isAncestor(parent.id, ancestorId);

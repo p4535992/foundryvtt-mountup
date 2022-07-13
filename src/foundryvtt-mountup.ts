@@ -119,22 +119,3 @@ export function getSocket() {
   const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as MountUpModuleData;
   return data.socket;
 }
-
-Hooks.once('libChangelogsReady', function () {
-  //@ts-ignore
-  libChangelogs.registerConflict(
-    CONSTANTS.MODULE_NAME,
-    'mountup',
-    `The 'mountup', is not needed anymore just use '${CONSTANTS.MODULE_NAME}'`,
-    'major',
-  );
-
-  //@ts-ignore
-  libChangelogs.register(
-    CONSTANTS.MODULE_NAME,
-    `
-    - Update 'cleanUpTokenSelected' to the API
-    `,
-    'minor',
-  );
-});

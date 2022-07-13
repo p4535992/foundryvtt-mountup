@@ -21,10 +21,10 @@ export class MountHud {
       info(`No HUD token is present`);
       return;
     }
-    const mountOrRider = <Token>canvas.tokens?.controlled.find((t) => t.id == hudToken._id);
+    const mountOrRider = <Token>canvas.tokens?.controlled.find((t) => t.id === hudToken._id);
     // const t = <UserTargets>getGame().user?.targets[0];
     // if only one token is selected
-    if (canvas.tokens?.controlled.length == 1) {
+    if (canvas.tokens?.controlled.length === 1) {
       // if the selected token is a mount
       if (MountManager.isaMount(mountOrRider.id)) {
         this.addRemoveRidersButton(html, hudToken);
@@ -62,7 +62,7 @@ export class MountHud {
       return;
     }
     const tokenNames = <string[]>canvas.tokens?.controlled
-      .filter((token) => token.id != hudToken._id)
+      .filter((token) => token.id !== hudToken._id)
       .map((token) => {
         return `'${token.name}'`;
       });
@@ -165,7 +165,7 @@ export class MountHud {
     }
     const button = $(`<div class="control-icon mount-up" title="${tooltip}"><i class="fas ${iconClass}"></i></div>`);
     const col = html.find(SettingsForm.getHudColumnClass());
-    if (SettingsForm.getHudTopBottomClass() == 'top') {
+    if (SettingsForm.getHudTopBottomClass() === 'top') {
       col.prepend(button);
     } else {
       col.append(button);

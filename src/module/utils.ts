@@ -65,7 +65,7 @@ export function firstGM() {
  * @param {String} tokenId - The ID of the token to look for
  */
 export function findTokenById(tokenId: string): Token {
-  return <Token>canvas.tokens?.placeables.find((t) => t.id == tokenId);
+  return <Token>canvas.tokens?.placeables.find((t) => t.id === tokenId);
 }
 
 /**
@@ -73,7 +73,7 @@ export function findTokenById(tokenId: string): Token {
  * @param {String} tokenName - The name of the token to look for
  */
 export function findTokenByName(tokenName: string): Token {
-  return <Token>canvas.tokens?.placeables.find((t) => t.name.toLowerCase() == tokenName.toLowerCase());
+  return <Token>canvas.tokens?.placeables.find((t) => t.name.toLowerCase() === tokenName.toLowerCase());
 }
 
 /**
@@ -97,9 +97,9 @@ export const getTokenCenter = function (token: Token, grid: any = {}): { x: numb
   const data: TokenData = token.data;
   //getCenter(type, data, grid = {}){
   let isGridSpace = false;
-  if (token.document.documentName == TileDocument.documentName) {
+  if (token.document.documentName === TileDocument.documentName) {
     isGridSpace = false;
-  } else if (token.document.documentName == DrawingDocument.documentName) {
+  } else if (token.document.documentName === DrawingDocument.documentName) {
     isGridSpace = false;
   } else {
     isGridSpace = true;
