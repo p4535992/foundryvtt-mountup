@@ -1,3 +1,7 @@
+### 3.2.25
+
+- Add dependecy to new library [active-effect-manager-lib](https://github.com/p4535992/foundryvtt-active-effect-manager-lib)
+
 ### 3.2.24
 
 - Made clean up hud button always aviable for gm
