@@ -69,6 +69,11 @@ Hooks.once('ready', () => {
     if (game.modules.get('token-z')) word = 'activate';
     throw error(`Requires the 'token-z' module. Please ${word} it.`);
   }
+  if (!game.modules.get('active-effect-manager-lib')?.active && game.user?.isGM) {
+    let word = 'install and activate';
+    if (game.modules.get('active-effect-manager-lib')) word = 'activate';
+    throw error(`Requires the 'active-effect-manager-lib' module. Please ${word} it.`);
+  }
   if (game.modules.get('mountup')?.active && game.user?.isGM) {
     dialogWarning(`Remove 'mountup' module. The module "Mount Up" breaks the API.`);
   }
