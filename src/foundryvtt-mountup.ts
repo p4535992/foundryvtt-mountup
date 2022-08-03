@@ -69,6 +69,11 @@ Hooks.once('ready', () => {
     if (game.modules.get('token-z')) word = 'activate';
     throw error(`Requires the 'token-z' module. Please ${word} it.`);
   }
+  if (!game.modules.get('active-effect-manager-lib')?.active && game.user?.isGM) {
+    let word = 'install and activate';
+    if (game.modules.get('active-effect-manager-lib')) word = 'activate';
+    throw error(`Requires the 'active-effect-manager-lib' module. Please ${word} it.`);
+  }
   if (game.modules.get('mountup')?.active && game.user?.isGM) {
     dialogWarning(`Remove 'mountup' module. The module "Mount Up" breaks the API.`);
   }
@@ -119,22 +124,3 @@ export function getSocket() {
   const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as MountUpModuleData;
   return data.socket;
 }
-
-Hooks.once('libChangelogsReady', function () {
-  //@ts-ignore
-  libChangelogs.registerConflict(
-    CONSTANTS.MODULE_NAME,
-    'mountup',
-    `The 'mountup', is not needed anymore just use '${CONSTANTS.MODULE_NAME}'`,
-    'major',
-  );
-
-  //@ts-ignore
-  libChangelogs.register(
-    CONSTANTS.MODULE_NAME,
-    `
-    - Update 'cleanUpTokenSelected' to the API
-    `,
-    'minor',
-  );
-});

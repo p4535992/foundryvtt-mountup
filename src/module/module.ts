@@ -135,11 +135,11 @@ export const readyHooks = async () => {
     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableAutoUpdateElevation')) {
       if (
         hasProperty(updateData, 'elevation') &&
-        ((sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != undefined &&
-          sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != null) ||
+        ((sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== undefined &&
+          sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== null) ||
           // TODO to remove
-          (sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != undefined &&
-            sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) != null))
+          (sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== undefined &&
+            sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== null))
       ) {
         if (MountManager.isaMount(<string>updateData._id)) {
           const mountElevation = getElevationToken(sourceToken) || updateData.elevation;
@@ -151,7 +151,7 @@ export const readyHooks = async () => {
             const riderToken = <Token>findTokenById(<string>rider);
             if (riderToken) {
               const riderElevation = getElevationToken(riderToken);
-              if (riderElevation != mountElevation) {
+              if (riderElevation !== mountElevation) {
                 await riderToken.document.update({
                   elevation: mountElevation,
                 });
@@ -169,7 +169,7 @@ export const readyHooks = async () => {
           if (mountToken) {
             const mountElevation = getElevationToken(mountToken);
             const riderElevation = getElevationToken(<Token>tokenDocument.object) || updateData.elevation;
-            if (riderElevation != mountElevation) {
+            if (riderElevation !== mountElevation) {
               warn(
                 `You can't update elevation of rider ${tokenDocument?.name} until you are mounted on ${mountToken?.name}`,
                 false,

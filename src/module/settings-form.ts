@@ -116,14 +116,14 @@ export class SettingsForm {
    * Returns the css class for the left or right HUD column based on the game setting
    */
   static getHudColumnClass() {
-    return game.settings.get(CONSTANTS.MODULE_NAME, 'column') == 0 ? '.col.left' : '.col.right';
+    return game.settings.get(CONSTANTS.MODULE_NAME, 'column') === 0 ? '.col.left' : '.col.right';
   }
 
   /**
    * Returns whether the button should be placed on the top or bottom of the HUD column
    */
   static getHudTopBottomClass() {
-    return game.settings.get(CONSTANTS.MODULE_NAME, 'topbottom') == 0 ? 'top' : 'bottom';
+    return game.settings.get(CONSTANTS.MODULE_NAME, 'topbottom') === 0 ? 'top' : 'bottom';
   }
 
   /**

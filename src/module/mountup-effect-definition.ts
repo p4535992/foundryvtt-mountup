@@ -88,56 +88,6 @@ export class MountupEffectDefinitions {
   // Utility Effect
   // =============================================
 
-  static _createAtlEffectKey(key) {
-    let result = key;
-    //@ts-ignore
-    const version = (game.version ?? game.data.version).charAt(0);
-
-    if (version == '9') {
-      switch (key) {
-        case 'ATL.preset':
-          break;
-        case 'ATL.brightSight':
-          break;
-        case 'ATL.light.dim':
-          break;
-        case 'ATL.height':
-          break;
-        case 'ATl.img':
-          break;
-        case 'ATL.mirrorX':
-          break;
-        case 'ATL.mirrorY':
-          break;
-        case 'ATL.rotation':
-          break;
-        case 'ATL.scale':
-          break;
-        case 'ATL.width':
-          break;
-        case 'ATL.dimLight':
-          result = 'ATL.light.dim';
-          break;
-        case 'ATL.brightLight':
-          result = 'ATL.light.bright';
-          break;
-        case 'ATL.lightAnimation':
-          result = 'ATL.light.animation';
-          break;
-        case 'ATL.lightColor':
-          result = 'ATL.light.color';
-          break;
-        case 'ATL.lightAlpha':
-          result = 'ATL.light.alpha';
-          break;
-        case 'ATL.lightAngle':
-          result = 'ATL.light.angle';
-          break;
-      }
-    }
-    return result;
-  }
-
   // =======================
   // TOKEN MAGIC EFFECT
   // =======================
