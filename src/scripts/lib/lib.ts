@@ -3,7 +3,6 @@ import type { ActorData } from "@league-of-foundry-developers/foundry-vtt-types/
 import API from "../api";
 import CONSTANTS from "../constants";
 import type Effect from "../effects/effect";
-import { EffectSupport } from "../effects/effect-support";
 import { aemlApi } from "../module";
 import { MountupEffectDefinitions } from "../mountup-effect-definition";
 import { ActiveTokenMountUpData } from "../utils";
@@ -318,7 +317,7 @@ function getElevationPlaceableObject(placeableObject: any): number {
 // Module specific function
 // =============================
 
-export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMountUpData {
+export async function retrieveAtmuActiveEffectsFromToken(token: Token): Promise<ActiveTokenMountUpData> {
 	const activeTokenMountUpData = new ActiveTokenMountUpData();
 	const toMountOnMount = new Map<string, Effect>();
 	const toMountOnDismount = new Map<string, Effect>();
@@ -333,30 +332,30 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
 		if (!effectNameToSet) {
 			continue;
 		}
-		const atmuChanges = EffectSupport.retrieveChangesOrderedByPriorityFromAE(effectEntity);
+		const atmuChanges = await aemlApi.retrieveChangesOrderedByPriorityFromAE(effectEntity);
 		//atmuValue = effectEntity.data.changes.find((aee) => {
 		for (const aee of atmuChanges) {
 			if (isStringEquals(aee.key, "ATMU.toMountOnMount")) {
 				if (aee.value && Boolean(aee.value)) {
-					const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
+					const effect = await aemlApi.convertActiveEffectToEffect(effectEntity);
 					toMountOnMount.set(<string>effectEntity.id, effect);
 				}
 			}
 			if (isStringEquals(aee.key, "ATMU.toMountOnDismount")) {
 				if (aee.value && Boolean(aee.value)) {
-					const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
+					const effect = await aemlApi.convertActiveEffectToEffect(effectEntity);
 					toMountOnDismount.set(<string>effectEntity.id, effect);
 				}
 			}
 			if (isStringEquals(aee.key, "ATMU.toRiderOnMount")) {
 				if (aee.value && Boolean(aee.value)) {
-					const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
+					const effect = await aemlApi.convertActiveEffectToEffect(effectEntity);
 					toRiderOnMount.set(<string>effectEntity.id, effect);
 				}
 			}
 			if (isStringEquals(aee.key, "ATMU.toRiderOnDismount")) {
 				if (aee.value && Boolean(aee.value)) {
-					const effect = EffectSupport.convertActiveEffectToEffect(effectEntity);
+					const effect = await aemlApi.convertActiveEffectToEffect(effectEntity);
 					toRiderOnDismount.set(<string>effectEntity.id, effect);
 				}
 			}
@@ -378,8 +377,8 @@ export function retrieveAtmuActiveEffectsFromToken(token: Token): ActiveTokenMou
 }
 
 export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
-	const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
-	const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
+	const riderData: ActiveTokenMountUpData = await retrieveAtmuActiveEffectsFromToken(riderToken);
+	const mountData: ActiveTokenMountUpData = await retrieveAtmuActiveEffectsFromToken(mountToken);
 	for (const value of riderData.toMountOnMount.values()) {
 		if (!(await aemlApi.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))) {
 			await aemlApi.addEffectOnToken(mountToken.id, i18n(value.name), value);
@@ -444,8 +443,8 @@ export async function manageAEOnMountUp(riderToken: Token, mountToken: Token) {
 }
 
 export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token) {
-	const riderData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(riderToken);
-	const mountData: ActiveTokenMountUpData = retrieveAtmuActiveEffectsFromToken(mountToken);
+	const riderData: ActiveTokenMountUpData = await retrieveAtmuActiveEffectsFromToken(riderToken);
+	const mountData: ActiveTokenMountUpData = await retrieveAtmuActiveEffectsFromToken(mountToken);
 	for (const value of riderData.toMountOnDismount.values()) {
 		if (!(await aemlApi.hasEffectAppliedOnToken(mountToken.id, i18n(value.name), true))) {
 			await aemlApi.addEffectOnToken(mountToken.id, i18n(value.name), value);

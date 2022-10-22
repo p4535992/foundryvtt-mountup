@@ -4,8 +4,6 @@ import { MountManager } from "./mountManager";
 import type { TokenData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
 import CONSTANTS from "./constants";
 import { debug, getElevationToken, warn } from "./lib/lib";
-import HOOKS from "./hooks";
-import { EffectInterfaceApi } from "./effects/effect-interface-api";
 import { MountupEffectDefinitions } from "./mountup-effect-definition";
 import { findTokenById, MountUpFlags } from "./utils";
 import { setApi } from "../mountup";
@@ -15,29 +13,6 @@ export let aemlApi: ActiveEffectManagerLibApi;
 
 export const initHooks = () => {
 	warn("Init Hooks processing");
-
-	// if (game.settings.get(CONSTANTS.MODULE_NAME, 'debugHooks')) {
-	//   for (const hook of Object.values(HOOKS)) {
-	//     if (typeof hook === 'string') {
-	//       Hooks.on(hook, (...args) => debug(`Hook called: ${hook}`, ...args));
-	//       debug(`Registered hook: ${hook}`);
-	//     } else {
-	//       for (const innerHook of Object.values(hook)) {
-	//         Hooks.on(<string>innerHook, (...args) => debug(`Hook called: ${innerHook}`, ...args));
-	//         debug(`Registered hook: ${innerHook}`);
-	//       }
-	//     }
-	//   }
-	// }
-
-	// //@ts-ignore
-	// window[CONSTANTS.MODULE_NAME] = {
-	//   API,
-	//   mount: API.mount,
-	//   dismount: API.dismount,
-	//   dropRider: API.dropRider,
-	//   toggleMount: API.toggleMount,
-	// };
 
 	// FOR RETROCOMPATIBILITY
 	//@ts-ignore

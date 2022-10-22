@@ -1,17 +1,12 @@
-import type {
-	ActiveEffectData,
-	ActorData,
-} from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import CONSTANTS from "./constants";
 import type Effect from "./effects/effect";
-import type { EffectInterfaceApi } from "./effects/effect-interface-api";
 import { error, getElevationToken, i18n, info, isStringEquals, warn } from "./lib/lib";
 import { MountManager } from "./mountManager";
 import { MountupEffectDefinitions } from "./mountup-effect-definition";
 import { findTokenById, findTokenByName, MountUpFlags } from "./utils";
 
 const API = {
-	effectInterface: <EffectInterfaceApi>{},
+	// effectInterface: <EffectInterfaceApi>{},
 
 	/**
 	 * Macro function to mount a rider token onto a mount token
