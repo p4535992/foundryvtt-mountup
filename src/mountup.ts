@@ -12,12 +12,12 @@
 // Import JavaScript modules
 
 // Import TypeScript modules
-import { preloadTemplates } from './module/preloadTemplates';
-import { initHooks, readyHooks, setupHooks } from './module/module';
-import { registerSettings } from './module/settings';
-import CONSTANTS from './module/constants';
-import type API from './module/api';
-import { dialogWarning, error } from './module/lib/lib';
+import { preloadTemplates } from './scripts/preloadTemplates';
+import { initHooks, readyHooks, setupHooks } from './scripts/module';
+import { registerSettings } from './scripts/settings';
+import CONSTANTS from './scripts/constants';
+import type API from './scripts/api';
+import { dialogWarning, error } from './scripts/lib/lib';
 
 /* ------------------------------------ */
 /* Initialize module					*/

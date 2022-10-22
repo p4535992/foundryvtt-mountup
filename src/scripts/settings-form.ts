@@ -131,18 +131,27 @@ export class SettingsForm {
    */
   static getIconClass() {
     switch (game.settings.get(CONSTANTS.MODULE_NAME, 'icon')) {
-      case 0:
+      case 0: {
         return 'fa-horse';
-      case 1:
+      }
+      case 1: {
         return 'fa-people-carry';
-      case 2:
+      }
+      case 2: {
         return 'fa-hands';
-      case 3:
+      }
+      case 3: {
         return 'fa-hand-holding';
-      case 4:
+      }
+      case 4: {
         return 'fa-fist-raised';
-      case 5:
+      }
+      case 5: {
         return 'fa-handshake';
+      }
+      default: {
+        return 'fa-horse';
+      }
     }
   }
   //#endregion CSS Getters
