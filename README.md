@@ -1,16 +1,20 @@
 # Mount Up!
 
-![Latest Release Download Count](https://img.shields.io/github/downloads/p4535992/MountUp/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) 
+![Latest Release Download Count](https://img.shields.io/github/downloads/p4535992/foundryvtt-mountup/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) 
 
-[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Ffoundryvtt-mountup&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=foundryvtt-mountup) 
+[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fmountup&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=mountup) 
 
-![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2FMountUp%2Fmaster%2Fsrc%2Fmodule.json&label=Foundry%20Version&query=$.compatibleCoreVersion&colorB=orange&style=for-the-badge)
+![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2Ffoundryvtt-mountup%2Fmaster%2Fsrc%2Fmodule.json&label=Foundry%20Version&query=$.compatibility.verified&colorB=orange&style=for-the-badge)
 
-![Latest Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2FMountUp%2Fmaster%2Fsrc%2Fmodule.json&label=Latest%20Release&prefix=v&query=$.version&colorB=red&style=for-the-badge)
+![Latest Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2Ffoundryvtt-mountup%2Fmaster%2Fsrc%2Fmodule.json&label=Latest%20Release&prefix=v&query=$.version&colorB=red&style=for-the-badge)
 
-[![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Ffoundryvtt-mountup%2Fshield%2Fendorsements&style=for-the-badge)](https://www.foundryvtt-hub.com/package/foundryvtt-mountup/)
+[![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Fmountup%2Fshield%2Fendorsements&style=for-the-badge)](https://www.foundryvtt-hub.com/package/mountup/)
 
-![GitHub all releases](https://img.shields.io/github/downloads/p4535992/MountUp/total?style=for-the-badge)
+![GitHub all releases](https://img.shields.io/github/downloads/p4535992/foundryvtt-mountup/total?style=for-the-badge)
+
+[![Translation status](https://weblate.foundryvtt-hub.com/widgets/final-blow/-/287x66-black.png)](https://weblate.foundryvtt-hub.com/engage/final-blow/)
+
+### If you want to buy me a coffee [![alt-text](https://img.shields.io/badge/-Patreon-%23ff424d?style=for-the-badge)](https://www.patreon.com/p4535992)
 
 **Mount Up!** is a module for [Foundry VTT](https://foundryvtt.com/  "Foundry VTT") that allows tokens to carry or be carried by other tokens. This is completely system agnostic, and fully customizable to fit right into your game.
 
@@ -23,7 +27,7 @@ To install this module manually:
 1. Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"
 2. Click "Install Module"
 3. In the "Manifest URL" field, paste the following url:
-`https://raw.githubusercontent.com/p4535992/MountUp/master/src/module.json`
+`https://raw.githubusercontent.com/p4535992/foundryvtt-mountup/master/src/module.json`
 4. Click 'Install' and wait for installation to complete
 5. Don't forget to enable the module in game using the "Manage Module" button
 
@@ -73,7 +77,7 @@ To mount a token:
 1. Select the "rider" and the "mount" tokens.
 2. Right click on the "mount" icon to bring up the token HUD.
 3. Click on the horse icon (you can change this in your game).\
-![mount example](./img/mount-example.png)\
+![mount example](./wiki/img/mount-example.png)\
 *The rider will now be linked to the mount. Anywhere the mount moves, the rider follows.*
 
 ### Dismounting
@@ -81,32 +85,32 @@ To mount a token:
 To dismount a token from a token:
 1. Right click on the "mount" to bring up the token HUD.
 2. Click on the dismount icon.\
-![dismount example](./img/dismount-example.png)\
+![dismount example](./wiki/img/dismount-example.png)\
 *The rider will now be un-linked from the mount, and is free to move on their own.*
 
 ### Partial multi mounting is supported
 
-![img](./img/multimount_partial.png)
+![img](./wiki/img/multimount_partial.png)
 
 ### Can Move Constrained
 
 Kneel before the genius of [KayelGee](https://github.com/KayelGee/) author of [Token Attacher](https://github.com/KayelGee/token-attacher) and thank discord for this amazing feature.
 
-![img](./img/constrained_movement.gif)
+![img](./wiki/img/constrained_movement.gif)
 
 ### Auto Elevation [EXPERIMENTAL]
 
 If enabled thi setting will make sure to always sync the riders elevation with the mount elevation, it can be useful for scene with the levels module
 
-![img](./img/feature_auto_elevation.gif)
+![img](./wiki/img/feature_auto_elevation.gif)
 
 ### Flying away !!!!
 
 Now when you mount some flying mount with the active effect `ATMU.flying = true` a beauty shadow effect is applied with the module [Token Magic](https://github.com/Feu-Secret/Tokenmagic).
 
-![img](./img/ShadowEffects.png)
+![img](./wiki/img/ShadowEffects.png)
 
-![img](./img/feature_flying.gif)
+![img](./wiki/img/feature_flying.gif)
 
 **NOTE:** You must enable the active effect management for this to work.
 
@@ -114,25 +118,7 @@ Now when you mount some flying mount with the active effect `ATMU.flying = true`
 
 Every time you mount up or dismount on the mount token and/or rider token some active effect can be added or removed based on the changes configuration on both rider and mount
 
-![img](./img/feature_ae_management.gif)
-
-#### How the active effect name is checked on the module ?
-
-You can use any active effect where the name is founded from the following code of the module:
-
-```
-const effectNameToCheck = <EFFECT NAME>;
-// For each active effects on the token/actor
-let result = false;
-for(const effect of effects){
-    // regex expression to match all non-alphanumeric characters in string
-    const regex = /[^A-Za-z0-9]/g;
-    // use replace() method to match and remove all the non-alphanumeric characters
-    result  = effectNameToCheck.replace(regex, "").toLowerCase().startsWith(effectIdOfTheModule.replace(regex, "").toLowerCase());
-    if(result)break;
-}
-return result;
-```
+![img](./wiki/img/feature_ae_management.gif)
 
 #### What active effect data changes are used from this module ?
 
@@ -158,13 +144,14 @@ For now no automatic UI is prepared (and don't think we need one) just created  
 
 Some functionality is exposed to macros for repeatable usage. All macros will either accept a token ID or name (case insensitive).
 
-**NOTE:** It's advisable to use the `game.modules.get('foundryvtt-mountup').api.` insrtead `MountUp.` for best practices
+**NOTE:** It's advisable to use the `game.modules.get('mountup').api.` insrtead `MountUp.` for best practices
 
 #### Macro to Mounting
 
 You can mount a rider to a mount using the following syntax:
 
 `MountUp.mount('RiderNameOrId', 'MountNameOrId')`
+`async  game.modules.get('mountup').api.mount('RiderNameOrId', 'MountNameOrId')`
 
 or you can use the module 'token-attacher'
 
@@ -173,6 +160,7 @@ or you can use the module 'token-attacher'
 You can have a rider dismount by passing it's token name or id:
 
 `MountUp.dismount('RiderNameOrId)`
+`async  game.modules.get('mountup').api.mount('RiderNameOrId', 'MountNameOrId')`
 
 or you can use the module 'token-attacher'
 
@@ -181,25 +169,26 @@ or you can use the module 'token-attacher'
 You can have a mount drop its rider by passing the mount's name or id:
 
 `MountUp.dropRider('MountNameOrId')`
+`async  game.modules.get('mountup').api.dropRider('MountNameOrId')`
 
 #### Macro function to toggle a rider mount pair
 
 You can have a mount drop its rider by passing the mount's name or id:
 
 `MountUp.toggleMount('RiderNameOrId', 'MountNameOrId')`
-
+`async  game.modules.get('mountup').api.toggleMount('RiderNameOrId', 'MountNameOrId')`
 
 #### Macro to clean up flags on token and actor
 
 Select some tokens on the canvas and run the following macro.
 
-`async  game.modules.get('foundryvtt-mountup').api.cleanUpTokenSelected()`
+`async  game.modules.get('mountup').api.cleanUpTokenSelected()`
 
 #### Macro to clean specific token and linked cactor
 
 Select some tokens on the canvas and run the following macro.
 
-`async game.modules.get('foundryvtt-mountup').api.cleanUpToken(token: Token)`
+`async game.modules.get('mountup').api.cleanUpToken(token: Token)`
 
 # Build
 
@@ -280,7 +269,7 @@ npm run-script package
 
 ## Issues
 
-Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/MountUp/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
+Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/foundryvtt-mountup/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
 
 ## License
 

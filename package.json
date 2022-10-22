@@ -1,9 +1,10 @@
 {
   "private": true,
-  "name": "foundryvtt-mountup",
+  "name": "mountup",
   "title": "FoundryVTT Mount Up!",
   "description": "Allows tokens to carry or be carried by other tokens. This is completely system agnostic, and fully customizable to fit right into your game.",
-  "version": "3.2.25",
+  "version": "3.3.0",
+  "main": "mountup.js",
   "scripts": {
     "package": "gulp package",
     "build": "gulp build && gulp link",

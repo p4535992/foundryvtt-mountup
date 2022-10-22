@@ -8,7 +8,7 @@ import HOOKS from './hooks';
 import { EffectInterfaceApi } from './effects/effect-interface-api';
 import { MountupEffectDefinitions } from './mountup-effect-definition';
 import { findTokenById, MountUpFlags } from './utils';
-import { setApi } from '../foundryvtt-mountup';
+import { setApi } from '../mountup';
 import type { ActiveEffectManagerLibApi } from './effects/effect-api';
 
 export let aemlApi: ActiveEffectManagerLibApi;
