@@ -59,7 +59,7 @@
 			"path": "languages/ja.json"
 		}
 	],
-	"esmodules": ["mountup.js"],
+	"esmodules": ["./mountup.js"],
 	"styles": [],
 	"compatibility": {
 		"minimum": 10,
