@@ -91,9 +91,7 @@ export class MountHud {
 			return;
 		}
 		const mountId =
-			<string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
-			// TODO to remove
-			<string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+			<string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 		const mount = findTokenById(mountId);
 		if (!mount) {
 			warn(`No mount with reference '${mountId}' is been found`, true);

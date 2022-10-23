@@ -59,18 +59,6 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 			height: newHeightRiderSize,
 		});
 
-		// riderToken.zIndex = mountToken.zIndex + 10;
-
-		// const loc: { x; y } = {
-		//   x: newRiderCoords.x,
-		//   y: newRiderCoords.y,
-		// }
-
-		// riderToken.document.data.x = newRiderCoords.x;
-		// riderToken.document.data.y = newRiderCoords.y;
-		// riderToken.document.data.height = newHeightRiderSize;
-		// riderToken.document.data.width = newWidthRiderSize;
-
 		const loc: { x; y } = MountManager.getRiderInitialLocation(riderToken, mountToken);
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableAutoUpdateElevation")) {
 			const mountElevation = getElevationToken(mountToken) || 0;
@@ -152,9 +140,7 @@ export const dismountDropAllTA = async function (mountToken: Token) {
 	ChatMessage.create(chatData);
 
 	const riderTokens: string[] =
-		<string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
-		// TODO to remove
-		<string[]>mountToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+		<string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
 	for (const riderTokenS of riderTokens) {
 		const riderToken = <Token>canvas.tokens?.placeables.find((rt) => {
 			return rt.id === riderTokenS;
@@ -163,16 +149,12 @@ export const dismountDropAllTA = async function (mountToken: Token) {
 			const backupRiderElevation = <number>(riderToken.actor?.getFlag(
 				CONSTANTS.MODULE_NAME,
 				MountUpFlags.OrigElevation
-			) ||
-				// TODO to remove
-				riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation));
+			));
 			if (backupRiderElevation) {
 				await riderToken.document.update({
 					elevation: backupRiderElevation,
 				});
 				await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
-				// TODO to remove
-				await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
 			}
 		}
 		// Manage active effect
@@ -226,16 +208,12 @@ export const dismountDropTargetTA = async function (mountToken: Token, riderToke
 			const backupRiderElevation = <number>(riderToken.actor?.getFlag(
 				CONSTANTS.MODULE_NAME,
 				MountUpFlags.OrigElevation
-			) ||
-				// TODO to remove
-				riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation));
+			));
 			if (backupRiderElevation) {
 				await riderToken.document.update({
 					elevation: backupRiderElevation,
 				});
 				await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
-				// TODO to remove
-				await riderToken.document.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
 			}
 		}
 		// Manage active effect

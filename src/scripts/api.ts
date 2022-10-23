@@ -58,9 +58,7 @@ const API = {
 		if (rider) {
 			if (MountManager.isaRider(rider.id)) {
 				const mountTokenId =
-					<string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
-					// TODO to remove
-					<string>rider.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+					<string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
 				const mountToken = findTokenById(mountTokenId);
 				if (!mountToken) {
 					warn(`No mount with reference '${mountTokenId}' is been found`, true);
@@ -90,8 +88,7 @@ const API = {
 		if (mount) {
 			if (MountManager.isaMount(mount.id)) {
 				const riders =
-					<string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
-					<string[]>mount.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+					<string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
 				for (const rider in riders) {
 					const riderToken: Token = findTokenById(rider);
 					if (!riderToken) {
@@ -126,9 +123,7 @@ const API = {
 		}
 
 		if (
-			riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) === mountToken.id ||
-			// TODO to remove
-			riderToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) === mountToken.id
+			riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) === mountToken.id
 		) {
 			API.dismount(riderNameOrId);
 		} else {
@@ -181,7 +176,7 @@ const API = {
 					for (const key in p) {
 						const senseOrConditionIdKey = key;
 						const senseOrConditionValue = <any>p[key];
-						await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+						await token.actor?.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
 					}
 					const attached = token.document.getFlag("token-attacher", `attached`);
 					if (attached) {
@@ -217,7 +212,7 @@ const API = {
 				for (const key in p) {
 					const senseOrConditionIdKey = key;
 					const senseOrConditionValue = <any>p[key];
-					await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+					await token.actor?.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
 				}
 				const attached = token.document.getFlag("token-attacher", `attached`);
 				if (attached) {

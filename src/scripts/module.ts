@@ -111,17 +111,12 @@ export const readyHooks = async () => {
 			if (
 				hasProperty(updateData, "elevation") &&
 				((sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== undefined &&
-					sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== null) ||
-					// TODO to remove
-					(sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== undefined &&
-						sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== null))
+					sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== null))
 			) {
 				if (MountManager.isaMount(<string>updateData._id)) {
 					const mountElevation = getElevationToken(sourceToken) || updateData.elevation;
 					const riders: string[] =
-						<string[]>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ||
-						// TODO to remove
-						<string[]>sourceToken.document.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+						<string[]>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
 					for (const rider of riders) {
 						const riderToken = <Token>findTokenById(<string>rider);
 						if (riderToken) {
@@ -137,9 +132,7 @@ export const readyHooks = async () => {
 
 				if (MountManager.isaRider(updateData._id)) {
 					const mountTokenId =
-						<string>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) ||
-						// TODO to remove
-						<string>tokenDocument.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+						<string>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 					const mountToken = <Token>findTokenById(mountTokenId);
 					if (mountToken) {
 						const mountElevation = getElevationToken(mountToken);
@@ -155,8 +148,6 @@ export const readyHooks = async () => {
 									<number>(
 										sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
 									) ||
-									// TODO to remove
-									<number>tokenDocument.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) ||
 									mountElevation,
 							});
 						}
