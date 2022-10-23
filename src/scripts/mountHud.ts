@@ -90,8 +90,7 @@ export class MountHud {
 			warn(`No rider with reference '${hudToken._id}' is been found`, true);
 			return;
 		}
-		const mountId =
-			<string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+		const mountId = <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 		const mount = findTokenById(mountId);
 		if (!mount) {
 			warn(`No mount with reference '${mountId}' is been found`, true);
@@ -108,7 +107,7 @@ export class MountHud {
 		// const token = <Token>canvas.tokens?.placeables.find((t:Token) =>{
 		//   return isStringEquals(hudToken._id,t.id);
 		// });
-		// if (token && getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
+		// if (token && getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`)) {
 		//   API.cleanUpTokenDialog(token);
 		// }
 		// });
@@ -125,8 +124,8 @@ export class MountHud {
 		});
 		// if (
 		//   token &&
-		//   getProperty(<Actor>token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`) &&
-		//   Object.keys(getProperty(<Actor>token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`)).length > 0
+		//   getProperty(<Actor>token.actor, `flags.${CONSTANTS.MODULE_NAME}`) &&
+		//   Object.keys(getProperty(<Actor>token.actor, `flags.${CONSTANTS.MODULE_NAME}`)).length > 0
 		// ) {
 		if (token && game.user?.isGM) {
 			let button = this.buildButton(html, `Clean up munt up flags from ${hudToken.name}`, `fa-horse`);

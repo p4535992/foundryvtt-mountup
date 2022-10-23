@@ -1,7 +1,6 @@
 import API from "./api";
 import { MountHud } from "./mountHud";
 import { MountManager } from "./mountManager";
-import type { TokenData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
 import CONSTANTS from "./constants";
 import { debug, getElevationToken, warn } from "./lib/lib";
 import { MountupEffectDefinitions } from "./mountup-effect-definition";
@@ -95,7 +94,7 @@ export const readyHooks = async () => {
 		if (!game.user?.isGM && !isPlayerOwned) {
 			return;
 		}
-		// if(!updateData.actor?.data?.flags[CONSTANTS.MODULE_NAME]){
+		// if(!updateData.actor?.flags[CONSTANTS.MODULE_NAME]){
 		//   return;
 		// }
 		if (updateData.x || updateData.y || updateData.rotation) {
@@ -110,13 +109,14 @@ export const readyHooks = async () => {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableAutoUpdateElevation")) {
 			if (
 				hasProperty(updateData, "elevation") &&
-				((sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== undefined &&
-					sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== null))
+				sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== undefined &&
+				sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation) !== null
 			) {
 				if (MountManager.isaMount(<string>updateData._id)) {
 					const mountElevation = getElevationToken(sourceToken) || updateData.elevation;
-					const riders: string[] =
-						<string[]>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+					const riders: string[] = <string[]>(
+						sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
+					);
 					for (const rider of riders) {
 						const riderToken = <Token>findTokenById(<string>rider);
 						if (riderToken) {
@@ -131,8 +131,7 @@ export const readyHooks = async () => {
 				}
 
 				if (MountManager.isaRider(updateData._id)) {
-					const mountTokenId =
-						<string>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+					const mountTokenId = <string>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 					const mountToken = <Token>findTokenById(mountTokenId);
 					if (mountToken) {
 						const mountElevation = getElevationToken(mountToken);
@@ -147,8 +146,7 @@ export const readyHooks = async () => {
 								elevation:
 									<number>(
 										sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
-									) ||
-									mountElevation,
+									) || mountElevation,
 							});
 						}
 					}
@@ -167,7 +165,7 @@ export const readyHooks = async () => {
 		}
 	});
 
-	Hooks.on("preDeleteToken", async (tokenDocument: TokenDocument, data: any, updateData: TokenData) => {
+	Hooks.on("preDeleteToken", async (tokenDocument: TokenDocument, data: any, updateData: any) => {
 		const isPlayerOwned = <boolean>tokenDocument.isOwner;
 		if (!game.user?.isGM && !isPlayerOwned) {
 			return;

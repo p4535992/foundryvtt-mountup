@@ -16,16 +16,24 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 
 		const mount = <Token>targets[0];
 		const newMountCoords = {
-			x: mount.document.data.x ? mount.document.data.x : mount.x,
-			y: mount.document.data.y ? mount.document.data.y : mount.y,
-			w: mount.document.data.width ? mount.document.data.width : mount.w,
-			h: mount.document.data.height ? mount.document.data.height : mount.h,
+			//@ts-ignore
+			x: mount.document.x ? mount.document.x : mount.x,
+			//@ts-ignore
+			y: mount.document.y ? mount.document.y : mount.y,
+			//@ts-ignore
+			w: mount.document.width ? mount.document.width : mount.w,
+			//@ts-ignore
+			h: mount.document.height ? mount.document.height : mount.h,
 		};
 		const newRiderCoords = {
-			x: riderToken.document.data.x ? riderToken.document.data.x : riderToken.x,
-			y: riderToken.document.data.y ? riderToken.document.data.y : riderToken.y,
-			w: riderToken.document.data.width ? riderToken.document.data.width : riderToken.w,
-			h: riderToken.document.data.height ? riderToken.document.data.height : riderToken.h,
+			//@ts-ignore
+			x: riderToken.document.x ? riderToken.document.x : riderToken.x,
+			//@ts-ignore
+			y: riderToken.document.y ? riderToken.document.y : riderToken.y,
+			//@ts-ignore
+			w: riderToken.document.width ? riderToken.document.width : riderToken.w,
+			//@ts-ignore
+			h: riderToken.document.height ? riderToken.document.height : riderToken.h,
 		};
 
 		if (newMountCoords.x + newMountCoords.w - newRiderCoords.w < newRiderCoords.x) {
@@ -40,16 +48,21 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 		}
 
 		// shrink the rider if needed
-		const grid = <number>canvas.scene?.data.grid;
+		//@ts-ignore
+		const grid = <number>canvas.scene?.grid;
 		let newWidthRider = riderToken.w;
 		let newHeightRider = riderToken.h;
-		let newWidthRiderSize = riderToken.document.data.width;
-		let newHeightRiderSize = riderToken.document.data.height;
+		//@ts-ignore
+		let newWidthRiderSize = riderToken.document.width;
+		//@ts-ignore
+		let newHeightRiderSize = riderToken.document.height;
 		if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
 			newWidthRider = mountToken.w / grid / 2;
 			newHeightRider = mountToken.h / grid / 2;
-			newWidthRiderSize = mountToken.document.data.width / 2;
-			newHeightRiderSize = mountToken.document.data.height / 2;
+			//@ts-ignore
+			newWidthRiderSize = mountToken.document.width / 2;
+			//@ts-ignore
+			newHeightRiderSize = mountToken.document.height / 2;
 		}
 
 		await riderToken.document.update({
@@ -139,17 +152,15 @@ export const dismountDropAllTA = async function (mountToken: Token) {
 	//@ts-ignore
 	ChatMessage.create(chatData);
 
-	const riderTokens: string[] =
-		<string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+	const riderTokens: string[] = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
 	for (const riderTokenS of riderTokens) {
 		const riderToken = <Token>canvas.tokens?.placeables.find((rt) => {
 			return rt.id === riderTokenS;
 		});
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableAutoUpdateElevation")) {
-			const backupRiderElevation = <number>(riderToken.actor?.getFlag(
-				CONSTANTS.MODULE_NAME,
-				MountUpFlags.OrigElevation
-			));
+			const backupRiderElevation = <number>(
+				riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+			);
 			if (backupRiderElevation) {
 				await riderToken.document.update({
 					elevation: backupRiderElevation,
@@ -205,10 +216,9 @@ export const dismountDropTargetTA = async function (mountToken: Token, riderToke
 			ChatMessage.create(chatData);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableAutoUpdateElevation")) {
-			const backupRiderElevation = <number>(riderToken.actor?.getFlag(
-				CONSTANTS.MODULE_NAME,
-				MountUpFlags.OrigElevation
-			));
+			const backupRiderElevation = <number>(
+				riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+			);
 			if (backupRiderElevation) {
 				await riderToken.document.update({
 					elevation: backupRiderElevation,
@@ -262,15 +272,15 @@ export const moveTokens = async function (riderTokens: Token[], mountToken: Toke
 	}
 	// if (game.user?.isGM && <number>canvas.tokens?.controlled.length > 0) {
 	if (game.user?.isGM && riderTokens.length > 0) {
-		const pos = { x: mountToken.data.x, y: mountToken.data.y }; //riderToken.document.data.getLocalPosition(canvas.app?.stage);
+		const pos = { x: mountToken.x, y: mountToken.y }; //riderToken.document.getLocalPosition(canvas.app?.stage);
 		const mid = {
-			x: <number>riderTokens[0]?.data.x, //<number>canvas.tokens?.controlled[0].data.x,
-			y: <number>riderTokens[0]?.data.y, //<number>canvas.tokens?.controlled[0].data.y
+			x: <number>riderTokens[0]?.x, //<number>canvas.tokens?.controlled[0].x,
+			y: <number>riderTokens[0]?.y, //<number>canvas.tokens?.controlled[0].y
 		};
 		// for (let i = 1; i < <number>canvas.tokens?.controlled.length; i++) {
 		for (let i = 1; i < <number>riderTokens.length; i++) {
-			mid.x += <number>riderTokens[i]?.data.x; // <number>canvas.tokens?.controlled[i].data.x;
-			mid.y += <number>riderTokens[i]?.data.y; // <number>canvas.tokens?.controlled[i].data.y;
+			mid.x += <number>riderTokens[i]?.x; // <number>canvas.tokens?.controlled[i].x;
+			mid.y += <number>riderTokens[i]?.y; // <number>canvas.tokens?.controlled[i].y;
 		}
 		mid.x = mid.x / riderTokens.length; // (mid.x / <number>canvas.tokens?.controlled.length);
 		mid.y = mid.y / riderTokens.length; // (mid.y / <number>canvas.tokens?.controlled.length);
@@ -282,8 +292,8 @@ export const moveTokens = async function (riderTokens: Token[], mountToken: Toke
 		const updates: any[] = [];
 		for (let i = 0; i < tokens.length; i++) {
 			const t = <Token>canvas.tokens?.get(<string>tokens[i]);
-			const offsetx = mid.x - t.data.x;
-			const offsety = mid.y - t.data.y;
+			const offsetx = mid.x - t.x;
+			const offsety = mid.y - t.y;
 			const gridPt = <PointArray>canvas.grid?.grid?.getGridPositionFromPixels(pos.x - offsetx, pos.y - offsety);
 			const px = <PointArray>canvas.grid?.grid?.getPixelsFromGridPosition(gridPt[0], gridPt[1]);
 

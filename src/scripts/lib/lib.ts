@@ -26,10 +26,14 @@ export function getOwnedTokens(priorityToControlledIfGM: boolean): Token[] {
 			return <Token[]>canvas.tokens?.placeables;
 		}
 	}
-	let ownedTokens = <Token[]>canvas.tokens?.placeables.filter((token) => token.isOwner && (!token.data.hidden || gm));
+	let ownedTokens = <Token[]>(
+		canvas.tokens?.placeables.filter((token) => token.isOwner && (!token.document.hidden || gm))
+	);
 	if (ownedTokens.length === 0 || !canvas.tokens?.controlled[0]) {
 		ownedTokens = <Token[]>(
-			canvas.tokens?.placeables.filter((token) => (token.observer || token.isOwner) && (!token.data.hidden || gm))
+			canvas.tokens?.placeables.filter(
+				(token) => (token.observer || token.isOwner) && (!token.document.hidden || gm)
+			)
 		);
 	}
 	return ownedTokens;
@@ -79,7 +83,7 @@ export function getActiveGMs() {
 
 export function isResponsibleGM() {
 	if (!game.user?.isGM) return false;
-	return !getActiveGMs()?.some((other) => other.data._id < <string>game.user?.data._id);
+	return !getActiveGMs()?.some((other) => other.id < <string>game.user?.id);
 }
 
 // ================================
@@ -242,9 +246,9 @@ export function getFirstPlayerTokenSelected(): Token | null {
 		return null;
 	}
 	if (!selectedTokens || selectedTokens.length === 0) {
-		//if(game.user.character.data.token){
+		//if(game.user.character.token){
 		//  //@ts-ignore
-		//  return game.user.character.data.token;
+		//  return game.user.character.token;
 		//}else{
 		return null;
 		//}
@@ -270,9 +274,7 @@ export function getFirstPlayerToken(): Token | null {
 	if (!token) {
 		if (!controlled.length || controlled.length === 0) {
 			// If no token is selected use the token of the users character
-			token = <Token>(
-				canvas.tokens?.placeables.find((token) => token.data._id === game.user?.character?.data?._id)
-			);
+			token = <Token>canvas.tokens?.placeables.find((token) => token.id === game.user?.character?.id);
 		}
 		// If no token is selected use the first owned token of the users character you found
 		if (!token) {
@@ -283,19 +285,19 @@ export function getFirstPlayerToken(): Token | null {
 }
 
 export function getElevationToken(token: Token): number {
-	const base = token.document.data;
+	const base = token.document;
 	return getElevationPlaceableObject(base);
 }
 
 function getElevationWall(wall: Wall): number {
-	const base = wall.document.data;
+	const base = wall.document;
 	return getElevationPlaceableObject(base);
 }
 
 function getElevationPlaceableObject(placeableObject: any): number {
 	let base = placeableObject;
 	if (base.document) {
-		base = base.document.data;
+		base = base.document;
 	}
 	const base_elevation =
 		//@ts-ignore
@@ -325,15 +327,16 @@ export async function retrieveAtmuActiveEffectsFromToken(token: Token): Promise<
 	const toRiderOnDismount = new Map<string, Effect>();
 	const flyingMount = new Map<string, Effect>();
 
-	const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>token.actor?.data.effects;
+	const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>token.actor?.effects;
 	// const atmuArr:ActiveEffect[] = [];
 	for (const effectEntity of actorEffects) {
-		const effectNameToSet = effectEntity.name ? effectEntity.name : effectEntity.data.label;
+		//@ts-ignore
+		const effectNameToSet = effectEntity.name ? effectEntity.name : effectEntity.label;
 		if (!effectNameToSet) {
 			continue;
 		}
 		const atmuChanges = await aemlApi.retrieveChangesOrderedByPriorityFromAE(effectEntity);
-		//atmuValue = effectEntity.data.changes.find((aee) => {
+		//atmuValue = effectEntity.changes.find((aee) => {
 		for (const aee of atmuChanges) {
 			if (isStringEquals(aee.key, "ATMU.toMountOnMount")) {
 				if (aee.value && Boolean(aee.value)) {

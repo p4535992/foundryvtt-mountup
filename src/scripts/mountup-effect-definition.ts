@@ -68,7 +68,7 @@ export class MountupEffectDefinitions {
 				{
 					key: "ATMU.flying",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: number && number > 0 ? `${number}` : `data.elevation`,
+					value: number && number > 0 ? `${number}` : `document.elevation`,
 					priority: 5,
 				},
 			],
@@ -101,7 +101,7 @@ export class MountupEffectDefinitions {
 	 * @param elevation
 	 */
 	static tokenMagicParamsFlying(tokenMagicEffectId: string, elevation = 0): any {
-		//const elevation: number = getProperty(tokenInstance.data, 'elevation');
+		//const elevation: number = getProperty(tokenInstance, 'elevation');
 		// const elevation: number = getElevationToken(tokenInstance);
 		//const tokenInstance = canvas.tokens?.get(tokenID);
 		//const tokenMagicEffectId = CONSTANTS.TM_FLYING;

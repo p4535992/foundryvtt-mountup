@@ -57,8 +57,7 @@ const API = {
 
 		if (rider) {
 			if (MountManager.isaRider(rider.id)) {
-				const mountTokenId =
-					<string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount)
+				const mountTokenId = <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 				const mountToken = findTokenById(mountTokenId);
 				if (!mountToken) {
 					warn(`No mount with reference '${mountTokenId}' is been found`, true);
@@ -87,8 +86,7 @@ const API = {
 
 		if (mount) {
 			if (MountManager.isaMount(mount.id)) {
-				const riders =
-					<string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+				const riders = <string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
 				for (const rider in riders) {
 					const riderToken: Token = findTokenById(rider);
 					if (!riderToken) {
@@ -122,9 +120,7 @@ const API = {
 			return;
 		}
 
-		if (
-			riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) === mountToken.id
-		) {
+		if (riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) === mountToken.id) {
 			API.dismount(riderNameOrId);
 		} else {
 			API.mount(riderNameOrId, mountNameOrId);
@@ -171,8 +167,8 @@ const API = {
 		}
 		for (const token of tokens) {
 			if (token && token.document) {
-				if (getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
-					const p = getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`);
+				if (getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`)) {
+					const p = getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`);
 					for (const key in p) {
 						const senseOrConditionIdKey = key;
 						const senseOrConditionValue = <any>p[key];
@@ -190,8 +186,8 @@ const API = {
 		}
 		for (const token of tokens) {
 			if (token && token.actor) {
-				if (getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
-					const p = getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`);
+				if (getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}`)) {
+					const p = getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}`);
 					for (const key in p) {
 						const senseOrConditionIdKey = key;
 						const senseOrConditionValue = <any>p[key];
@@ -207,8 +203,8 @@ const API = {
 
 	async cleanUpToken(token: Token) {
 		if (token && token.document) {
-			if (getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
-				const p = getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`);
+			if (getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`)) {
+				const p = getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`);
 				for (const key in p) {
 					const senseOrConditionIdKey = key;
 					const senseOrConditionValue = <any>p[key];
@@ -225,8 +221,8 @@ const API = {
 		}
 
 		if (token && token.actor) {
-			if (getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
-				const p = getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`);
+			if (getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}`)) {
+				const p = getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}`);
 				for (const key in p) {
 					const senseOrConditionIdKey = key;
 					const senseOrConditionValue = <any>p[key];
