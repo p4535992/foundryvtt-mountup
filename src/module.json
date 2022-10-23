@@ -96,13 +96,13 @@
 				"compatibility": {}
 			},
 			{
-				"name": "token-attacher",
+				"id": "token-attacher",
 				"type": "module",
 				"manifest": "https://raw.githubusercontent.com/KayelGee/token-attacher/master/module.json",
 				"compatibility": {}
 			},
 			{
-				"name": "token-z",
+				"id": "token-z",
 				"type": "module",
 				"manifest": "https://raw.githubusercontent.com/theripper93/token-z/master/module.json",
 				"compatibility": {}
