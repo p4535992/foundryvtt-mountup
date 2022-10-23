@@ -17,23 +17,23 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 		const mount = <Token>targets[0];
 		const newMountCoords = {
 			//@ts-ignore
-			x: mount.document.x ? mount.document.x : mount.x,
+			x: mount.x,
 			//@ts-ignore
-			y: mount.document.y ? mount.document.y : mount.y,
+			y: mount.y,
 			//@ts-ignore
-			w: mount.document.width ? mount.document.width : mount.w,
+			w: mount.w,
 			//@ts-ignore
-			h: mount.document.height ? mount.document.height : mount.h,
+			h: mount.h,
 		};
 		const newRiderCoords = {
 			//@ts-ignore
-			x: riderToken.document.x ? riderToken.document.x : riderToken.x,
+			x: riderToken.x,
 			//@ts-ignore
-			y: riderToken.document.y ? riderToken.document.y : riderToken.y,
+			y: riderToken.y,
 			//@ts-ignore
-			w: riderToken.document.width ? riderToken.document.width : riderToken.w,
+			w: riderToken.w,
 			//@ts-ignore
-			h: riderToken.document.height ? riderToken.document.height : riderToken.h,
+			h: riderToken.h,
 		};
 
 		if (newMountCoords.x + newMountCoords.w - newRiderCoords.w < newRiderCoords.x) {
@@ -49,7 +49,7 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 
 		// shrink the rider if needed
 		//@ts-ignore
-		const grid = <number>canvas.scene?.grid;
+		const grid = <number>canvas.scene?.grid.size;
 		let newWidthRider = riderToken.w;
 		let newHeightRider = riderToken.h;
 		//@ts-ignore
@@ -65,12 +65,12 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 			newHeightRiderSize = mountToken.document.height / 2;
 		}
 
-		await riderToken.document.update({
-			x: newRiderCoords.x,
-			y: newRiderCoords.y,
-			width: newWidthRiderSize,
-			height: newHeightRiderSize,
-		});
+		// await riderToken.document.update({
+		// 	x: newRiderCoords.x,
+		// 	y: newRiderCoords.y,
+		// 	width: newWidthRiderSize,
+		// 	height: newHeightRiderSize,
+		// });
 
 		const loc: { x; y } = MountManager.getRiderInitialLocation(riderToken, mountToken);
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableAutoUpdateElevation")) {
@@ -81,11 +81,15 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 				x: loc.x,
 				y: loc.y,
 				elevation: mountElevation,
+				width: newWidthRiderSize,
+				height: newHeightRiderSize,
 			});
 		} else {
 			await riderToken.document.update({
 				x: loc.x,
 				y: loc.y,
+				width: newWidthRiderSize,
+				height: newHeightRiderSize,
 			});
 		}
 
@@ -118,12 +122,14 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 		await window["tokenAttacher"].setElementsLockStatus(riderToken, isLocked, true);
 		const canMoveConstrained =
 			<boolean>game.settings.get(CONSTANTS.MODULE_NAME, "enableCanMoveConstrained") || true;
-		await window["tokenAttacher"].setElementsMoveConstrainedStatus(riderToken, canMoveConstrained, true);
-
+		// await window["tokenAttacher"].setElementsMoveConstrainedStatus(riderToken, canMoveConstrained, true);
+		await window["tokenAttacher"].setElementsMoveConstrainedStatus(riderToken, canMoveConstrained, true, {
+			type: window["tokenAttacher"].CONSTRAINED_TYPE.TOKEN_CONSTRAINED,
+		});
 		// Manage active effect
-		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableActiveEffect")) {
-			await manageAEOnMountUp(riderToken, mountToken);
-		}
+		// if (game.settings.get(CONSTANTS.MODULE_NAME, "enableActiveEffect")) {
+		// 	await manageAEOnMountUp(riderToken, mountToken);
+		// }
 	}
 };
 
@@ -257,7 +263,7 @@ export const detachAllFromTokenTA = async function (mountToken: Token) {
 	// };
 	// ChatMessage.create(chatData);
 };
-
+/*
 export const moveToken = async function (riderToken: Token, mountToken: Token) {
 	if (!riderToken || !mountToken) {
 		return;
@@ -306,3 +312,4 @@ export const moveTokens = async function (riderTokens: Token[], mountToken: Toke
 		}
 	}
 };
+*/

@@ -61,7 +61,7 @@ export class MountManager {
 
 				// // shrink the rider if needed
 				// if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
-				//   const grid = <number>canvas.scene?.grid;
+				//   const grid = <number>canvas.scene?.grid.size;
 				//   const newWidth = mountToken.w / 2 / grid;
 				//   const newHeight = mountToken.h / 2 / grid;
 				//   await riderToken.document.update({
@@ -180,7 +180,7 @@ export class MountManager {
 		//   if (riders.includes(riderTokenTmp.id)) {
 		//     // shrink the rider if needed
 		//     if (riderTokenTmp.w >= mountToken.w || riderTokenTmp.h >= mountToken.h) {
-		//       const grid = <number>canvas.scene?.grid;
+		//       const grid = <number>canvas.scene?.grid.size;
 		//       const newWidth = mountToken.w / 2 / grid;
 		//       const newHeight = mountToken.h / 2 / grid;
 		//       await riderTokenTmp.document.update({
@@ -212,7 +212,7 @@ export class MountManager {
 			// MOD 4535992 REMOVED IF
 			//if (riderToken.w < origsize.w || riderToken.h < origsize.h) {
 			//@ts-ignore
-			const grid = <number>canvas.scene?.grid;
+			const grid = <number>canvas.scene?.grid.size;
 			const newWidth = riderToken.w < origsize.w ? origsize.w : riderToken.w;
 			const newHeight = riderToken.h < origsize.h ? origsize.h : riderToken.h;
 
@@ -332,7 +332,7 @@ export class MountManager {
 				// if (riders && riders.includes(riderToken.id)) {
 				//   // shrink the rider if needed
 				//   if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
-				//     const grid = <number>canvas.scene?.grid;
+				//     const grid = <number>canvas.scene?.grid.size;
 				//     const newWidth = mountToken.w / 2 / grid;
 				//     const newHeight = mountToken.h / 2 / grid;
 				//     await riderToken.document.update({

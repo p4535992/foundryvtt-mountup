@@ -172,7 +172,7 @@ const API = {
 					for (const key in p) {
 						const senseOrConditionIdKey = key;
 						const senseOrConditionValue = <any>p[key];
-						await token.actor?.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+						await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
 					}
 					const attached = token.document.getFlag("token-attacher", `attached`);
 					if (attached) {
@@ -208,7 +208,7 @@ const API = {
 				for (const key in p) {
 					const senseOrConditionIdKey = key;
 					const senseOrConditionValue = <any>p[key];
-					await token.actor?.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+					await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
 				}
 				const attached = token.document.getFlag("token-attacher", `attached`);
 				if (attached) {
