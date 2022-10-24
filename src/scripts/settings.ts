@@ -217,6 +217,15 @@ export const registerSettings = function () {
 		type: Boolean,
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "showDialogOnDropMountUp", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.showDialogOnDropMountUp.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.showDialogOnDropMountUp.hint`,
+		scope: "client",
+		config: true,
+		default: false,
+		type: Boolean,
+	});
+
 	game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.debug.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.debug.hint`,

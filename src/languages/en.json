@@ -85,6 +85,10 @@
 				"name": "Disable the HUD integration for the 'Mount' action",
 				"hint": "Make sense only with 'Enable drag and drop token for mountup' enabled. It will hide the hud integration of the hud module for mountup, but it will appear for the dismount."
 			},
+			"showDialogOnDropMountUp": {
+				"name": "Enable show dialog on drop Mount Up",
+				"hint": "Make sense only with 'Enable drag and drop token for mountup' enabled. If enabled when you drop a token (rider) on a token (mount) if will pop out a dialog for confirmation"
+			},
 			"debug": {
 				"name": "Enable debugging",
 				"hint": "Prints debug messages to the console"
@@ -95,6 +99,10 @@
 			"message": "This action will run a fixing macro on the curren token for clean up any information of 'Mount Up' from this token and start everything from scratch, THIS IS USEFUL FOR THE USE CASES WHERE THE FLAGS REMAIN STUCKED, are you sure about this ?",
 			"yes": "Do the clean up",
 			"no": "Cancel clean up"
-		}
+		},
+		"confirmationDialogDropMountUpMessage": "Did you want the '{rider}' to mount up '{mount}' ?",
+		"confirmationDialogTitle": "Drop Mount Up!",
+		"confirmationDialogChoiceYes": "Yes",
+		"confirmationDialogChoiceNo": "No"
 	}
 }

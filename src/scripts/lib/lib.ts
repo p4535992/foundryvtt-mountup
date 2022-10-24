@@ -543,45 +543,103 @@ export function findTokensWithinBoundaries(riderToken: Token): Token | undefined
 export const dragAndDropOnMountHandler = async function (wrapped, ...args) {
 	if (game.settings.get(CONSTANTS.MODULE_NAME, "enableDragAndDropMountUp")) {
 		const draggedToken = this as Token;
-		const mountToken = dragAndDropOnMount(draggedToken);
+		if (draggedToken) {
+			// let mount = draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+			// let alreadymounted = draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted);
+			// if (alreadymounted) {
+			// 	warn(`The rider '${draggedToken.name}' is already mounted!`);
+			// 	return undefined;
+			// }
+			if (MountManager.isaRider(draggedToken.id) || MountManager.isaMount(draggedToken.id)) {
+				return undefined;
+			}
+			// if (!draggedToken.x) {
+			// 	draggedToken = <Token>canvas.tokens?.get(draggedToken.id);
+			// }
+			const mountToken = findTokensWithinBoundaries(draggedToken);
+			if (mountToken) {
+				if (game.settings.get(CONSTANTS.MODULE_NAME, "showDialogOnDropMountUp")) {
+					renderDialogDropMountUp(draggedToken, mountToken);
+				} else {
+					dragAndDropOnMount(draggedToken, mountToken);
+				}
+			}
+		}
 	}
 	return wrapped(...args);
 };
 
-async function dragAndDropOnMount(draggedToken: Token): Promise<Token | undefined> {
-	if (draggedToken) {
-		// let mount = draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
-		// let alreadymounted = draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted);
-		// if (alreadymounted) {
-		// 	warn(`The rider '${draggedToken.name}' is already mounted!`);
-		// 	return undefined;
-		// }
-		if (MountManager.isaRider(draggedToken.id) || MountManager.isaMount(draggedToken.id)) {
-			return undefined;
-		}
-		// if (!draggedToken.x) {
-		// 	draggedToken = <Token>canvas.tokens?.get(draggedToken.id);
-		// }
-		const mountToken = findTokensWithinBoundaries(draggedToken);
-		if (mountToken) {
-			// await MountManager.doCreateMount(riderToken, mountToken);
-			await mountUpTA(draggedToken, mountToken, true);
-			let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-			if (riders === undefined) riders = [];
-			if (!riders.includes(draggedToken.id)) {
-				riders.push(draggedToken.id);
-			}
-			await mountToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders, riders);
-			log(riders);
-			await draggedToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount, mountToken.id);
-			if (!draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)) {
-				await draggedToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize, {
-					w: draggedToken.w,
-					h: draggedToken.h,
-				});
-			}
-			await draggedToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted, true);
-		}
+async function dragAndDropOnMount(riderToken: Token, mountToken: Token): Promise<Token | undefined> {
+	// const riderToken = <Token>canvas.tokens?.get(draggedToken.id);
+	// const mountToken = <Token>canvas.tokens?.get(droppedToken.id);
+
+	// await MountManager.doCreateMount(riderToken, mountToken);
+	mountUpTA(riderToken, mountToken, true);
+	let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+	if (riders === undefined) riders = [];
+	if (!riders.includes(riderToken.id)) {
+		riders.push(riderToken.id);
 	}
+
+	mountToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders, riders);
+	log(riders);
+	riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount, mountToken.id);
+	if (!riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)) {
+		riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize, {
+			w: riderToken.w,
+			h: riderToken.h,
+		});
+	}
+	riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted, true);
+
+	// //@ts-ignore
+	// setProperty(mountToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.Riders}`, riders);
+	// log(riders);
+	// //@ts-ignore
+	// setProperty(riderToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.Mount}`, mountToken.id);
+	// //@ts-ignore
+	// if (!getProperty(riderToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.OrigSize}`)) {
+	// 	//@ts-ignore
+	// 	setProperty(riderToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.OrigSize}`, {
+	// 		w: riderToken.w,
+	// 		h: riderToken.h,
+	// 	});
+	// }
+	// //@ts-ignore
+	// setProperty(riderToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.AlreadyMounted}`, true);
 	return undefined;
+}
+
+export async function renderDialogDropMountUp(riderToken: Token, mountToken: Token) {
+	const msg = i18nFormat(`${CONSTANTS.MODULE_NAME}.confirmationDialogDropMountUpMessage`, {
+		rider: riderToken?.name,
+		mount: mountToken.name,
+	});
+
+	const template = `
+	<div class="form-group">
+		<label>${msg}</label>
+	</div>`;
+	const d = new Dialog({
+		title: i18n(`${CONSTANTS.MODULE_NAME}.confirmationDialogTitle`),
+		content: template,
+		buttons: {
+			yes: {
+				icon: `<i class="fas fa-${game.settings.get(CONSTANTS.MODULE_NAME, "icon")}"></i>`,
+				label: i18n(`${CONSTANTS.MODULE_NAME}.confirmationDialogChoiceYes`),
+				callback: async (html: HTMLElement | JQuery<HTMLElement>) => {
+					dragAndDropOnMount(riderToken, mountToken);
+				},
+			},
+			no: {
+				icon: '<i class="fas fa-times"></i>',
+				label: i18n(`${CONSTANTS.MODULE_NAME}.confirmationDialogChoiceNo`),
+			},
+		},
+		render: (html: HTMLElement | JQuery<HTMLElement>) => {
+			// DO NOTHING
+		},
+		default: "cancel",
+	});
+	d.render(true);
 }
