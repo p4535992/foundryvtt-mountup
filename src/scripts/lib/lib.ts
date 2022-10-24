@@ -4,8 +4,10 @@ import API from "../api";
 import CONSTANTS from "../constants";
 import type Effect from "../effects/effect";
 import { aemlApi } from "../module";
+import { MountManager } from "../mountManager";
 import { MountupEffectDefinitions } from "../mountup-effect-definition";
-import { ActiveTokenMountUpData } from "../utils";
+import { mountUpTA } from "../tokenAttacherHelper";
+import { ActiveTokenMountUpData, MountUpFlags } from "../utils";
 
 // =============================
 // Module Generic function
@@ -514,4 +516,72 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
 			);
 		}
 	}
+}
+
+//- finds tokens with co-ordinates within the boundaries of the given token
+//-array will be ordered from top to bottom. Top being index 0
+export function findTokensWithinBoundaries(riderToken: Token): Token | undefined {
+	let mountToken: Token | undefined = undefined;
+	if (riderToken) {
+		let tokenStack = <Token[]>[];
+		tokenStack = <Token[]>(
+			canvas.tokens?.placeables.filter(
+				(t) =>
+					t.x + t.w > riderToken.x &&
+					t.y + t.h > riderToken.y &&
+					t.x < riderToken.x + riderToken.w &&
+					t.y < riderToken.y + riderToken.h
+			)
+		);
+		if (tokenStack && tokenStack.length > 0) {
+			mountToken = tokenStack[0];
+		}
+	}
+	return mountToken;
+}
+
+export const dragAndDropOnMountHandler = async function (wrapped, ...args) {
+	if (game.settings.get(CONSTANTS.MODULE_NAME, "enableDragAndDropMountUp")) {
+		const draggedToken = this as Token;
+		const mountToken = dragAndDropOnMount(draggedToken);
+	}
+	return wrapped(...args);
+};
+
+async function dragAndDropOnMount(draggedToken: Token): Promise<Token | undefined> {
+	if (draggedToken) {
+		// let mount = draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+		// let alreadymounted = draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted);
+		// if (alreadymounted) {
+		// 	warn(`The rider '${draggedToken.name}' is already mounted!`);
+		// 	return undefined;
+		// }
+		if (MountManager.isaRider(draggedToken.id) || MountManager.isaMount(draggedToken.id)) {
+			return undefined;
+		}
+		// if (!draggedToken.x) {
+		// 	draggedToken = <Token>canvas.tokens?.get(draggedToken.id);
+		// }
+		const mountToken = findTokensWithinBoundaries(draggedToken);
+		if (mountToken) {
+			// await MountManager.doCreateMount(riderToken, mountToken);
+			await mountUpTA(draggedToken, mountToken, true);
+			let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+			if (riders === undefined) riders = [];
+			if (!riders.includes(draggedToken.id)) {
+				riders.push(draggedToken.id);
+			}
+			await mountToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders, riders);
+			log(riders);
+			await draggedToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount, mountToken.id);
+			if (!draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)) {
+				await draggedToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize, {
+					w: draggedToken.w,
+					h: draggedToken.h,
+				});
+			}
+			await draggedToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted, true);
+		}
+	}
+	return undefined;
 }

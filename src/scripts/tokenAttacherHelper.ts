@@ -4,7 +4,7 @@ import { MountManager } from "./mountManager";
 import { SettingsForm } from "./settings-form";
 import { MountUpFlags } from "./utils";
 
-export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
+export const mountUpTA = async function (riderToken: Token, mountToken: Token, noRiderUpdate: boolean) {
 	if (!riderToken || !mountToken) {
 		return;
 	}
@@ -65,14 +65,10 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token) {
 			newHeightRiderSize = mountToken.document.height / 2;
 		}
 
-		// await riderToken.document.update({
-		// 	x: newRiderCoords.x,
-		// 	y: newRiderCoords.y,
-		// 	width: newWidthRiderSize,
-		// 	height: newHeightRiderSize,
-		// });
-
-		const loc: { x; y } = MountManager.getRiderInitialLocation(riderToken, mountToken);
+		let loc: { x; y } = { x: riderToken.x, y: riderToken.y };
+		if (!noRiderUpdate) {
+			loc = MountManager.getRiderInitialLocation(riderToken, mountToken);
+		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableAutoUpdateElevation")) {
 			const mountElevation = getElevationToken(mountToken) || 0;
 			const backupRiderElevation = getElevationToken(riderToken) || 0;

@@ -2,7 +2,7 @@ import API from "./api";
 import { MountHud } from "./mountHud";
 import { MountManager } from "./mountManager";
 import CONSTANTS from "./constants";
-import { debug, getElevationToken, warn } from "./lib/lib";
+import { dragAndDropOnMountHandler, getElevationToken, warn } from "./lib/lib";
 import { MountupEffectDefinitions } from "./mountup-effect-definition";
 import { findTokenById, MountUpFlags } from "./utils";
 import { setApi } from "../mountup";
@@ -182,5 +182,26 @@ export const readyHooks = async () => {
 			//@ts-ignore
 			TokenMagic.addPreset(CONSTANTS.TM_FLYING, params);
 		}
+	}
+
+	if (game.settings.get(CONSTANTS.MODULE_NAME, "enableDragAndDropMountUp")) {
+		// //@ts-ignore
+		// libWrapper.register(
+		// 	CONSTANTS.MODULE_NAME,
+		// 	"Token.prototype._onDragLeftDrop",
+		// 	dragAndDropOnMountHandler,
+		// 	"MIXED"
+		// );
+
+		// //@ts-ignore
+		// libWrapper.register(
+		// 	CONSTANTS.MODULE_NAME,
+		// 	"Token.prototype._onDragLeftCancel",
+		// 	dragAndDropOnMountHandler,
+		// 	"MIXED"
+		// );
+
+		//@ts-ignore
+		libWrapper.register(CONSTANTS.MODULE_NAME, "Token.prototype._onDragEnd", dragAndDropOnMountHandler, "MIXED");
 	}
 };

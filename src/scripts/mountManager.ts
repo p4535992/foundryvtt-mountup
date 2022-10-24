@@ -55,7 +55,7 @@ export class MountManager {
 				}
 
 				// CALL TOKEN ATTACHER
-				await mountUpTA(riderToken, mountToken);
+				await mountUpTA(riderToken, mountToken, false);
 				await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted, true);
 				// Chatter.mountMessage(riderToken.id, mountToken.id);
 
@@ -135,7 +135,7 @@ export class MountManager {
 		// this.moveRiderToMount(riderToken, { x: mountToken.x, y: mountToken.y }, null, null, null);
 
 		// CALL TOKEN ATTACHER MOVED UP
-		await mountUpTA(riderToken, mountToken);
+		await mountUpTA(riderToken, mountToken, false);
 		await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted, true);
 		// Chatter.mountMessage(riderToken.id, mountToken.id);
 		return true;
@@ -342,7 +342,7 @@ export class MountManager {
 				//     riderToken.zIndex = mountToken.zIndex + 10;
 				//   }
 				//   // MOD 4535992 SET UP A OFFSET MORE EASY TO SEE IF MORE TOKEN ON THE SAME MOUNT
-				//   // let riders = <string[]>mountToken.document.actor.getFlag(CONSTANTS.MODULE_NAME, Flags.Riders);
+				//   // let riders = <string[]>mountToken.actor.getFlag(CONSTANTS.MODULE_NAME, Flags.Riders);
 				//   // let index = riders.indexOf(riderToken.id); // 1
 				//   // let offsetM = index;
 				//   // if(!updateData){

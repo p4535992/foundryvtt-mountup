@@ -77,6 +77,14 @@
 				"name": "Enable 'can move constrained'",
 				"hint": "Enable the new 'Can Move Constrained' feature from Token Attacher"
 			},
+			"enableDragAndDropMountUp": {
+				"name": "Enable drag and drop token for mountup",
+				"hint": "If Enabled when dragging and dropped a token it will try to mount the below token if present and if you have permissions on that token"
+			},
+			"hudDisableForMount": {
+				"name": "Disable the HUD integration for the 'Mount' action",
+				"hint": "Make sense only with 'Enable drag and drop token for mountup' enabled. It will hide the hud integration of the hud module for mountup, but it will appear for the dismount."
+			},
 			"debug": {
 				"name": "Enable debugging",
 				"hint": "Prints debug messages to the console"

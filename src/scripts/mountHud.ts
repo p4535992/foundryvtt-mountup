@@ -34,7 +34,9 @@ export class MountHud {
 			this.addCleanupButton(html, hudToken);
 		} else if (<number>canvas.tokens?.controlled.length > 1) {
 			//ui.notifications.warn(`${MODULE_NAME}! : You must be sure to select only the token mount`);
-			this.addMountButton(html, hudToken);
+			if (!game.settings.get(CONSTANTS.MODULE_NAME, "hudDisableForMount")) {
+				this.addMountButton(html, hudToken);
+			}
 		}
 
 		// if (canvas.tokens.controlled.length == 1 && MountManager.isaMount(mount.id)) {
@@ -128,7 +130,7 @@ export class MountHud {
 		//   Object.keys(getProperty(<Actor>token.actor, `flags.${CONSTANTS.MODULE_NAME}`)).length > 0
 		// ) {
 		if (token && game.user?.isGM) {
-			let button = this.buildButton(html, `Clean up munt up flags from ${hudToken.name}`, `fa-horse`);
+			let button = this.buildButton(html, `Clean up mount up flags from ${hudToken.name}`, `fa-horse`);
 			button = this.addSlashForFLags(button);
 
 			button.find("i").on("click", async (ev) => {

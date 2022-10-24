@@ -199,6 +199,24 @@ export const registerSettings = function () {
 		default: "{rider} has dismounted from {mount}.",
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "enableDragAndDropMountUp", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.enableDragAndDropMountUp.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.enableDragAndDropMountUp.hint`,
+		scope: "client",
+		config: true,
+		default: false,
+		type: Boolean,
+	});
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "hudDisableForMount", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.hudDisableForMount.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.hudDisableForMount.hint`,
+		scope: "client",
+		config: true,
+		default: false,
+		type: Boolean,
+	});
+
 	game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.debug.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.debug.hint`,
