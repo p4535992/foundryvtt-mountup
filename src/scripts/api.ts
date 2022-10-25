@@ -13,7 +13,7 @@ const API = {
 	 * @param {string} riderNameOrId - The name or the ID of the rider token
 	 * @param {string} mountNameOrId - The name or the ID of the mount token
 	 */
-	mount(riderNameOrId: string, mountNameOrId: string) {
+	mount(riderNameOrId: string, mountNameOrId: string, noRiderUpdate: boolean) {
 		const rider: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
 		const mount: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
 		if (!rider) {
@@ -31,7 +31,7 @@ const API = {
 		if (rider) {
 			if (mount) {
 				if (rider.id !== mount.id) {
-					MountManager.doCreateMount(rider, mount);
+					MountManager.doCreateMount(rider, mount, noRiderUpdate);
 				} else {
 					error("You cannot mount a token to itself");
 				}
@@ -123,7 +123,7 @@ const API = {
 		if (riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount) === mountToken.id) {
 			API.dismount(riderNameOrId);
 		} else {
-			API.mount(riderNameOrId, mountNameOrId);
+			API.mount(riderNameOrId, mountNameOrId, false);
 		}
 	},
 

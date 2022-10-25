@@ -111,7 +111,7 @@ export class MountManager {
 	 * @param {object} riderToken - The rider token
 	 * @param {object} mountToken - The mount token
 	 */
-	static async doCreateMount(riderToken: Token, mountToken: Token): Promise<boolean> {
+	static async doCreateMount(riderToken: Token, mountToken: Token, noRiderUpdate: boolean): Promise<boolean> {
 		if (riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)) {
 			return false;
 		}
@@ -135,7 +135,7 @@ export class MountManager {
 		// this.moveRiderToMount(riderToken, { x: mountToken.x, y: mountToken.y }, null, null, null);
 
 		// CALL TOKEN ATTACHER MOVED UP
-		await mountUpTA(riderToken, mountToken, false);
+		await mountUpTA(riderToken, mountToken, noRiderUpdate);
 		await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted, true);
 		// Chatter.mountMessage(riderToken.id, mountToken.id);
 		return true;

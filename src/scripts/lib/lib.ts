@@ -544,30 +544,20 @@ export const dragAndDropOnMountHandler = async function (draggedToken) {
 	if (game.settings.get(CONSTANTS.MODULE_NAME, "enableDragAndDropMountUp")) {
 		// const draggedToken = this as Token;
 		if (draggedToken) {
-			// let mount = draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
-			// let alreadymounted = draggedToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted);
-			// if (alreadymounted) {
-			// 	warn(`The rider '${draggedToken.name}' is already mounted!`);
-			// 	return;
-			// }
 			if (MountManager.isaRider(draggedToken.id) || MountManager.isaMount(draggedToken.id)) {
 				return;
 			}
-			// if (!draggedToken.x) {
-			// 	draggedToken = <Token>canvas.tokens?.get(draggedToken.id);
-			// }
 			const mountToken = findTokensWithinBoundaries(draggedToken);
 			if (mountToken) {
 				const riderTokenId = draggedToken.id;
 				const mountTokenId = mountToken.id;
 				const riderTokenName = draggedToken.name;
 				const mountTokenName = mountToken.name;
-				// await wait(3000);
 				if (game.settings.get(CONSTANTS.MODULE_NAME, "showDialogOnDropMountUp")) {
 					renderDialogDropMountUp(riderTokenId, mountTokenId, riderTokenName, mountTokenName);
 				} else {
 					// dragAndDropOnMount(riderTokenId, mountTokenId );
-					API.mount(riderTokenId, mountTokenId);
+					API.mount(riderTokenId, mountTokenId, true);
 				}
 			}
 		}
@@ -638,7 +628,8 @@ export async function renderDialogDropMountUp(
 				icon: `<i class="fas fa-${game.settings.get(CONSTANTS.MODULE_NAME, "icon")}"></i>`,
 				label: i18n(`${CONSTANTS.MODULE_NAME}.confirmationDialogChoiceYes`),
 				callback: async (html: HTMLElement | JQuery<HTMLElement>) => {
-					await dragAndDropOnMount(riderTokenId, mountTokenId);
+					// await dragAndDropOnMount(riderTokenId, mountTokenId);
+					API.mount(riderTokenId, mountTokenId, true);
 				},
 			},
 			no: {
