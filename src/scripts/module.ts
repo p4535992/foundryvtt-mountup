@@ -185,7 +185,78 @@ export const readyHooks = async () => {
 	}
 
 	if (game.settings.get(CONSTANTS.MODULE_NAME, "enableDragAndDropMountUp")) {
+		//@ts-ignore
+		// libWrapper.register(CONSTANTS.MODULE_NAME, 'Token.prototype._onDragLeftMove', (function() {
+		// 	return async function(wrapped, ...args) {
+		// 		if (!game.user.isGM || !canvas.scene.tokenVision ||
+		// 			!inputDown || !hasValidToken) {
+		// 				return wrapped.apply(this, args);
+		// 		}
+
+		// 		canvas.scene.tokenVision = false;
+		// 		canvas.perception.refresh();
+
+		// 		return wrapped.apply(this, args);
+		// 	}
+		// })(), 'WRAPPER');
+
+		// function EndDrag() {
+		// 	if (!game.user?.isGM || !inputDown) {
+		// 		return;
+		// 	}
+		// 	inputDown = false;
+
+		// 	if (hasValidToken) {
+		// 		canvas.scene.tokenVision = true;
+		// 		canvas.perception.refresh();
+		// 		hasValidToken = false;
+		// 	}
+		// }
+
 		// //@ts-ignore
+		// libWrapper.register(
+		// 	CONSTANTS.MODULE_NAME,
+		// 	"Token.prototype._onDragLeftDrop",
+		// 	(function () {
+		// 		return async function (wrapped, ...args) {
+		// 			dragAndDropOnMountHandler(wrapped, ...args);
+		// 			// EndDrag();
+		// 			return wrapped.apply(this, args);
+		// 		};
+		// 	})(),
+		// 	"MIXED"
+		// );
+
+		// //@ts-ignore
+		// libWrapper.register(
+		// 	CONSTANTS.MODULE_NAME,
+		// 	"Token.prototype._onDragLeftCancel",
+		// 	(function () {
+		// 		return async function (wrapped, ...args) {
+		// 			dragAndDropOnMountHandler(wrapped, ...args);
+		// 			// EndDrag();
+		// 			return wrapped.apply(this, args);
+		// 		};
+		// 	})(),
+		// 	"MIXED"
+		// );
+
+		//@ts-ignore
+		libWrapper.register(
+			CONSTANTS.MODULE_NAME,
+			"Token.prototype._onDragEnd",
+			(function () {
+				return async function (wrapped, ...args) {
+					const draggedToken = this as Token;
+					dragAndDropOnMountHandler(draggedToken);
+					// EndDrag();
+					return wrapped.apply(this, args);
+				};
+			})(),
+			"MIXED"
+		);
+
+		//@ts-ignore
 		// libWrapper.register(
 		// 	CONSTANTS.MODULE_NAME,
 		// 	"Token.prototype._onDragLeftDrop",
@@ -202,6 +273,21 @@ export const readyHooks = async () => {
 		// );
 
 		//@ts-ignore
-		libWrapper.register(CONSTANTS.MODULE_NAME, "Token.prototype._onDragEnd", dragAndDropOnMountHandler, "MIXED");
+		// libWrapper.register(CONSTANTS.MODULE_NAME, "Token.prototype._onDragLeftMove", dragAndDropOnMountHandler, "MIXED");
+
+		//@ts-ignore
+		// libWrapper.register(CONSTANTS.MODULE_NAME, "Token.prototype._onDragEnd", dragAndDropOnMountHandler, "MIXED");
+
+		// https://github.com/ruipin/fvtt-lib-wrapper/#134-shim
+		// Note: Don't simply pass in the function onCanvasDrop, or you lose 'this' referring to Droppable
+		//@ts-ignore
+		// libWrapper.register(
+		// 	CONSTANTS.MODULE_NAME,
+		// 	'Canvas.prototype._onDrop',
+		// 	function (wrapper, ...args) {
+		// 		dragAndDropOnMountHandler(wrapper, ...args);
+		// 	},
+		// 	"MIXED"
+		// );
 	}
 };
