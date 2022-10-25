@@ -1,3 +1,11 @@
+### 3.3.2
+
+. Add drag and drop feature
+
+### 3.3.0-1
+
+- Upgrade for fvtt10
+
 ### 3.2.25
 
 - Add dependecy to new library [active-effect-manager-lib](https://github.com/p4535992/foundryvtt-active-effect-manager-lib)

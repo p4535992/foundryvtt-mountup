@@ -49,23 +49,24 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token, n
 
 		// shrink the rider if needed
 		//@ts-ignore
-		const grid = <number>canvas.scene?.grid.size;
-		let newWidthRider = riderToken.w;
-		let newHeightRider = riderToken.h;
+		// const grid = <number>canvas.scene?.grid.size;
+		// let newWidthRider = riderToken.w;
+		// let newHeightRider = riderToken.h;
 		//@ts-ignore
 		let newWidthRiderSize = riderToken.document.width;
 		//@ts-ignore
 		let newHeightRiderSize = riderToken.document.height;
 		if (riderToken.w >= mountToken.w || riderToken.h >= mountToken.h) {
-			newWidthRider = mountToken.w / grid / 2;
-			newHeightRider = mountToken.h / grid / 2;
+			// newWidthRider = mountToken.w / grid / 2;
+			// newHeightRider = mountToken.h / grid / 2;
 			//@ts-ignore
 			newWidthRiderSize = mountToken.document.width / 2;
 			//@ts-ignore
 			newHeightRiderSize = mountToken.document.height / 2;
 		}
 
-		let loc: { x; y } = { x: riderToken.x, y: riderToken.y };
+		let loc: { x; y } = { x: newRiderCoords.x, y: newRiderCoords.y };
+		// let loc: { x; y } = canvas.app?.renderer.plugins.interaction.mouse.getLocalPosition(canvas.app.stage);
 		if (!noRiderUpdate) {
 			loc = MountManager.getRiderInitialLocation(riderToken, mountToken);
 		}

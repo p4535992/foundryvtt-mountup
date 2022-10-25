@@ -68,6 +68,9 @@ This module uses the [active-effect-manager-lib](https://github.com/p4535992/fou
 - **Enable auto update elevation:** If enabled thi setting will make sure to always sync the riders elevation with the mount elevation
 - **Enable 'can move constrained':** Enable the the new 'Can Move Constrained' feature from Token Attacher
 
+- **Enable drag and drop token for mountup:** If Enabled when dragging and dropped a token it will try to mount the below token if present and if you have owner permissions on that token
+- **Disable the HUD integration for the 'Mount' action:** Make sense only with 'Enable drag and drop token for mountup' enabled. It will hide the hud integration of the hud module for mountup, but it will appear for the dismount
+- **Enable show dialog on drop Mount Up:** Make sense only with 'Enable drag and drop token for mountup' enabled. If enabled when you drop a token (rider) on a token (mount) if will pop out a dialog for confirmation
 
 ## Usage
 
@@ -91,6 +94,10 @@ To dismount a token from a token:
 ### Partial multi mounting is supported
 
 ![img](./wiki/img/multimount_partial.png)
+
+### Can Drag and drop on other owned tokens
+
+![img](./wiki/img/dnd_mountup_feature.gif)
 
 ### Can Move Constrained
 

@@ -185,7 +185,6 @@ export const readyHooks = async () => {
 	}
 
 	if (game.settings.get(CONSTANTS.MODULE_NAME, "enableDragAndDropMountUp")) {
-		
 		//@ts-ignore
 		libWrapper.register(
 			CONSTANTS.MODULE_NAME,

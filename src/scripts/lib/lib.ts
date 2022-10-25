@@ -530,7 +530,8 @@ export function findTokensWithinBoundaries(riderToken: Token): Token | undefined
 					t.x + t.w > riderToken.x &&
 					t.y + t.h > riderToken.y &&
 					t.x < riderToken.x + riderToken.w &&
-					t.y < riderToken.y + riderToken.h
+					t.y < riderToken.y + riderToken.h &&
+					t.id !== riderToken.id
 			)
 		);
 		if (tokenStack && tokenStack.length > 0) {
@@ -548,7 +549,8 @@ export const dragAndDropOnMountHandler = async function (draggedToken) {
 				return;
 			}
 			const mountToken = findTokensWithinBoundaries(draggedToken);
-			if (mountToken) {
+			const isMountPlayerOwned = game.user?.isGM || <boolean> mountToken?.document.isOwner;
+			if (mountToken && isMountPlayerOwned) {
 				const riderTokenId = draggedToken.id;
 				const mountTokenId = mountToken.id;
 				const riderTokenName = draggedToken.name;
