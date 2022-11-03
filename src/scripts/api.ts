@@ -199,6 +199,41 @@ const API = {
 				warn(`No token found on the canvas for id '${token.id}'`, true);
 			}
 		}
+        // OLD
+        for (const token of tokens) {
+			if (token && token.document) {
+				if (getProperty(token.document, `flags.${"foundryvtt-mountup"}`)) {
+					const p = getProperty(token.document, `flags.${"foundryvtt-mountup"}`);
+					for (const key in p) {
+						const senseOrConditionIdKey = key;
+						const senseOrConditionValue = <any>p[key];
+						await token.document.unsetFlag("foundryvtt-mountup", senseOrConditionIdKey);
+					}
+					const attached = token.document.getFlag("token-attacher", `attached`);
+					if (attached) {
+						await window["tokenAttacher"].detachAllElementsFromToken(token, true);
+					}
+					info(`Cleaned up token '${token.name}'`, true);
+				}
+			} else {
+				warn(`No token found on the canvas for id '${token.id}'`, true);
+			}
+		}
+		for (const token of tokens) {
+			if (token && token.actor) {
+				if (getProperty(token.actor, `flags.${"foundryvtt-mountup"}`)) {
+					const p = getProperty(token.actor, `flags.${"foundryvtt-mountup"}`);
+					for (const key in p) {
+						const senseOrConditionIdKey = key;
+						const senseOrConditionValue = <any>p[key];
+						await token.actor.unsetFlag("foundryvtt-mountup", senseOrConditionIdKey);
+					}
+					info(`Cleaned up actor '${token.name}'`, true);
+				}
+			} else {
+				warn(`No token found on the canvas for id '${token.id}'`, true);
+			}
+		}
 	},
 
 	async cleanUpToken(token: Token) {
@@ -227,6 +262,38 @@ const API = {
 					const senseOrConditionIdKey = key;
 					const senseOrConditionValue = <any>p[key];
 					await token.actor.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+				}
+				info(`Cleaned up actor '${token.name}'`, true);
+			}
+		} else {
+			warn(`No token found on the canvas for id '${token.id}'`, true);
+		}
+        // OLD
+        if (token && token.document) {
+			if (getProperty(token.document, `flags.${"foundryvtt-mountup"}`)) {
+				const p = getProperty(token.document, `flags.${"foundryvtt-mountup"}`);
+				for (const key in p) {
+					const senseOrConditionIdKey = key;
+					const senseOrConditionValue = <any>p[key];
+					await token.document.unsetFlag("foundryvtt-mountup", senseOrConditionIdKey);
+				}
+				const attached = token.document.getFlag("token-attacher", `attached`);
+				if (attached) {
+					await window["tokenAttacher"].detachAllElementsFromToken(token, true);
+				}
+				info(`Cleaned up token '${token.name}'`, true);
+			}
+		} else {
+			warn(`No token found on the canvas for id '${token.id}'`, true);
+		}
+
+		if (token && token.actor) {
+			if (getProperty(token.actor, `flags.${"foundryvtt-mountup"}`)) {
+				const p = getProperty(token.actor, `flags.${"foundryvtt-mountup"}`);
+				for (const key in p) {
+					const senseOrConditionIdKey = key;
+					const senseOrConditionValue = <any>p[key];
+					await token.actor.unsetFlag("foundryvtt-mountup", senseOrConditionIdKey);
 				}
 				info(`Cleaned up actor '${token.name}'`, true);
 			}
