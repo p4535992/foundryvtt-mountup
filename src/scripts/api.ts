@@ -86,14 +86,16 @@ const API = {
 
 		if (mount) {
 			if (MountManager.isaMount(mount.id)) {
-				const riders = <string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-				for (const rider in riders) {
-					const riderToken: Token = findTokenById(rider);
-					if (!riderToken) {
-						warn(`No rider with reference '${rider}' is been found`, true);
-						return;
+				const riders = <string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) || [];
+				if (riders && riders.length > 0) {
+					for (const rider in riders) {
+						const riderToken: Token = findTokenById(rider);
+						if (!riderToken) {
+							warn(`No rider with reference '${rider}' is been found`, true);
+							return;
+						}
+						MountManager.doRemoveMount(riderToken, mount);
 					}
-					MountManager.doRemoveMount(riderToken, mount);
 				}
 			} else {
 				error(`Token '${mountName}' is not a mount`);
@@ -199,8 +201,8 @@ const API = {
 				warn(`No token found on the canvas for id '${token.id}'`, true);
 			}
 		}
-        // OLD
-        for (const token of tokens) {
+		// OLD
+		for (const token of tokens) {
 			if (token && token.document) {
 				if (getProperty(token.document, `flags.${"foundryvtt-mountup"}`)) {
 					const p = getProperty(token.document, `flags.${"foundryvtt-mountup"}`);
@@ -268,8 +270,8 @@ const API = {
 		} else {
 			warn(`No token found on the canvas for id '${token.id}'`, true);
 		}
-        // OLD
-        if (token && token.document) {
+		// OLD
+		if (token && token.document) {
 			if (getProperty(token.document, `flags.${"foundryvtt-mountup"}`)) {
 				const p = getProperty(token.document, `flags.${"foundryvtt-mountup"}`);
 				for (const key in p) {

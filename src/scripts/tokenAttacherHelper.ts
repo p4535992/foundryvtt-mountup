@@ -155,25 +155,27 @@ export const dismountDropAllTA = async function (mountToken: Token) {
 	//@ts-ignore
 	ChatMessage.create(chatData);
 
-	const riderTokens: string[] = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-	for (const riderTokenS of riderTokens) {
-		const riderToken = <Token>canvas.tokens?.placeables.find((rt) => {
-			return rt.id === riderTokenS;
-		});
-		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableAutoUpdateElevation")) {
-			const backupRiderElevation = <number>(
-				riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
-			);
-			if (backupRiderElevation) {
-				await riderToken.document.update({
-					elevation: backupRiderElevation,
-				});
-				await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
+	const riderTokens: string[] = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) || [];
+	if (riderTokens && riderTokens.length > 0) {
+		for (const riderTokenS of riderTokens) {
+			const riderToken = <Token>canvas.tokens?.placeables.find((rt) => {
+				return rt.id === riderTokenS;
+			});
+			if (game.settings.get(CONSTANTS.MODULE_NAME, "enableAutoUpdateElevation")) {
+				const backupRiderElevation = <number>(
+					riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation)
+				);
+				if (backupRiderElevation) {
+					await riderToken.document.update({
+						elevation: backupRiderElevation,
+					});
+					await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigElevation);
+				}
 			}
-		}
-		// Manage active effect
-		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableActiveEffect")) {
-			await manageAEOnDismountUp(riderToken, mountToken);
+			// Manage active effect
+			if (game.settings.get(CONSTANTS.MODULE_NAME, "enableActiveEffect")) {
+				await manageAEOnDismountUp(riderToken, mountToken);
+			}
 		}
 	}
 };

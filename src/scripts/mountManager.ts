@@ -97,12 +97,13 @@ export class MountManager {
 		const mountToken: Token = findTokenById(hudToken._id);
 		// CALL TOKEN ATTACHER
 		dismountDropAllTA(mountToken);
-		const ridersIds = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-		const riders: string[] = ridersIds;
-		for (const riderId of riders) {
-			const riderToken = findTokenById(riderId);
-			// MOD 4535992
-			this.doRemoveMount(riderToken, mountToken);
+		const riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) || [];
+		if (riders && riders.length > 0) {
+			for (const riderId of riders) {
+				const riderToken = findTokenById(riderId);
+				// MOD 4535992
+				this.doRemoveMount(riderToken, mountToken);
+			}
 		}
 	}
 
@@ -174,7 +175,8 @@ export class MountManager {
 			await mountToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
 		}
 		// MOD 4535992 FORCE SHRINK TO OTHERS RIDERS
-		//let riders = <string[]>mountToken.actor.getFlag(CONSTANTS.MODULE_NAME, Flags.Riders);
+		//let riders = <string[]>mountToken.actor.getFlag(CONSTANTS.MODULE_NAME, Flags.Riders) || [];
+		// if(riders && riders.length > 0) {
 		// for (const riderTmp of riders) {
 		//   const riderTokenTmp: Token = findTokenById(riderTmp);
 		//   if (riders.includes(riderTokenTmp.id)) {
@@ -191,6 +193,7 @@ export class MountManager {
 		//     }
 		//   }
 		// }
+		//}
 		// END MOD 4535992 FORCE SHRINK TO OTHERS RIDERS
 
 		return true;
@@ -251,7 +254,8 @@ export class MountManager {
 				MountManager.removeAllRiders(token);
 				/*
         const riders =
-          <string[]>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+          <string[]>token.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) || [];
+		  if(riders && riders.length > 0) {
         for (const riderTmp in riders) {
           const rider: Token = findTokenById(riderTmp);
           // MOD 4535992 CHECK IF TOKEN IS ALREADY DELETED
@@ -260,6 +264,7 @@ export class MountManager {
             // await rider.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize);
           }
         }
+	    }
         */
 			}
 
@@ -294,26 +299,27 @@ export class MountManager {
 			return true;
 		}
 		const mountToken: Token = findTokenById(mountId);
-		const riders: string[] = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-		for (const riderId of riders) {
-			const riderToken = findTokenById(riderId);
-			if (riderToken) {
-				riderToken.zIndex = mountToken.zIndex + 10;
-			}
+		const riders: string[] = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) || [];
+		if (riders && riders.length > 0) {
+			for (const riderId of riders) {
+				const riderToken = findTokenById(riderId);
+				if (riderToken) {
+					riderToken.zIndex = mountToken.zIndex + 10;
+				}
 
-			if (riderToken && this.isaMount(riderToken.id)) {
-				//this.popRider(riderToken.id, callcount += 1);
-				callcount += 1;
-				// CALL TOKEN ATTACHER
-				// dismountDropTargetTA(mountToken, riderToken); // Already called in doRemoveMount
-				this.doRemoveMount(riderToken, mountToken);
-			}
+				if (riderToken && this.isaMount(riderToken.id)) {
+					//this.popRider(riderToken.id, callcount += 1);
+					callcount += 1;
+					// CALL TOKEN ATTACHER
+					// dismountDropTargetTA(mountToken, riderToken); // Already called in doRemoveMount
+					this.doRemoveMount(riderToken, mountToken);
+				}
 
-			if (riderToken && riderToken.owner) {
-				await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove);
+				if (riderToken && riderToken.owner) {
+					await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.MountMove);
+				}
 			}
 		}
-
 		mountToken.parent.sortChildren();
 
 		return true;

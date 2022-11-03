@@ -114,17 +114,18 @@ export const readyHooks = async () => {
 			) {
 				if (MountManager.isaMount(<string>updateData._id)) {
 					const mountElevation = getElevationToken(sourceToken) || updateData.elevation;
-					const riders: string[] = <string[]>(
-						sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders)
-					);
-					for (const rider of riders) {
-						const riderToken = <Token>findTokenById(<string>rider);
-						if (riderToken) {
-							const riderElevation = getElevationToken(riderToken);
-							if (riderElevation !== mountElevation) {
-								await riderToken.document.update({
-									elevation: mountElevation,
-								});
+					const riders: string[] =
+						<string[]>sourceToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) || [];
+					if (riders && riders.length > 0) {
+						for (const rider of riders) {
+							const riderToken = <Token>findTokenById(<string>rider);
+							if (riderToken) {
+								const riderElevation = getElevationToken(riderToken);
+								if (riderElevation !== mountElevation) {
+									await riderToken.document.update({
+										elevation: mountElevation,
+									});
+								}
 							}
 						}
 					}

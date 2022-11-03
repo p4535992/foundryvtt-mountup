@@ -549,7 +549,7 @@ export const dragAndDropOnMountHandler = async function (draggedToken) {
 				return;
 			}
 			const mountToken = findTokensWithinBoundaries(draggedToken);
-			const isMountPlayerOwned = game.user?.isGM || <boolean> mountToken?.document.isOwner;
+			const isMountPlayerOwned = game.user?.isGM || <boolean>mountToken?.document.isOwner;
 			if (mountToken && isMountPlayerOwned) {
 				const riderTokenId = draggedToken.id;
 				const mountTokenId = mountToken.id;
