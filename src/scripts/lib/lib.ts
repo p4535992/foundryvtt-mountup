@@ -523,16 +523,21 @@ export async function manageAEOnDismountUp(riderToken: Token, mountToken: Token)
 export function findTokensWithinBoundaries(riderToken: Token): Token | undefined {
 	let mountToken: Token | undefined = undefined;
 	if (riderToken) {
+		//@ts-ignore
+		const tokensToCheck = [...canvas.tokens?.placeables].filter((token) => token.mesh.visible);
 		let tokenStack = <Token[]>[];
-		tokenStack = <Token[]>(
-			canvas.tokens?.placeables.filter(
-				(t) =>
-					t.x + t.w > riderToken.x &&
-					t.y + t.h > riderToken.y &&
-					t.x < riderToken.x + riderToken.w &&
-					t.y < riderToken.y + riderToken.h &&
-					t.id !== riderToken.id
-			)
+		tokenStack = <Token[]>tokensToCheck.filter(
+			(t) =>
+				t.x + t.w > riderToken.x &&
+				t.y + t.h > riderToken.y &&
+				t.x < riderToken.x + riderToken.w &&
+				t.y < riderToken.y + riderToken.h &&
+				t.id !== riderToken.id
+
+			// position.x >= token.x &&
+			// position.x < token.x + token.document.width * canvas.grid.size &&
+			// position.y >= token.y &&
+			// position.y < token.y + token.document.height * canvas.grid.size
 		);
 		if (tokenStack && tokenStack.length > 0) {
 			mountToken = tokenStack[0];
