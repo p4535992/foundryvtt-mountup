@@ -1,0 +1,112 @@
+{
+	"I18N": {
+		"LANGUAGE": "Espanol",
+		"MAINTAINERS": "@Viriato139ac#0342"
+	},
+	"mountup": {
+		"setting": {
+			"button": {
+				"name": "Ajustes Mount Up!",
+				"label": "Mount Up!",
+				"hint": "Mount Up!"
+			},
+			"formHeaders": {
+				"hudSettings": "Ajustes del HUD",
+				"riderBehavior": "Comportamiento del jinete",
+				"chatSettings": "Ajustes del chat",
+				"save": "Guardar ajustes",
+				"reset": "Reiniciar ajustes"
+			},
+			"icon": {
+				"name": "Icono",
+				"hint": "El icono a mostrar en el HUD"
+			},
+			"hudColumn": {
+				"name": "Columna del HUD",
+				"hint": "En qué columna del HUD poner el botón"
+			},
+			"hudTopBottom": {
+				"name": "HUD arriba/abajo",
+				"hint": "Posición del botón en la columna"
+			},
+			"riderLock": {
+				"name": "Restringir movimiento de los jinetes",
+				"hint": "[Ya no es necesario] Si se habilita, los jinetes no podrán moverse de manera separada de sus monturas hasta que desmonten. NOTA: con la nueva opción de Token Attacher 'romper movimiento restringido' ya no hace falta tocar este ajuste, aunque permanecerá aquí por si alguien tiene interés en establecer la posición inicial del jinete en la montura",
+				"noLock": "No lock"
+			},
+			"riderRotate": {
+				"name": "Rotar jinetes con sus monturas",
+				"hint": "[Ya no es necesario] Si se habilita, se actualizará la rotación del jinete para que coincida con la de la montura. NOTA: con la nueva opción de Token Attacher  'romper movimiento restringido' ya no hace falta tocar este ajuste, aunque permanecerá aquí por si alguien tiene interés en establecer la posición inicial del jinete en la montura"
+			},
+			"riderX": {
+				"name": "Alineación horizontal del jinete",
+				"hint": "[Ya no es necesario] Centrado por defecto. NOTA: con la nueva opción de Token Attacher  'romper movimiento restringido' ya no hace falta tocar este ajuste, aunque permanecerá aquí por si alguien tiene interés en establecer la posición inicial del jinete en la montura"
+			},
+			"riderY": {
+				"name": "Alineación vertical del jinete",
+				"hint": "[Ya no es necesario] Centrado por defecto. NOTA: con la nueva opción de Token Attacher  'romper movimiento restringido' ya no hace falta tocar este ajuste, aunque permanecerá aquí por si alguien tiene interés en establecer la posición inicial del jinete en la montura"
+			},
+			"shouldChat": {
+				"name": "Enviar mensajes al chat",
+				"hint": "Indica si se deben enviar al chat los mensajes de montar/llevar y desmontar/soltar"
+			},
+			"mountMsg": {
+				"name": "Formato de mensaje para montar",
+				"hint": "Formato del mensaje al montar, si se habilita. Use {rider} y {mount} para sustituir los nombres"
+			},
+			"dismountMsg": {
+				"name": "Formato de mensaje para desmontar",
+				"hint": "Formato del mensaje al desmontar, si se habilita. Use {rider} y {mount} para sustituir los nombres"
+			},
+			"pipPosition": {
+				"name": "Posición del jinete",
+				"hint": "[Ya no es necesario] Ajusta la posición del jinete (centrado por defecto). NOTA: con la nueva opción de Token Attacher  'romper movimiento restringido' ya no hace falta tocar este ajuste, aunque permanecerá aquí por si alguien tiene interés en establecer la posición inicial del jinete en la montura",
+				"topleft": "Arriba izquierda",
+				"topright": "Arriba derecha",
+				"bottomleft": "Abajo izquierda",
+				"bottomright": "Abajo derecha",
+				"centertop": "Arriba centrado",
+				"centerbottom": "Abajo centrado",
+				"random": "Aleatorio"
+			},
+			"enableActiveEffect": {
+				"name": "Administración de iconos activos",
+				"hint": "Cada vez que se monte o desmonte en los iconos montura y/o jinete, se pueden añadir o quitar efectos activos en base a la configuración de los cambios para ambos jinete y montura"
+			},
+			"enableAutoUpdateElevation": {
+				"name": "Actualizar elevación",
+				"hint": "Si se habilita, se sincronizará la elevación del jinete con la de la montura"
+			},
+			"enableCanMoveConstrained": {
+				"name": "Habilitar 'romper movimiento restringido'",
+				"hint": "Habilita la nueva característica de Token Attacher 'romper movimiento restringido'"
+			},
+			"enableDragAndDropMountUp": {
+				"name": "Habilitar arrastrar y soltar iconos para montar",
+				"hint": "Si se habilita, cuando se arrastre y suelte un icono, intentará montar en el icono de debajo, si hay alguno, y si se tienen permisos de propietario del mismo"
+			},
+			"hudDisableForMount": {
+				"name": "Deshabilitar integración del HUD integration para la acción 'Montar'",
+				"hint": "Solo tiene sentido si se habilita 'Habilitar arrastrar y soltar iconos para montar'. Ocultará la integración del HUD para montar, aunque seguirá apareciendo para desmontar"
+			},
+			"showDialogOnDropMountUp": {
+				"name": "Mostrar confirmación al montar",
+				"hint": "Solo tiene sentido si se habilita 'Habilitar arrastrar y soltar iconos para montar'. Si se habilita, cuando se suelte un icono (jinete) sobre otro icono (montura), se mostrará un diálogo de confirmación"
+			},
+			"debug": {
+				"name": "Habilitar registro de depuración",
+				"hint": "Envía a la consola mensajes de depuración"
+			}
+		},
+		"dialogCleanUp": {
+			"title": "Macro de limpieza de 'Mount Up'",
+			"message": "Esto ejecutará una macro que corregirá posibles errores en el icono actual y limpiará toda información relacionada con 'Mount Up', ÚTIL SI SE HAN BLOQUEADO LAS ETIQUETAS, ¿quiere continuar?",
+			"yes": "Realizar la limpieza",
+			"no": "Cancelar la limpieza"
+		},
+		"confirmationDialogDropMountUpMessage": "¿Quiere que '{rider}' se monte en '{mount}'?",
+		"confirmationDialogTitle": "¡Soltar Mount Up!",
+		"confirmationDialogChoiceYes": "Sí",
+		"confirmationDialogChoiceNo": "No"
+	}
+}
