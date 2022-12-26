@@ -103,6 +103,20 @@
 		"confirmationDialogDropMountUpMessage": "Did you want the '{rider}' to mount up '{mount}' ?",
 		"confirmationDialogTitle": "Drop Mount Up!",
 		"confirmationDialogChoiceYes": "Yes",
-		"confirmationDialogChoiceNo": "No"
+		"confirmationDialogChoiceNo": "No",
+		"tokenConfig": {
+			"isamount": {
+				"name": "Is a Mount ?",
+				"hint": "If enabled this token will be used by the 'Mount Up' module as a valid mount."
+			},
+			"lockrider": {
+				"name": "Lock the ride ?",
+				"hint": "If enabled this token when is use as a mount, will lock the rider on the initial position. Basically ignore the setting 'can move constrained'"
+			},
+			"iconhud": {
+				"name": "Icon Hud",
+				"hint": "Choose the hud icon for the current token"
+			}
+		}
 	}
 }

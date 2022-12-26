@@ -129,8 +129,11 @@ export class SettingsForm {
 	/**
 	 * Gets the icon that should be used on the HUD
 	 */
-	static getIconClass() {
-		switch (game.settings.get(CONSTANTS.MODULE_NAME, "icon")) {
+	static getIconClass(iconClassIndex: any = undefined) {
+		if (!iconClassIndex == undefined) {
+			iconClassIndex = game.settings.get(CONSTANTS.MODULE_NAME, "icon");
+		}
+		switch (iconClassIndex) {
 			case 0: {
 				return "fa-horse";
 			}

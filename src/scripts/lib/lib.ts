@@ -576,7 +576,7 @@ async function dragAndDropOnMount(riderTokenId: string, mountTokenId: string): P
 	const mountToken = <Token>canvas.tokens?.get(mountTokenId);
 
 	// await MountManager.doCreateMount(riderToken, mountToken);
-	mountUpTA(riderToken, mountToken, true);
+	await mountUpTA(riderToken, mountToken, true);
 	let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
 	if (riders === undefined) riders = [];
 	if (!riders.includes(riderToken.id)) {

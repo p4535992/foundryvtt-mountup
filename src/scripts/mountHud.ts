@@ -71,6 +71,7 @@ export class MountHud {
 
 		const button = this.buildButton(
 			html,
+			hudToken,
 			`Mount ${tokenNames.join(", ").replace(/, ([^,]*)$/, " and $1")} on to ${hudToken.name}`
 		);
 
@@ -98,7 +99,7 @@ export class MountHud {
 			warn(`No mount with reference '${mountId}' is been found`, true);
 			return;
 		}
-		let button = this.buildButton(html, `Dismount ${hudToken.name} from ${mount.name}`);
+		let button = this.buildButton(html, hudToken, `Dismount ${hudToken.name} from ${mount.name}`);
 		button = this.addSlash(button);
 
 		button.find("i").on("click", async (ev) => {
@@ -130,7 +131,7 @@ export class MountHud {
 		//   Object.keys(getProperty(<Actor>token.actor, `flags.${CONSTANTS.MODULE_NAME}`)).length > 0
 		// ) {
 		if (token && game.user?.isGM) {
-			let button = this.buildButton(html, `Clean up mount up flags from ${hudToken.name}`, `fa-horse`);
+			let button = this.buildButton(html, hudToken, `Clean up mount up flags from ${hudToken.name}`, `fa-horse`);
 			button = this.addSlashForFLags(button);
 
 			button.find("i").on("click", async (ev) => {
@@ -147,7 +148,7 @@ export class MountHud {
 			info(`No HUD token is present`);
 			return;
 		}
-		let button = this.buildButton(html, `Remove all riders from ${hudToken.name}`);
+		let button = this.buildButton(html, hudToken, `Remove all riders from ${hudToken.name}`);
 		button = this.addSlash(button);
 
 		button.find("i").on("click", async (ev) => {
@@ -158,9 +159,13 @@ export class MountHud {
 		// });
 	}
 
-	static buildButton(html, tooltip, iconClass: string | undefined = undefined) {
+	static buildButton(html, hudToken: Token, tooltip, iconClass: string | undefined = undefined) {
 		if (!iconClass) {
 			iconClass = SettingsForm.getIconClass();
+		}
+		if (hudToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IconHud)) {
+			const iconClassIndex = <number>hudToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IconHud);
+			iconClass = SettingsForm.getIconClass(iconClassIndex);
 		}
 		const button = $(
 			`<div class="control-icon mount-up" title="${tooltip}"><i class="fas ${iconClass}"></i></div>`

@@ -7,6 +7,7 @@ import { MountupEffectDefinitions } from "./mountup-effect-definition";
 import { findTokenById, MountUpFlags } from "./utils";
 import { setApi } from "../mountup";
 import type { ActiveEffectManagerLibApi } from "./effects/effect-api";
+import { renderTokenConfigHandler } from "./lib/configurations";
 
 export let aemlApi: ActiveEffectManagerLibApi;
 
@@ -184,6 +185,8 @@ export const readyHooks = async () => {
 			TokenMagic.addPreset(CONSTANTS.TM_FLYING, params);
 		}
 	}
+
+	Hooks.on("renderTokenConfig", renderTokenConfigHandler);
 
 	if (game.settings.get(CONSTANTS.MODULE_NAME, "enableDragAndDropMountUp")) {
 		//@ts-ignore

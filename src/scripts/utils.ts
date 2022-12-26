@@ -10,6 +10,10 @@ export const MountUpFlags = {
 	MountMove: "mountMove",
 	OrigElevation: "origelevation",
 	AlreadyMounted: "alreadymounted",
+	// Token Specific
+	IsAMount: "isamount",
+	LockRider: "lockrider",
+	IconHud: "iconhud",
 };
 
 /**
