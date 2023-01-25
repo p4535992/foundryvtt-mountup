@@ -24,6 +24,7 @@ const API = {
 			warn(`No mount with reference '${mountNameOrId}' is been found`, true);
 			return;
 		}
+
 		if (!(String(mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
 			//warn(`Mount '${mountNameOrId}' is been found but is not setted to be mount on the token configuration`, true);
 			return;

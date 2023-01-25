@@ -1,5 +1,3 @@
-import type EmbeddedCollection from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs";
-import type { ActorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import API from "../api";
 import CONSTANTS from "../constants";
 import type Effect from "../effects/effect";
@@ -7,7 +5,9 @@ import { aemlApi } from "../module";
 import { MountManager } from "../mountManager";
 import { MountupEffectDefinitions } from "../mountup-effect-definition";
 import { mountUpTA } from "../tokenAttacherHelper";
-import { ActiveTokenMountUpData, MountUpFlags } from "../utils";
+import { ActiveTokenMountUpData, MountUpFlags, findTokenById } from "../utils";
+import { SettingsForm } from "../settings-form";
+import { isEmptyObject } from "jquery";
 
 // =============================
 // Module Generic function
@@ -329,7 +329,7 @@ export async function retrieveAtmuActiveEffectsFromToken(token: Token): Promise<
 	const toRiderOnDismount = new Map<string, Effect>();
 	const flyingMount = new Map<string, Effect>();
 
-	const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>token.actor?.effects;
+	const actorEffects = <any>token.actor?.effects;
 	// const atmuArr:ActiveEffect[] = [];
 	for (const effectEntity of actorEffects) {
 		//@ts-ignore
@@ -571,46 +571,31 @@ export const dragAndDropOnMountHandler = async function (draggedToken) {
 	}
 };
 
-async function dragAndDropOnMount(riderTokenId: string, mountTokenId: string): Promise<Token | undefined> {
-	const riderToken = <Token>canvas.tokens?.get(riderTokenId);
-	const mountToken = <Token>canvas.tokens?.get(mountTokenId);
+// async function dragAndDropOnMount(riderTokenId: string, mountTokenId: string): Promise<Token | undefined> {
+// 	const riderToken = <Token>canvas.tokens?.get(riderTokenId);
+// 	const mountToken = <Token>canvas.tokens?.get(mountTokenId);
 
-	// await MountManager.doCreateMount(riderToken, mountToken);
-	await mountUpTA(riderToken, mountToken, true);
-	let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-	if (riders === undefined) riders = [];
-	if (!riders.includes(riderToken.id)) {
-		riders.push(riderToken.id);
-	}
+// 	// await MountManager.doCreateMount(riderToken, mountToken);
+// 	await mountUpTA(riderToken, mountToken, true);
+// 	let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+// 	if (riders === undefined) riders = [];
+// 	if (!riders.includes(riderToken.id)) {
+// 		riders.push(riderToken.id);
+// 	}
 
-	await mountToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders, riders);
-	log(riders);
-	await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount, mountToken.id);
-	if (!riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)) {
-		await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize, {
-			w: riderToken.w,
-			h: riderToken.h,
-		});
-	}
-	await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted, true);
+// 	await mountToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders, riders);
+// 	log(riders);
+// 	await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount, mountToken.id);
+// 	if (!riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize)) {
+// 		await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize, {
+// 			w: riderToken.w,
+// 			h: riderToken.h,
+// 		});
+// 	}
+// 	await riderToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted, true);
 
-	// //@ts-ignore
-	// setProperty(mountToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.Riders}`, riders);
-	// log(riders);
-	// //@ts-ignore
-	// setProperty(riderToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.Mount}`, mountToken.id);
-	// //@ts-ignore
-	// if (!getProperty(riderToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.OrigSize}`)) {
-	// 	//@ts-ignore
-	// 	setProperty(riderToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.OrigSize}`, {
-	// 		w: riderToken.w,
-	// 		h: riderToken.h,
-	// 	});
-	// }
-	// //@ts-ignore
-	// setProperty(riderToken.actor?.flags, `${CONSTANTS.MODULE_NAME}.${MountUpFlags.AlreadyMounted}`, true);
-	return undefined;
-}
+// 	return undefined;
+// }
 
 export async function renderDialogDropMountUp(
 	riderTokenId: string,
@@ -627,12 +612,24 @@ export async function renderDialogDropMountUp(
 	<div class="form-group">
 		<label>${msg}</label>
 	</div>`;
+
+	const mount: Token = findTokenById(mountTokenId);
+	if (!mount) {
+		warn(`No mount with reference '${mountTokenId}' is been found`, true);
+		return;
+	}
+
+	const classIconIndex =
+		//@ts-ignore
+		mount?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+		game.settings.get(CONSTANTS.MODULE_NAME, "icon");
+	const classIcon = SettingsForm.getIconClass(classIconIndex);
 	const d = new Dialog({
 		title: i18n(`${CONSTANTS.MODULE_NAME}.confirmationDialogTitle`),
 		content: template,
 		buttons: {
 			yes: {
-				icon: `<i class="fas fa-${game.settings.get(CONSTANTS.MODULE_NAME, "icon")}"></i>`,
+				icon: `<i class="fas ${classIcon}"></i>`,
 				label: i18n(`${CONSTANTS.MODULE_NAME}.confirmationDialogChoiceYes`),
 				callback: async (html: HTMLElement | JQuery<HTMLElement>) => {
 					// await dragAndDropOnMount(riderTokenId, mountTokenId);
@@ -650,4 +647,12 @@ export async function renderDialogDropMountUp(
 		default: "cancel",
 	});
 	d.render(true);
+}
+
+export function retrieveFlagFromToken(token: Token, key: string) {
+	let currentFlag = getProperty(token, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+	if (isEmptyObject(currentFlag) && token.actor) {
+		currentFlag = getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+	}
+	return currentFlag;
 }

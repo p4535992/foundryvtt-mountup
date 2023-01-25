@@ -92,12 +92,18 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token, n
 
 		let message = <string>game.settings.get(CONSTANTS.MODULE_NAME, "mount-message")
 			? <string>game.settings.get(CONSTANTS.MODULE_NAME, "mount-message")
-			: `I mount this ${targets[0]?.name}`;
+			: `I mount this ${mount?.name}`;
 		message = message.replace("{rider}", riderToken.name);
-		message = message.replace("{mount}", <string>targets[0]?.name);
+		message = message.replace("{mount}", <string>mount?.name);
+
+		const classIconIndex =
+			//@ts-ignore
+			mount?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
+		const classIcon = SettingsForm.getIconClass(classIconIndex);
 
 		const icon = `<span class="fa-stack">
-        <i class="fas ${SettingsForm.getIconClass()} fa-stack-1x"></i>
+        <i class="fas ${classIcon} fa-stack-1x"></i>
       </span>&nbsp;`;
 		message = icon + message;
 
@@ -114,7 +120,7 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token, n
 		//@ts-ignore
 		ChatMessage.create(chatData);
 
-		await window["tokenAttacher"].attachElementToToken(riderToken, targets[0], true);
+		await window["tokenAttacher"].attachElementToToken(riderToken, mount, true);
 		const isLocked = false;
 		await window["tokenAttacher"].setElementsLockStatus(riderToken, isLocked, true);
 		const canMoveConstrained =

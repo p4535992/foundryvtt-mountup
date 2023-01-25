@@ -130,26 +130,26 @@ export class SettingsForm {
 	 * Gets the icon that should be used on the HUD
 	 */
 	static getIconClass(iconClassIndex: any = undefined) {
-		if (!iconClassIndex == undefined) {
+		if (iconClassIndex == undefined) {
 			iconClassIndex = game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 		}
-		switch (iconClassIndex) {
-			case 0: {
+		switch (String(iconClassIndex)) {
+			case "0": {
 				return "fa-horse";
 			}
-			case 1: {
+			case "1": {
 				return "fa-people-carry";
 			}
-			case 2: {
+			case "2": {
 				return "fa-hands";
 			}
-			case 3: {
+			case "3": {
 				return "fa-hand-holding";
 			}
-			case 4: {
+			case "4": {
 				return "fa-fist-raised";
 			}
-			case 5: {
+			case "5": {
 				return "fa-handshake";
 			}
 			default: {

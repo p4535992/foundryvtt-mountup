@@ -6,15 +6,15 @@ export var injectConfig = {
 	inject: function injectConfig(app, html, data, objectOri) {
 		this._generateTabStruct(app, html, data, objectOri);
 		const tabSize = data.tab?.width ?? 100;
-		// let object = objectOri || app.object;
+		let object = objectOri || app.object;
 		// MOD 4535992
-		objectOri = objectOri || app.object;
-		let object = objectOri;
-		//@ts-ignore
-		if (objectOri instanceof TokenDocument && objectOri.actorData) {
-			//@ts-ignore
-			object = objectOri.actorData;
-		}
+		// objectOri = objectOri || app.object;
+		// let object = objectOri;
+		// //@ts-ignore
+		// if (objectOri instanceof TokenDocument && objectOri.actorData) {
+		// 	//@ts-ignore
+		// 	object = objectOri.actorData;
+		// }
 		// END MOD 4535992
 		const moduleId = data.moduleId;
 		let injectPoint;
@@ -37,13 +37,13 @@ export var injectConfig = {
 			const elemData = data[k];
 			let flag = "flags." + moduleId + "." + (k || "");
 			// MOD 4535992
-			//@ts-ignore
-			if (objectOri instanceof TokenDocument && objectOri.actorData) {
-				flag = "actorData.flags." + moduleId + "." + (k || "");
-			}
-			const flagValue = object?.flags[moduleId][k] ?? elemData.default ?? getDefaultFlag(k);
+			// //@ts-ignore
+			// if (objectOri instanceof TokenDocument && objectOri.actorData) {
+			// 	flag = "actorData.flags." + moduleId + "." + (k || "");
+			// }
+			// const flagValue = object?.flags[moduleId][k] ?? elemData.default ?? getDefaultFlag(k);
 			// END MOD 4535992
-			// const flagValue = object?.getFlag(moduleId, k) ?? elemData.default ?? getDefaultFlag(k);
+			const flagValue = object?.getFlag(moduleId, k) ?? elemData.default ?? getDefaultFlag(k);
 			const notes = v.notes ? `<p class="notes">${v.notes}</p>` : "";
 			v.label = v.units ? v.label + `<span class="units"> (${v.units})</span>` : v.label;
 			switch (elemData.type) {

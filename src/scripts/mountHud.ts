@@ -69,10 +69,17 @@ export class MountHud {
 				return `'${token.name}'`;
 			});
 
+		const classIconIndex =
+			//@ts-ignore
+			hudToken?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
+		const classIcon = SettingsForm.getIconClass(classIconIndex);
+
 		const button = this.buildButton(
 			html,
 			hudToken,
-			`Mount ${tokenNames.join(", ").replace(/, ([^,]*)$/, " and $1")} on to ${hudToken.name}`
+			`Mount ${tokenNames.join(", ").replace(/, ([^,]*)$/, " and $1")} on to ${hudToken.name}`,
+			classIcon
 		);
 
 		button.find("i").on("click", async (ev) => {
@@ -99,7 +106,14 @@ export class MountHud {
 			warn(`No mount with reference '${mountId}' is been found`, true);
 			return;
 		}
-		let button = this.buildButton(html, hudToken, `Dismount ${hudToken.name} from ${mount.name}`);
+
+		const classIconIndex =
+			//@ts-ignore
+			mount?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
+		const classIcon = SettingsForm.getIconClass(classIconIndex);
+
+		let button = this.buildButton(html, hudToken, `Dismount ${hudToken.name} from ${mount.name}`, classIcon);
 		button = this.addSlash(button);
 
 		button.find("i").on("click", async (ev) => {
@@ -131,7 +145,13 @@ export class MountHud {
 		//   Object.keys(getProperty(<Actor>token.actor, `flags.${CONSTANTS.MODULE_NAME}`)).length > 0
 		// ) {
 		if (token && game.user?.isGM) {
-			let button = this.buildButton(html, hudToken, `Clean up mount up flags from ${hudToken.name}`, `fa-horse`);
+			const classIconIndex =
+				//@ts-ignore
+				hudToken?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+				game.settings.get(CONSTANTS.MODULE_NAME, "icon");
+			const classIcon = SettingsForm.getIconClass(classIconIndex);
+
+			let button = this.buildButton(html, hudToken, `Clean up mount up flags from ${hudToken.name}`, classIcon);
 			button = this.addSlashForFLags(button);
 
 			button.find("i").on("click", async (ev) => {
@@ -148,7 +168,13 @@ export class MountHud {
 			info(`No HUD token is present`);
 			return;
 		}
-		let button = this.buildButton(html, hudToken, `Remove all riders from ${hudToken.name}`);
+		const classIconIndex =
+			//@ts-ignore
+			hudToken?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
+		const classIcon = SettingsForm.getIconClass(classIconIndex);
+
+		let button = this.buildButton(html, hudToken, `Remove all riders from ${hudToken.name}`, classIcon);
 		button = this.addSlash(button);
 
 		button.find("i").on("click", async (ev) => {
@@ -159,14 +185,7 @@ export class MountHud {
 		// });
 	}
 
-	static buildButton(html, hudToken: Token, tooltip, iconClass: string | undefined = undefined) {
-		if (!iconClass) {
-			iconClass = SettingsForm.getIconClass();
-		}
-		if (hudToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IconHud)) {
-			const iconClassIndex = <number>hudToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IconHud);
-			iconClass = SettingsForm.getIconClass(iconClassIndex);
-		}
+	static buildButton(html, hudToken: Token, tooltip, iconClass: string) {
 		const button = $(
 			`<div class="control-icon mount-up" title="${tooltip}"><i class="fas ${iconClass}"></i></div>`
 		);

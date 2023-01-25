@@ -84,6 +84,19 @@ export class MountupEffectDefinitions {
 		});
 	}
 
+	static isamount() {
+		return new Effect({
+			customId: "isamount",
+			name: i18n(`${CONSTANTS.MODULE_NAME}.effects.isamount.name`),
+			description: i18n(`${CONSTANTS.MODULE_NAME}.effects.isamount.description`),
+			icon: `modules/${CONSTANTS.MODULE_NAME}/icons/ae/flying.jpg`,
+			// seconds: Constants.SECONDS.IN_EIGHT_HOURS,
+			transfer: true,
+			changes: [],
+			isTemporary: false,
+		});
+	}
+
 	// ===========================================
 	// Utility Effect
 	// =============================================

@@ -18,10 +18,10 @@ export async function renderTokenConfigHandler(app, html, data) {
 	// MOD 4535992
 	let noActorDataFlagsOnToken = false;
 	//@ts-ignore
-	if (objectOri instanceof TokenDocument && objectOri.actorData) {
-		//@ts-ignore
-		object = objectOri.actorData;
-	}
+	// if (objectOri instanceof TokenDocument && objectOri.actorData) {
+	// 	//@ts-ignore
+	// 	object = objectOri.actorData;
+	// }
 	if (!hasProperty(object, "flags")) {
 		object.flags = {};
 		noActorDataFlagsOnToken = true;
