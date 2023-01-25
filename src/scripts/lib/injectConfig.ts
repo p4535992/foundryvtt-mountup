@@ -10,9 +10,9 @@ export var injectConfig = {
 		// MOD 4535992
 		objectOri = objectOri || app.object;
 		let object = objectOri;
-        //@ts-ignore
+		//@ts-ignore
 		if (objectOri instanceof TokenDocument && objectOri.actorData) {
-            //@ts-ignore
+			//@ts-ignore
 			object = objectOri.actorData;
 		}
 		// END MOD 4535992
@@ -37,11 +37,11 @@ export var injectConfig = {
 			const elemData = data[k];
 			let flag = "flags." + moduleId + "." + (k || "");
 			// MOD 4535992
-            //@ts-ignore
+			//@ts-ignore
 			if (objectOri instanceof TokenDocument && objectOri.actorData) {
 				flag = "actorData.flags." + moduleId + "." + (k || "");
 			}
-            const flagValue = object?.flags[moduleId][k] ?? elemData.default ?? getDefaultFlag(k);
+			const flagValue = object?.flags[moduleId][k] ?? elemData.default ?? getDefaultFlag(k);
 			// END MOD 4535992
 			// const flagValue = object?.getFlag(moduleId, k) ?? elemData.default ?? getDefaultFlag(k);
 			const notes = v.notes ? `<p class="notes">${v.notes}</p>` : "";

@@ -16,19 +16,23 @@ export async function renderTokenConfigHandler(app, html, data) {
 	const objectOri = app.object;
 	let object = objectOri;
 	// MOD 4535992
-    //@ts-ignore
+	let noActorDataFlagsOnToken = false;
+	//@ts-ignore
 	if (objectOri instanceof TokenDocument && objectOri.actorData) {
-        //@ts-ignore
+		//@ts-ignore
 		object = objectOri.actorData;
 	}
+	if (!hasProperty(object, "flags")) {
+		object.flags = {};
+		noActorDataFlagsOnToken = true;
+	}
 	if (!hasProperty(object.flags, CONSTANTS.MODULE_NAME)) {
-		await object.update({
-			flags: {
-				[CONSTANTS.MODULE_NAME]: {},
-			},
-		});
-		return;
-		// setProperty(object.flags, CONSTANTS.MODULE_NAME, {});
+		object.flags[CONSTANTS.MODULE_NAME] = {};
+		noActorDataFlagsOnToken = true;
+	}
+	if (noActorDataFlagsOnToken && hasProperty(app, `actor.prototypeToken.flags.${CONSTANTS.MODULE_NAME}`)) {
+		const actorFlags = getProperty(app, `actor.prototypeToken.flags.${CONSTANTS.MODULE_NAME}`);
+		setProperty(object, `flags.${CONSTANTS.MODULE_NAME}`, actorFlags);
 	}
 	// END MOD 4535992
 
