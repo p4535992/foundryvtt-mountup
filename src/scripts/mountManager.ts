@@ -20,7 +20,7 @@ export class MountManager {
 			return;
 		}
 		if (!(String(mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
-			warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`,{mount: hudToken.name}), true);
+			warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: hudToken.name }), true);
 			return;
 		}
 		const tokensToCheck = canvas.tokens?.controlled || [];
@@ -170,10 +170,12 @@ export class MountManager {
 		dismountDropTargetTA(mountToken, riderToken);
 
 		// Chatter.dismountMessage(riderToken.id, mountToken.id);
-		const riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
+		const riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) ?? [];
 		await mountToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
-
-		riders.splice(riders.indexOf(riderToken.id));
+		// https://github.com/p4535992/foundryvtt-mountup/issues/19
+		if (riders.length > 0) {
+			riders.splice(riders.indexOf(riderToken.id), 1);
+		}
 		await mountToken.actor?.setFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders, riders);
 		await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 		await riderToken.actor?.unsetFlag(CONSTANTS.MODULE_NAME, MountUpFlags.OrigSize);
