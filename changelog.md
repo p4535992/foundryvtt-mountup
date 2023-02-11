@@ -1,3 +1,7 @@
+### 3.4.0
+
+- Rewrite a lot of code
+
 ### 3.3.2
 
 . Add drag and drop feature
