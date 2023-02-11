@@ -2,6 +2,7 @@ import CONSTANTS from "../constants";
 import { SettingsForm } from "../settings-form";
 import { MountUpFlags } from "../utils";
 import { injectConfig } from "./injectConfig";
+import { info, warn } from "./lib";
 
 /**
  * Handler called when token configuration window is opened. Injects custom form html and deals
@@ -13,15 +14,23 @@ import { injectConfig } from "./injectConfig";
  * @param {JQuery} html
  */
 export async function renderTokenConfigHandler(app, html, data) {
+	// if (!game.user?.isGM) {
+	// 	info('Only GM can edit the Mount Up Token Configuration');
+	// 	return;
+	// }
+	if (app.object.flags["token-attacher"]?.parent) {
+		warn("Detach token before editing token config.", true);
+		return;
+	}
 	const objectOri = app.object;
 	let object = objectOri;
 	// MOD 4535992
 	let noActorDataFlagsOnToken = false;
 	//@ts-ignore
-	// if (objectOri instanceof TokenDocument && objectOri.actorData) {
-	// 	//@ts-ignore
-	// 	object = objectOri.actorData;
-	// }
+	if (objectOri instanceof TokenDocument && objectOri.actorData) {
+		//@ts-ignore
+		object = objectOri.actorData;
+	}
 	if (!hasProperty(object, "flags")) {
 		object.flags = {};
 		noActorDataFlagsOnToken = true;
@@ -47,13 +56,13 @@ export async function renderTokenConfigHandler(app, html, data) {
 			type: "checkbox",
 			label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.tokenConfig.${MountUpFlags.IsAMount}.name`),
 			notes: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.tokenConfig.${MountUpFlags.IsAMount}.hint`),
-			default: object?.flags?.[CONSTANTS.MODULE_NAME][MountUpFlags.IsAMount] ?? false,
+			default: object?.flags[CONSTANTS.MODULE_NAME][MountUpFlags.IsAMount] ?? false,
 		},
 		[MountUpFlags.LockRider]: {
 			type: "checkbox",
 			label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.tokenConfig.${MountUpFlags.LockRider}.name`),
 			notes: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.tokenConfig.${MountUpFlags.LockRider}.hint`),
-			default: object?.flags?.[CONSTANTS.MODULE_NAME][MountUpFlags.LockRider] ?? false,
+			default: object?.flags[CONSTANTS.MODULE_NAME][MountUpFlags.LockRider] ?? false,
 		},
 		[MountUpFlags.IconHud]: {
 			type: "select",
@@ -68,7 +77,7 @@ export async function renderTokenConfigHandler(app, html, data) {
 				5: "Handshake",
 			},
 			default:
-				object?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+				object?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 				game.settings.get(CONSTANTS.MODULE_NAME, "icon"),
 		},
 	};
@@ -97,7 +106,7 @@ export async function renderTokenConfigHandler(app, html, data) {
 	if (tokenConfig.options.sheetConfig) {
 		isAMount = tokenConfig.object.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount) ? "checked" : "";
 	} else {
-		isAMount = tokenConfig.token.flags?.[CONSTANTS.MODULE_NAME][MountUpFlags.IsAMount] ? "checked" : "";
+		isAMount = tokenConfig.token.actor.flags[CONSTANTS.MODULE_NAME][MountUpFlags.IsAMount] ? "checked" : "";
 	}
 
 	let data = {

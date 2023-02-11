@@ -14,16 +14,16 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token, n
 			return ui.notifications?.error("Can't mount more then one token!");
 		}
 
-		const mount = <Token>targets[0];
+		const mountToken = <Token>targets[0];
 		const newMountCoords = {
 			//@ts-ignore
-			x: mount.x,
+			x: mountToken.x,
 			//@ts-ignore
-			y: mount.y,
+			y: mountToken.y,
 			//@ts-ignore
-			w: mount.w,
+			w: mountToken.w,
 			//@ts-ignore
-			h: mount.h,
+			h: mountToken.h,
 		};
 		const newRiderCoords = {
 			//@ts-ignore
@@ -92,13 +92,13 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token, n
 
 		let message = <string>game.settings.get(CONSTANTS.MODULE_NAME, "mount-message")
 			? <string>game.settings.get(CONSTANTS.MODULE_NAME, "mount-message")
-			: `I mount this ${mount?.name}`;
+			: `I mount this ${mountToken?.name}`;
 		message = message.replace("{rider}", riderToken.name);
-		message = message.replace("{mount}", <string>mount?.name);
+		message = message.replace("{mount}", <string>mountToken?.name);
 
 		const classIconIndex =
 			//@ts-ignore
-			mount?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			mountToken?.actor.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 		const classIcon = SettingsForm.getIconClass(classIconIndex);
 
@@ -120,7 +120,7 @@ export const mountUpTA = async function (riderToken: Token, mountToken: Token, n
 		//@ts-ignore
 		ChatMessage.create(chatData);
 
-		await window["tokenAttacher"].attachElementToToken(riderToken, mount, true);
+		await window["tokenAttacher"].attachElementToToken(riderToken, mountToken, true);
 		const isLocked = false;
 		await window["tokenAttacher"].setElementsLockStatus(riderToken, isLocked, true);
 		const canMoveConstrained =

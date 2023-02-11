@@ -104,6 +104,7 @@
 		"confirmationDialogTitle": "Drop Mount Up!",
 		"confirmationDialogChoiceYes": "Yes",
 		"confirmationDialogChoiceNo": "No",
+		"isNotAMount": "The token '{mount}' is not checked as mount on the token configuration",
 		"tokenConfig": {
 			"isamount": {
 				"name": "Is a Mount ?",

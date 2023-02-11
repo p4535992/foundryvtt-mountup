@@ -71,7 +71,7 @@ export class MountHud {
 
 		const classIconIndex =
 			//@ts-ignore
-			hudToken?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			hudToken?.actor?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 		const classIcon = SettingsForm.getIconClass(classIconIndex);
 
@@ -101,19 +101,19 @@ export class MountHud {
 			return;
 		}
 		const mountId = <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
-		const mount = findTokenById(mountId);
-		if (!mount) {
+		const mountToken = findTokenById(mountId);
+		if (!mountToken) {
 			warn(`No mount with reference '${mountId}' is been found`, true);
 			return;
 		}
 
 		const classIconIndex =
 			//@ts-ignore
-			mount?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			mountToken?.actor.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 		const classIcon = SettingsForm.getIconClass(classIconIndex);
 
-		let button = this.buildButton(html, hudToken, `Dismount ${hudToken.name} from ${mount.name}`, classIcon);
+		let button = this.buildButton(html, hudToken, `Dismount ${hudToken.name} from ${mountToken.name}`, classIcon);
 		button = this.addSlash(button);
 
 		button.find("i").on("click", async (ev) => {
@@ -147,7 +147,7 @@ export class MountHud {
 		if (token && game.user?.isGM) {
 			const classIconIndex =
 				//@ts-ignore
-				hudToken?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+				hudToken?.actor?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 				game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 			const classIcon = SettingsForm.getIconClass(classIconIndex);
 
@@ -170,7 +170,7 @@ export class MountHud {
 		}
 		const classIconIndex =
 			//@ts-ignore
-			hudToken?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			hudToken?.actor?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 		const classIcon = SettingsForm.getIconClass(classIconIndex);
 

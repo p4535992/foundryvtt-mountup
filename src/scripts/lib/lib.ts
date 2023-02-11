@@ -7,7 +7,6 @@ import { MountupEffectDefinitions } from "../mountup-effect-definition";
 import { mountUpTA } from "../tokenAttacherHelper";
 import { ActiveTokenMountUpData, MountUpFlags, findTokenById } from "../utils";
 import { SettingsForm } from "../settings-form";
-import { isEmptyObject } from "jquery";
 
 // =============================
 // Module Generic function
@@ -613,15 +612,15 @@ export async function renderDialogDropMountUp(
 		<label>${msg}</label>
 	</div>`;
 
-	const mount: Token = findTokenById(mountTokenId);
-	if (!mount) {
+	const mountToken: Token = findTokenById(mountTokenId);
+	if (!mountToken) {
 		warn(`No mount with reference '${mountTokenId}' is been found`, true);
 		return;
 	}
 
 	const classIconIndex =
 		//@ts-ignore
-		mount?.flags?.[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+		mountToken?.actor.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 		game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 	const classIcon = SettingsForm.getIconClass(classIconIndex);
 	const d = new Dialog({
@@ -649,10 +648,10 @@ export async function renderDialogDropMountUp(
 	d.render(true);
 }
 
-export function retrieveFlagFromToken(token: Token, key: string) {
-	let currentFlag = getProperty(token, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
-	if (isEmptyObject(currentFlag) && token.actor) {
-		currentFlag = getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
-	}
-	return currentFlag;
-}
+// export function retrieveFlagFromToken(token: Token, key: string) {
+// 	let currentFlag = getProperty(token, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+// 	if (isEmptyObject(currentFlag) && token.actor) {
+// 		currentFlag = getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+// 	}
+// 	return currentFlag;
+// }

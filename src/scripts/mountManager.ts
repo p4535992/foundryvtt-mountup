@@ -1,7 +1,7 @@
 import { SettingsForm } from "./settings-form";
 import { dismountDropAllTA, dismountDropTargetTA, mountUpTA } from "./tokenAttacherHelper";
 import { findTokenById, MountUpFlags, getTokenCenter, riderLock, riderX, riderY, socketAction } from "./utils";
-import { error, log, warn } from "./lib/lib";
+import { error, i18nFormat, log, warn } from "./lib/lib";
 import CONSTANTS from "./constants";
 
 /**
@@ -16,9 +16,11 @@ export class MountManager {
 	static async mountUpHud(hudToken) {
 		const mountToken = <Token>canvas.tokens?.controlled.find((t) => t.id === hudToken._id);
 		if (!mountToken) {
+			warn(`Token mount is not present on the canvas`, true);
 			return;
 		}
 		if (!(String(mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
+			warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`,{mount: hudToken.name}), true);
 			return;
 		}
 		const tokensToCheck = canvas.tokens?.controlled || [];
