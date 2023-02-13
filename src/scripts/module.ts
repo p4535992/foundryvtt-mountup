@@ -93,6 +93,7 @@ export const readyHooks = async () => {
 		}
 		const isPlayerOwned = <boolean>tokenDocument.isOwner;
 		if (!game.user?.isGM && !isPlayerOwned) {
+            warn(`Can't update the token '${tokenDocument}' because you are not owner`);
 			return;
 		}
 		// if(!updateData.actor?.flags[CONSTANTS.MODULE_NAME]){
@@ -155,6 +156,15 @@ export const readyHooks = async () => {
 				}
 			}
 		}
+
+        if (hasProperty(updateData, `flags.${CONSTANTS.MODULE_NAME}`)) {
+            const flagsOnToken = getProperty(updateData, `flags.${CONSTANTS.MODULE_NAME}`);
+            const flagsOnActor = getProperty(<Actor>sourceToken.actor, `flags.${CONSTANTS.MODULE_NAME}`);
+            const flagsOn = mergeObject(flagsOnActor, flagsOnToken);
+            sourceToken.actor?.update({
+                "flags.mountup" : flagsOn
+            });
+        }
 	});
 
 	Hooks.on("controlToken", async (token: Token) => {

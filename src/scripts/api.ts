@@ -1,6 +1,6 @@
 import CONSTANTS from "./constants";
 import type Effect from "./effects/effect";
-import { error, getElevationToken, i18n, info, isStringEquals, warn } from "./lib/lib";
+import { error, getElevationToken, i18n, i18nFormat, info, isStringEquals, warn } from "./lib/lib";
 import { MountManager } from "./mountManager";
 import { MountupEffectDefinitions } from "./mountup-effect-definition";
 import { findTokenById, findTokenByName, MountUpFlags } from "./utils";
@@ -14,29 +14,29 @@ const API = {
 	 * @param {string} mountNameOrId - The name or the ID of the mount token
 	 */
 	mount(riderNameOrId: string, mountNameOrId: string, noRiderUpdate: boolean) {
-		const rider: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
-		const mount: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
-		if (!rider) {
+		const riderToken: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
+		const mountToken: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
+		if (!riderToken) {
 			warn(`No rider with reference '${riderNameOrId}' is been found`, true);
 			return;
 		}
-		if (!mount) {
+		if (!mountToken) {
 			warn(`No mount with reference '${mountNameOrId}' is been found`, true);
 			return;
 		}
 
-		if (!(String(mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
-			//warn(`Mount '${mountNameOrId}' is been found but is not setted to be mount on the token configuration`, true);
+		if (!(String(mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
+            warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
 			return;
 		}
 
-		const mountName = mount.name;
-		const riderName = rider.name;
+		const mountName = mountToken.name;
+		const riderName = riderToken.name;
 
-		if (rider) {
-			if (mount) {
-				if (rider.id !== mount.id) {
-					MountManager.doCreateMount(rider, mount, noRiderUpdate);
+		if (riderToken) {
+			if (mountToken) {
+				if (riderToken.id !== mountToken.id) {
+					MountManager.doCreateMount(riderToken, mountToken, noRiderUpdate);
 				} else {
 					error("You cannot mount a token to itself");
 				}

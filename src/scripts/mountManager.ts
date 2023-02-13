@@ -123,9 +123,11 @@ export class MountManager {
 	 */
 	static async doCreateMount(riderToken: Token, mountToken: Token, noRiderUpdate: boolean): Promise<boolean> {
 		if (riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)) {
+            warn(`Token mount is already mounted`, true);
 			return false;
 		}
 		if (!(String(mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
+            warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
 			return false;
 		}
 		let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
