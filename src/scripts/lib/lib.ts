@@ -649,7 +649,9 @@ export async function renderDialogDropMountUp(
 }
 
 // export function retrieveFlagFromToken(token: Token, key: string) {
-// 	let currentFlag = getProperty(token, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+// 	let currentFlag = undefined;
+// 	if(token.actor)
+// 	getProperty(token, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
 // 	if (isEmptyObject(currentFlag) && token.actor) {
 // 		currentFlag = getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
 // 	}

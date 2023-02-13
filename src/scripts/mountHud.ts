@@ -17,32 +17,32 @@ export class MountHud {
 	 * @param {Object} hudToken - The HUD Data
 	 */
 	static async renderMountHud(app, html, hudToken) {
-		if (!hudToken._id) {
-			info(`No HUD token is present`);
+		const mountOrRiderToken = findTokenById(hudToken._id) || findTokenById(hudToken.id);
+		if (!mountOrRiderToken) {
+			warn(`No mount or rider with reference '${hudToken._id}' is been found`, true);
 			return;
 		}
-		const mountOrRider = <Token>canvas.tokens?.controlled.find((t) => t.id === hudToken._id);
 		// const t = <UserTargets>getGame().user?.targets[0];
 		// if only one token is selected
 		if (canvas.tokens?.controlled.length === 1) {
 			// if the selected token is a mount
-			if (MountManager.isaMount(mountOrRider.id)) {
-				this.addRemoveRidersButton(html, hudToken);
-			} else if (MountManager.isaRider(mountOrRider.id)) {
-				this.addDismountButton(html, hudToken);
+			if (MountManager.isaMount(mountOrRiderToken.id)) {
+				this.addRemoveRidersButton(html, mountOrRiderToken);
+			} else if (MountManager.isaRider(mountOrRiderToken.id)) {
+				this.addDismountButton(html, mountOrRiderToken);
 			}
-			this.addCleanupButton(html, hudToken);
+			this.addCleanupButton(html, mountOrRiderToken);
 		} else if (<number>canvas.tokens?.controlled.length > 1) {
 			//ui.notifications.warn(`${MODULE_NAME}! : You must be sure to select only the token mount`);
 			if (!game.settings.get(CONSTANTS.MODULE_NAME, "hudDisableForMount")) {
-				this.addMountButton(html, hudToken);
+				this.addMountButton(html, mountOrRiderToken);
 			}
 		}
 
 		// if (canvas.tokens.controlled.length == 1 && MountManager.isaMount(mount.id)) {
-		//     this.addButton(html, hudToken, true);
+		//     this.addButton(html, mountOrRider, true);
 		// } else if (canvas.tokens.controlled.length >= 2) {
-		//     this.addMountButton(html, hudToken);
+		//     this.addMountButton(html, mountOrRider);
 		//     // let rider = canvas.tokens.controlled.find(t => t.id != mount.id);
 
 		//     // if (MountManager.isRidersMount(rider.id, mount.id)) {
@@ -59,10 +59,13 @@ export class MountHud {
 	}
 
 	static addMountButton(html, hudToken) {
-		if (!hudToken._id) {
-			info(`No HUD token is present`);
+
+		const mountToken = findTokenById(hudToken._id) || findTokenById(hudToken.id);
+		if (!mountToken) {
+			warn(`No mount with reference '${hudToken._id}' is been found`, true);
 			return;
 		}
+
 		const tokenNames = <string[]>canvas.tokens?.controlled
 			.filter((token) => token.id !== hudToken._id)
 			.map((token) => {
@@ -71,36 +74,32 @@ export class MountHud {
 
 		const classIconIndex =
 			//@ts-ignore
-			hudToken?.actor?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			mountToken?.actor?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 		const classIcon = SettingsForm.getIconClass(classIconIndex);
 
 		const button = this.buildButton(
 			html,
-			hudToken,
-			`Mount ${tokenNames.join(", ").replace(/, ([^,]*)$/, " and $1")} on to ${hudToken.name}`,
+			mountToken,
+			`Mount ${tokenNames.join(", ").replace(/, ([^,]*)$/, " and $1")} on to ${mountToken.name}`,
 			classIcon
 		);
 
 		button.find("i").on("click", async (ev) => {
-			MountManager.mountUpHud(hudToken);
+			MountManager.mountUpHud(mountToken);
 		});
 		// button.find('i').on('contextmenu', async (ev) => {
-		//   API.cleanUpTokenDialog(hudToken);
+		//   API.cleanUpTokenDialog(mountToken);
 		// });
 	}
 
 	static addDismountButton(html, hudToken) {
-		if (!hudToken._id) {
-			info(`No HUD token is present`);
-			return;
-		}
-		const rider: Token = findTokenById(hudToken._id);
-		if (!rider) {
+		const riderToken: Token = findTokenById(hudToken._id) || findTokenById(hudToken.id) ;
+		if (!riderToken) {
 			warn(`No rider with reference '${hudToken._id}' is been found`, true);
 			return;
 		}
-		const mountId = <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+		const mountId = <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 		const mountToken = findTokenById(mountId);
 		if (!mountToken) {
 			warn(`No mount with reference '${mountId}' is been found`, true);
@@ -113,16 +112,21 @@ export class MountHud {
 			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 		const classIcon = SettingsForm.getIconClass(classIconIndex);
 
-		let button = this.buildButton(html, hudToken, `Dismount ${hudToken.name} from ${mountToken.name}`, classIcon);
+		let button = this.buildButton(
+			html,
+			riderToken,
+			`Dismount ${riderToken.name} from ${mountToken.name}`,
+			classIcon
+		);
 		button = this.addSlash(button);
 
 		button.find("i").on("click", async (ev) => {
-			MountManager.dismount(hudToken);
+			MountManager.dismount(riderToken);
 		});
 		// button.find('i').on('contextmenu', async (ev) => {
 		// // THIS IS A SPECIAL CASE OR HUD TOKEN OBJECT
 		// const token = <Token>canvas.tokens?.placeables.find((t:Token) =>{
-		//   return isStringEquals(hudToken._id,t.id);
+		//   return isStringEquals(riderToken._id,t.id);
 		// });
 		// if (token && getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`)) {
 		//   API.cleanUpTokenDialog(token);
@@ -131,14 +135,12 @@ export class MountHud {
 	}
 
 	static addCleanupButton(html, hudToken) {
-		if (!hudToken._id) {
-			info(`No HUD token is present`);
+		// THIS IS A SPECIAL CASE OR HUD TOKEN OBJECT
+		const token = findTokenById(hudToken._id) || findTokenById(hudToken.id);
+		if (!token) {
+			warn(`No token with reference '${hudToken._id}' is been found`, true);
 			return;
 		}
-		// THIS IS A SPECIAL CASE OR HUD TOKEN OBJECT
-		const token = <Token>canvas.tokens?.placeables.find((t: Token) => {
-			return isStringEquals(hudToken._id, t.id);
-		});
 		// if (
 		//   token &&
 		//   getProperty(<Actor>token.actor, `flags.${CONSTANTS.MODULE_NAME}`) &&
@@ -147,41 +149,43 @@ export class MountHud {
 		if (token && game.user?.isGM) {
 			const classIconIndex =
 				//@ts-ignore
-				hudToken?.actor?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+				token?.actor?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 				game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 			const classIcon = SettingsForm.getIconClass(classIconIndex);
 
-			let button = this.buildButton(html, hudToken, `Clean up mount up flags from ${hudToken.name}`, classIcon);
+			let button = this.buildButton(html, token, `Clean up mount up flags from ${token.name}`, classIcon);
 			button = this.addSlashForFLags(button);
 
 			button.find("i").on("click", async (ev) => {
 				API.cleanUpTokenDialog(token);
 			});
 			// button.find('i').on('contextmenu', async (ev) => {
-			//   API.cleanUpToken(hudToken);
+			//   API.cleanUpToken(token);
 			// });
 		}
 	}
 
 	static addRemoveRidersButton(html, hudToken) {
-		if (!hudToken._id) {
-			info(`No HUD token is present`);
+		const mountToken = findTokenById(hudToken._id) || findTokenById(hudToken.id);
+		if (!mountToken) {
+			warn(`No mount with reference '${hudToken._id}' is been found`, true);
 			return;
 		}
+
 		const classIconIndex =
 			//@ts-ignore
-			hudToken?.actor?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
+			mountToken?.actor?.flags[CONSTANTS.MODULE_NAME]?.[MountUpFlags.IconHud] ??
 			game.settings.get(CONSTANTS.MODULE_NAME, "icon");
 		const classIcon = SettingsForm.getIconClass(classIconIndex);
 
-		let button = this.buildButton(html, hudToken, `Remove all riders from ${hudToken.name}`, classIcon);
+		let button = this.buildButton(html, mountToken, `Remove all riders from ${mountToken.name}`, classIcon);
 		button = this.addSlash(button);
 
 		button.find("i").on("click", async (ev) => {
-			MountManager.removeAllRiders(hudToken);
+			MountManager.removeAllRiders(mountToken);
 		});
 		// button.find('i').on('contextmenu', async (ev) => {
-		//   API.cleanUpToken(hudToken);
+		//   API.cleanUpToken(mountToken);
 		// });
 	}
 

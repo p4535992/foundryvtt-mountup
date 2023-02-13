@@ -14,13 +14,13 @@ export class MountManager {
 	 * @param {Object} hudToken - The token from which the button was clicked on the hud
 	 */
 	static async mountUpHud(hudToken) {
-		const mountToken = <Token>canvas.tokens?.controlled.find((t) => t.id === hudToken._id);
+		const mountToken = findTokenById(hudToken._id) || findTokenById(hudToken.id);
 		if (!mountToken) {
 			warn(`Token mount is not present on the canvas`, true);
 			return;
 		}
 		if (!(String(mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
-			warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: hudToken.name }), true);
+			warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
 			return;
 		}
 		const tokensToCheck = canvas.tokens?.controlled || [];
@@ -33,9 +33,9 @@ export class MountManager {
 				const mountId = <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 				const mountTokenTmp = <Token>findTokenById(mountId);
 				// check that the new rider isn't already a rider of a different mount
-				if (this.isaRider(riderToken.id) && !this.isRidersMount(riderToken.id, hudToken._id)) {
+				if (this.isaRider(riderToken.id) && !this.isRidersMount(riderToken.id, mountToken.id)) {
 					warn(
-						`Couldn't mount '${riderToken.name}' on to '${hudToken.name}' because it is already mounted to '${mountTokenTmp.name}'.`
+						`Couldn't mount '${riderToken.name}' on to '${mountToken.name}' because it is already mounted to '${mountTokenTmp.name}'.`
 					);
 					// MOD 4535992 ADD CHECK
 					// const mountTokenTmp = findTokenById(<string>riderToken.actor.getFlag(CONSTANTS.MODULE_NAME, Flags.Mount));
@@ -93,7 +93,7 @@ export class MountManager {
 	}
 
 	static async dismount(hudToken) {
-		const riderToken: Token = findTokenById(hudToken._id);
+		const riderToken: Token = findTokenById(hudToken._id) || findTokenById(hudToken.id);
 		const mountTokenId = <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 		const mountToken: Token = findTokenById(mountTokenId);
 		// MOD 4535992
@@ -103,7 +103,7 @@ export class MountManager {
 	}
 
 	static async removeAllRiders(hudToken) {
-		const mountToken: Token = findTokenById(hudToken._id);
+		const mountToken: Token = findTokenById(hudToken._id) || findTokenById(hudToken.id);
 		// CALL TOKEN ATTACHER
 		dismountDropAllTA(mountToken);
 		const riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) || [];
@@ -123,11 +123,11 @@ export class MountManager {
 	 */
 	static async doCreateMount(riderToken: Token, mountToken: Token, noRiderUpdate: boolean): Promise<boolean> {
 		if (riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.AlreadyMounted)) {
-            warn(`Token mount is already mounted`, true);
+			warn(`Token mount is already mounted`, true);
 			return false;
 		}
 		if (!(String(mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
-            warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
+			warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
 			return false;
 		}
 		let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);

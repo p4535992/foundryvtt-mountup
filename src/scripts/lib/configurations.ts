@@ -39,7 +39,7 @@ export async function renderTokenConfigHandler(app, html, data) {
 		object.flags[CONSTANTS.MODULE_NAME] = {};
 		noActorDataFlagsOnToken = true;
 	}
-	if (hasProperty(app, `actor.prototypeToken.flags.${CONSTANTS.MODULE_NAME}`)) {
+	if (noActorDataFlagsOnToken && hasProperty(app, `actor.prototypeToken.flags.${CONSTANTS.MODULE_NAME}`)) {
 		const actorFlags = getProperty(app, `actor.prototypeToken.flags.${CONSTANTS.MODULE_NAME}`);
 		setProperty(object, `flags.${CONSTANTS.MODULE_NAME}`, actorFlags);
 	}
@@ -56,13 +56,13 @@ export async function renderTokenConfigHandler(app, html, data) {
 			type: "checkbox",
 			label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.tokenConfig.${MountUpFlags.IsAMount}.name`),
 			notes: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.tokenConfig.${MountUpFlags.IsAMount}.hint`),
-			default: object?.flags[CONSTANTS.MODULE_NAME][MountUpFlags.IsAMount] ?? false,
+			default: Boolean(object?.flags[CONSTANTS.MODULE_NAME][MountUpFlags.IsAMount] ?? false),
 		},
 		[MountUpFlags.LockRider]: {
 			type: "checkbox",
 			label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.tokenConfig.${MountUpFlags.LockRider}.name`),
 			notes: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.tokenConfig.${MountUpFlags.LockRider}.hint`),
-			default: object?.flags[CONSTANTS.MODULE_NAME][MountUpFlags.LockRider] ?? false,
+			default: Boolean(object?.flags[CONSTANTS.MODULE_NAME][MountUpFlags.LockRider] ?? false),
 		},
 		[MountUpFlags.IconHud]: {
 			type: "select",

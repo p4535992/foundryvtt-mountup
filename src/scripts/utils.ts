@@ -1,4 +1,5 @@
 import type Effect from "./effects/effect";
+import { isStringEquals } from "./lib/lib";
 
 /**
  * Flag Info
@@ -68,7 +69,11 @@ export function firstGM() {
  * @param {String} tokenId - The ID of the token to look for
  */
 export function findTokenById(tokenId: string): Token {
+	//return <Token>canvas.tokens?.controlled.find((t) => t.id === tokenId);
 	return <Token>canvas.tokens?.placeables.find((t) => t.id === tokenId);
+	// return <Token>canvas.tokens?.placeables.find((t: Token) => {
+	// 	return isStringEquals(tokenId, t.id);
+	// });
 }
 
 /**
