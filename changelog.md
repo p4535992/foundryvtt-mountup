@@ -1,3 +1,6 @@
+### 3.4.2
+
+- Add module setting for bypass the token configuration check and rollback to the moduels ettings
 ### 3.4.0-1
 
 - Rewrite a lot of code
@@ -33,7 +36,7 @@
 ### 3.2.19
 
 - Update `cleanUpTokenSelected` to the API
-- 
+-
 ### 3.2.18
 
 - Add `cleanUpTokenSelected` to the API
@@ -79,7 +82,7 @@
 - Set up for the new token attacher parameters for the mount up macro "Add _canMoveConstrained_ flag and API to set this flag so a attached element is allowed to move within area of base token. This is only supported for Tokens for now."
 - Abbandoned support for 0.8.9
 
-### 3.2.5 
+### 3.2.5
 
 - Removed old flag set
 - Better center calculation coordinates
@@ -139,7 +142,7 @@
 
 - Converted to typescript
 - Direct integration with the module 'token-attacher'
-- Minor bug fix 
+- Minor bug fix
 - Preparation to foundryvtt 0.8.0
 - Update documentation
 
