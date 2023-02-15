@@ -1,6 +1,11 @@
+### 3.4.3 
+
+- Add hook on create token for update the flags
+
 ### 3.4.2
 
 - Add module setting for bypass the token configuration check and rollback to the moduels ettings
+
 ### 3.4.0-1
 
 - Rewrite a lot of code
