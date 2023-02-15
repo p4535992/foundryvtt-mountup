@@ -86,12 +86,12 @@ export const readyHooks = async () => {
 	//   MountManager.popAllRiders();
 	// });
 
-    Hooks.on("createToken", async (tokenDocument: TokenDocument, updateData: any, options: any, userId: string) => {
+	Hooks.on("createToken", async (tokenDocument: TokenDocument, updateData: any, userId: string) => {
 		const sourceToken = <Token>tokenDocument.object;
 		if (!sourceToken) {
 			return;
 		}
-        if (hasProperty(updateData, `flags.${CONSTANTS.MODULE_NAME}`)) {
+		if (hasProperty(tokenDocument, `flags.${CONSTANTS.MODULE_NAME}`)) {
 			const flagsOnToken = getProperty(tokenDocument, `flags.${CONSTANTS.MODULE_NAME}`) ?? {};
 			const flagsOnActor = getProperty(<Actor>sourceToken.actor, `flags.${CONSTANTS.MODULE_NAME}`) ?? {};
 			const flagsOn = mergeObject(flagsOnActor, flagsOnToken);
@@ -102,7 +102,7 @@ export const readyHooks = async () => {
 				"flags.mountup": flagsOn,
 			});
 		}
-    });
+	});
 
 	Hooks.on("updateToken", async (tokenDocument: TokenDocument, updateData: any, options: any, userId: string) => {
 		const sourceToken = <Token>tokenDocument.object;
@@ -188,7 +188,7 @@ export const readyHooks = async () => {
 		}
 	});
 
-    // Hooks.on("updateTile", async (tileDocument: TokenDocument, updateData: any, options: any, userId: string) => {
+	// Hooks.on("updateTile", async (tileDocument: TokenDocument, updateData: any, options: any, userId: string) => {
 	// 	const sourceTile = <Token>tileDocument.object;
 	// 	if (!sourceTile) {
 	// 		return;

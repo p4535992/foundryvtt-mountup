@@ -59,7 +59,6 @@ export class MountHud {
 	}
 
 	static addMountButton(html, hudToken) {
-
 		const mountToken = findTokenById(hudToken._id) || findTokenById(hudToken.id);
 		if (!mountToken) {
 			warn(`No mount with reference '${hudToken._id}' is been found`, true);
@@ -94,7 +93,7 @@ export class MountHud {
 	}
 
 	static addDismountButton(html, hudToken) {
-		const riderToken: Token = findTokenById(hudToken._id) || findTokenById(hudToken.id) ;
+		const riderToken: Token = findTokenById(hudToken._id) || findTokenById(hudToken.id);
 		if (!riderToken) {
 			warn(`No rider with reference '${hudToken._id}' is been found`, true);
 			return;

@@ -648,49 +648,47 @@ export async function renderDialogDropMountUp(
 	d.render(true);
 }
 
-export function getFlagMountUp(placeable: Token|Tile|TileDocument|TokenDocument, key: string) {
-    if(placeable instanceof Token) {
-        if(placeable.actor) {
-            return getProperty(placeable.actor, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
-        } else {
-            return getProperty(placeable, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
-        }
-    }
-    else if(placeable instanceof TokenDocument) {
-        //@ts-ignore
-        return getProperty(placeable, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
-    }
-    else if(placeable instanceof Tile) {
-        return getProperty(placeable, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
-    }
-    else if(placeable instanceof TileDocument) {
-        //@ts-ignore
-        return getProperty(placeable, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
-    }
+export function getFlagMountUp(placeable: Token | Tile | TileDocument | TokenDocument, key: string) {
+	if (placeable instanceof Token) {
+		if (placeable.actor) {
+			return getProperty(placeable.actor, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+		} else {
+			return getProperty(placeable, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+		}
+	} else if (placeable instanceof TokenDocument) {
+		//@ts-ignore
+		return getProperty(placeable, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+	} else if (placeable instanceof Tile) {
+		return getProperty(placeable, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+	} else if (placeable instanceof TileDocument) {
+		//@ts-ignore
+		return getProperty(placeable, `flags.${CONSTANTS.MODULE_NAME}.${key}`);
+	}
 	return undefined;
 }
 
-export async function setFlagMountUp(placeable: Token|Tile|TileDocument|TokenDocument, key: string, value:any):Promise<any> {
-    if(placeable instanceof Token) {
-        if(placeable.actor) {
-            //@ts-ignore
-            return await placeable.actor.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
-        } else {
-            //@ts-ignore
-            return await placeable.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
-        }
-    }
-    else if(placeable instanceof TokenDocument) {
-        //@ts-ignore
-        return await placeable.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
-    }
-    else if(placeable instanceof Tile) {
-        //@ts-ignore
-        return await placeable.document.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
-    }
-    else if(placeable instanceof TileDocument) {
-        //@ts-ignore
-        return await placeable.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
-    }
+export async function setFlagMountUp(
+	placeable: Token | Tile | TileDocument | TokenDocument,
+	key: string,
+	value: any
+): Promise<any> {
+	if (placeable instanceof Token) {
+		if (placeable.actor) {
+			//@ts-ignore
+			return await placeable.actor.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
+		} else {
+			//@ts-ignore
+			return await placeable.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
+		}
+	} else if (placeable instanceof TokenDocument) {
+		//@ts-ignore
+		return await placeable.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
+	} else if (placeable instanceof Tile) {
+		//@ts-ignore
+		return await placeable.document.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
+	} else if (placeable instanceof TileDocument) {
+		//@ts-ignore
+		return await placeable.setFlag(`flags.${CONSTANTS.MODULE_NAME}.${key}`, value);
+	}
 	return undefined;
 }

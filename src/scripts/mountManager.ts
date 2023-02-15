@@ -20,12 +20,12 @@ export class MountManager {
 			return;
 		}
 		if (!(String(mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
-            if(game.settings.get(CONSTANTS.MODULE_NAME,"disableTokenConfigurationCheck")) {
-                warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }));
-            } else {
-                warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
-                return;
-            }
+			if (game.settings.get(CONSTANTS.MODULE_NAME, "disableTokenConfigurationCheck")) {
+				warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }));
+			} else {
+				warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
+				return;
+			}
 		}
 		const tokensToCheck = canvas.tokens?.controlled || [];
 		for (const riderToken of tokensToCheck) {
@@ -131,12 +131,12 @@ export class MountManager {
 			return false;
 		}
 		if (!(String(mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
-            if(game.settings.get(CONSTANTS.MODULE_NAME,"disableTokenConfigurationCheck")) {
-                warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }));
-            } else {
-                warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
-                return false;
-            }
+			if (game.settings.get(CONSTANTS.MODULE_NAME, "disableTokenConfigurationCheck")) {
+				warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }));
+			} else {
+				warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
+				return false;
+			}
 		}
 		let riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders);
 		if (riders === undefined) riders = [];

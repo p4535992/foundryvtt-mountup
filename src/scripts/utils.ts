@@ -89,8 +89,8 @@ export function findToken(tokenNameOrId: string): Token {
 }
 
 export function findTileById(tileId: string): Token {
-    //@ts-ignore
-	return <Token>canvas.tiles?.placeables.find((t) => t.id === tileId)
+	//@ts-ignore
+	return <Token>canvas.tiles?.placeables.find((t) => t.id === tileId);
 }
 
 export function findTokenOrTile(tokenNameOrId: string): Token {
