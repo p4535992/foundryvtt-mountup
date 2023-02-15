@@ -199,6 +199,15 @@ export const registerSettings = function () {
 		default: "{rider} has dismounted from {mount}.",
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "disableTokenConfigurationCheck", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.disableTokenConfigurationCheck.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.disableTokenConfigurationCheck.hint`,
+		scope: "client",
+		config: true,
+		default: false,
+		type: Boolean,
+	});
+
 	game.settings.register(CONSTANTS.MODULE_NAME, "enableDragAndDropMountUp", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.enableDragAndDropMountUp.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.enableDragAndDropMountUp.hint`,

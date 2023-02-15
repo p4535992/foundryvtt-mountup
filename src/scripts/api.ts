@@ -26,8 +26,12 @@ const API = {
 		}
 
 		if (!(String(mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.IsAMount)) === "true")) {
-			warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
-			return;
+            if(game.settings.get(CONSTANTS.MODULE_NAME,"disableTokenConfigurationCheck")) {
+                warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }));
+            } else {
+                warn(i18nFormat(`${CONSTANTS.MODULE_NAME}.isNotAMount`, { mount: mountToken.name }), true);
+                return;
+            }
 		}
 
 		const mountName = mountToken.name;

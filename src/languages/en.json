@@ -77,6 +77,10 @@
 				"name": "Enable 'can move constrained'",
 				"hint": "Enable the new 'Can Move Constrained' feature from Token Attacher"
 			},
+            "disableTokenConfigurationCheck": {
+                "name": "Disable token configuration check",
+				"hint": "I don't quite understand why, but some people have problems getting the flags on the token configuration to work .... after hundreds of tests from my high successfully I give up to understand why , enabling this module settings ignores the setting control on the token configuration and uses those at the module level (as it was for the pre 3.4.X version)."
+            },
 			"enableDragAndDropMountUp": {
 				"name": "Enable drag and drop token for mountup",
 				"hint": "If Enabled when dragging and dropped a token it will try to mount the below token if present and if you have owner permissions on that token"
