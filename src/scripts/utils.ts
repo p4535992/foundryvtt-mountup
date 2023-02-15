@@ -84,6 +84,19 @@ export function findTokenByName(tokenName: string): Token {
 	return <Token>canvas.tokens?.placeables.find((t) => t.name.toLowerCase() === tokenName.toLowerCase());
 }
 
+export function findToken(tokenNameOrId: string): Token {
+	return findTokenById(tokenNameOrId) || findTokenByName(tokenNameOrId);
+}
+
+export function findTileById(tileId: string): Token {
+    //@ts-ignore
+	return <Token>canvas.tiles?.placeables.find((t) => t.id === tileId)
+}
+
+export function findTokenOrTile(tokenNameOrId: string): Token {
+	return findTokenById(tokenNameOrId) || findTileById(tokenNameOrId) || findTokenByName(tokenNameOrId);
+}
+
 /**
  * Get token center
  */

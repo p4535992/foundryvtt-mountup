@@ -86,6 +86,24 @@ export const readyHooks = async () => {
 	//   MountManager.popAllRiders();
 	// });
 
+    Hooks.on("createToken", async (tokenDocument: TokenDocument, updateData: any, options: any, userId: string) => {
+		const sourceToken = <Token>tokenDocument.object;
+		if (!sourceToken) {
+			return;
+		}
+        if (hasProperty(updateData, `flags.${CONSTANTS.MODULE_NAME}`)) {
+			const flagsOnToken = getProperty(tokenDocument, `flags.${CONSTANTS.MODULE_NAME}`) ?? {};
+			const flagsOnActor = getProperty(<Actor>sourceToken.actor, `flags.${CONSTANTS.MODULE_NAME}`) ?? {};
+			const flagsOn = mergeObject(flagsOnActor, flagsOnToken);
+			if (!sourceToken.actor) {
+				setProperty(sourceToken, `actor`, {});
+			}
+			sourceToken.actor?.update({
+				"flags.mountup": flagsOn,
+			});
+		}
+    });
+
 	Hooks.on("updateToken", async (tokenDocument: TokenDocument, updateData: any, options: any, userId: string) => {
 		const sourceToken = <Token>tokenDocument.object;
 		if (!sourceToken) {
@@ -169,6 +187,25 @@ export const readyHooks = async () => {
 			});
 		}
 	});
+
+    // Hooks.on("updateTile", async (tileDocument: TokenDocument, updateData: any, options: any, userId: string) => {
+	// 	const sourceTile = <Token>tileDocument.object;
+	// 	if (!sourceTile) {
+	// 		return;
+	// 	}
+
+	// 	if (hasProperty(updateData, `flags.${CONSTANTS.MODULE_NAME}`)) {
+	// 		const flagsOnTile = getProperty(tileDocument, `flags.${CONSTANTS.MODULE_NAME}`) ?? {};
+	// 		const flagsOnActor = getProperty(<Actor>sourceTile.actor, `flags.${CONSTANTS.MODULE_NAME}`) ?? {};
+	// 		const flagsOn = mergeObject(flagsOnActor, flagsOnTile);
+	// 		if (!sourceTile.actor) {
+	// 			setProperty(sourceTile, `actor`, {});
+	// 		}
+	// 		sourceTile.actor?.update({
+	// 			"flags.mountup": flagsOn,
+	// 		});
+	// 	}
+	// });
 
 	Hooks.on("controlToken", async (token: Token) => {
 		const isPlayerOwned = <boolean>token.document.isOwner;

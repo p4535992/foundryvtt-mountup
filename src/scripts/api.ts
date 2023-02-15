@@ -57,22 +57,22 @@ const API = {
 	 * @param {string} riderNameOrId - The name or the ID of the rider token
 	 */
 	dismount(riderNameOrId: string) {
-		const rider: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
-		if (!rider) {
+		const riderToken: Token = findTokenById(riderNameOrId) || findTokenByName(riderNameOrId);
+		if (!riderToken) {
 			warn(`No rider with reference '${riderNameOrId}' is been found`, true);
 			return;
 		}
-		const riderName: string = rider.name;
+		const riderName: string = riderToken.name;
 
-		if (rider) {
-			if (MountManager.isaRider(rider.id)) {
-				const mountTokenId = <string>rider.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
+		if (riderToken) {
+			if (MountManager.isaRider(riderToken.id)) {
+				const mountTokenId = <string>riderToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Mount);
 				const mountToken = findTokenById(mountTokenId);
 				if (!mountToken) {
 					warn(`No mount with reference '${mountTokenId}' is been found`, true);
 					return;
 				}
-				MountManager.doRemoveMount(rider, mountToken);
+				MountManager.doRemoveMount(riderToken, mountToken);
 			} else {
 				error(`Token '${riderName}' is not a rider`);
 			}
@@ -86,16 +86,16 @@ const API = {
 	 * @param {string} mountNameOrId - The name or the ID of the mount token
 	 */
 	dropRider(mountNameOrId: string) {
-		const mount: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
-		if (!mount) {
+		const mountToken: Token = findTokenById(mountNameOrId) || findTokenByName(mountNameOrId);
+		if (!mountToken) {
 			warn(`No mount with reference '${mountNameOrId}' is been found`, true);
 			return;
 		}
-		const mountName: string = mount.name;
+		const mountName: string = mountToken.name;
 
-		if (mount) {
-			if (MountManager.isaMount(mount.id)) {
-				const riders = <string[]>mount.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) || [];
+		if (mountToken) {
+			if (MountManager.isaMount(mountToken.id)) {
+				const riders = <string[]>mountToken.actor?.getFlag(CONSTANTS.MODULE_NAME, MountUpFlags.Riders) || [];
 				if (riders && riders.length > 0) {
 					for (const rider in riders) {
 						const riderToken: Token = findTokenById(rider);
@@ -103,7 +103,7 @@ const API = {
 							warn(`No rider with reference '${rider}' is been found`, true);
 							return;
 						}
-						MountManager.doRemoveMount(riderToken, mount);
+						MountManager.doRemoveMount(riderToken, mountToken);
 					}
 				}
 			} else {
