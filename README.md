@@ -1,5 +1,7 @@
 # Mount Up!
 
+# THIS MODULES IS DEPRECATED ON V11 IN FAVOR OF [Rideable](https://foundryvtt.com/packages/rideable)
+
 ![Latest Release Download Count](https://img.shields.io/github/downloads/p4535992/foundryvtt-mountup/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) 
 
 [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fmountup&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=mountup) 
